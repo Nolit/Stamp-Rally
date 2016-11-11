@@ -28,6 +28,35 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/TOP"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:layout_weight="0.81">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="Name"
+                        android:ems="10"
+                        android:id="@+id/editText" />
+
+                    <Button
+                        android:text="Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button4" />
+
+                    <TextView
+                        android:text="TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/MyPage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -188,6 +217,7 @@
                             </LinearLayout>
 
                         </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -198,22 +228,25 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/TOP"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:weightSum="1"
-                        android:layout_weight="0.81">
+                </LinearLayout>
 
-                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/StampRally"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/StampRegistration"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
 
 </android.support.design.widget.CoordinatorLayout>

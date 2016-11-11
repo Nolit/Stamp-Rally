@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -17,11 +18,19 @@ public class MainActivity extends AppCompatActivity {
     Button loginButton;
     TextView newloginText;
 
+
+    //test
+    Button test1;
+    EditText test2;
+    TextView test3;
+    String a = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //ログインボタン
         loginButton = (Button)findViewById(R.id.login);
         loginButton.setText("ログイン");
 
@@ -32,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //新規会員登録テキスト
         newloginText = (TextView) findViewById(R.id.newMem);
         newloginText.setText("新規会員登録");
 
@@ -42,11 +52,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+        //test
+        test1 = (Button)findViewById(R.id.button4);
+        test2 = (EditText) findViewById(R.id.editText);
+        test3 = (TextView) findViewById(R.id.textView2);
+
+        test1.setText("テスト");
+        test1.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                test3.setText(test2.getText());
+            }
+        });
+
+
+
+
+
+
+
+
         // TabHostの初期化および設定処理
         initTabs();
-
-
     }
+
 
     protected void initTabs() {
         try {
@@ -56,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
 
             // Tab1
             spec = tabHost.newTabSpec("TOP")
-                    .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
             // Tab2
-            spec = tabHost.newTabSpec("MyPage")
+            spec = tabHost.newTabSpec("マイページ")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.MyPage);
             tabHost.addTab(spec);
@@ -70,6 +100,18 @@ public class MainActivity extends AppCompatActivity {
             spec = tabHost.newTabSpec("TimeLine")
                     .setIndicator("タイムライン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TimeLine);
+            tabHost.addTab(spec);
+
+            // Tab4
+            spec = tabHost.newTabSpec("StampRally")
+                    .setIndicator("スタンプラリー", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setContent(R.id.StampRally);
+            tabHost.addTab(spec);
+
+            // Tab5
+            spec = tabHost.newTabSpec("StampRegistration")
+                    .setIndicator("スタンプ登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setContent(R.id.StampRegistration);
             tabHost.addTab(spec);
 
             tabHost.setCurrentTab(0);
