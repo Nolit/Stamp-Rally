@@ -10,6 +10,8 @@ import android.view.View;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.Request;
 
+import database.entities.Sample;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
          new Request.Builder()
                 .url("http://stamp-rally/sample");
-
+        new Sample();
 
     }
 
