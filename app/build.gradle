@@ -36,4 +36,5 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     compile 'org.eclipse.persistence:eclipselink:2.5.1'
     compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
