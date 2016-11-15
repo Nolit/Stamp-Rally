@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.om1.stamp_rally.MainActivity">
+    tools:context="com.om1.stamp_rally.controller.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_main"
+        android:id="@+id/include" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -30,5 +31,23 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
+
+    <TextView
+        android:text="Default"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:id="@+id/sampleTextView"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="center_vertical|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="bottom|center_horizontal"
+        android:layout_gravity="center_vertical|center_horizontal" />
 
 </android.support.design.widget.CoordinatorLayout>
