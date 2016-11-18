@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.utility.Url;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -29,10 +30,20 @@ public class SampleAsyncTask extends AsyncTask<Integer, String, String>{
                 .get()
                 .build();
 
-        OkHttpClient client = new OkHttpClient();
         String responseData = null;
         try {
-            responseData = client.newCall(request).execute().body().string();
+            responseData = new OkHttpClient().newCall(request).execute().body().string();
+            new OkHttpClient().newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+
+                }
+            });
             System.out.println(responseData);
         } catch (IOException e) {
             e.printStackTrace();

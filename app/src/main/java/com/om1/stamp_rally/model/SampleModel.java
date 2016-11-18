@@ -2,6 +2,8 @@ package com.om1.stamp_rally.model;
 
 import android.os.AsyncTask;
 
+import com.om1.stamp_rally.model.event.FetchJsonEvent;
+
 import org.greenrobot.eventbus.EventBus;
 
 import database.entities.Sample;
@@ -11,14 +13,19 @@ import database.entities.Sample;
  */
 
 public class SampleModel {
-
+    private final EventBus eventBus = EventBus.getDefault();
     private static SampleModel instance = new SampleModel();
     private AsyncTask<Void, Void, Sample> task = new MyTask();
     private Sample entity;
 
+
     private SampleModel(){}
     public static SampleModel getInstance() {
         return instance;
+    }
+
+    public void connect(){
+        new MyTask().execute();
     }
 
     private class MyTask extends AsyncTask<Void, Void, Sample> {
@@ -33,11 +40,11 @@ public class SampleModel {
         protected void onPostExecute(Sample entity) {
             super.onPostExecute(entity);
             setEntity(entity);
-            EventBus.getDefault().post(new ButtonClickEvent(mClickCount++));
         }
     }
 
     private void setEntity(Sample sample){
         entity = sample;
+        eventBus.post(new FetchJsonEvent(true, "jsonイベントです"));
     }
 }
