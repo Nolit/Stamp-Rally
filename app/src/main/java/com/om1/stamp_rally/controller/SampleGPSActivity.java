@@ -3,28 +3,27 @@ package com.om1.stamp_rally.controller;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.om1.stamp_rally.R;
+
+import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class SampleGPSActivity extends AppCompatActivity {
+public class SampleGPSActivity extends AppCompatActivity{
     private LocationManager mLocationManager;
+    private Location location;
+    private final String providerName = LocationManager.GPS_PROVIDER;
 
     @InjectView(R.id.latitudeTextView)
     TextView latitudeTextView;
@@ -37,28 +36,42 @@ public class SampleGPSActivity extends AppCompatActivity {
         setContentView(R.layout.content_gps);
         ButterKnife.inject(this);
 
-        // GPS
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final boolean gpsFlg = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        Log.d("GPS Enabled", gpsFlg ? "OK" : "NG");
 
+        if(mLocationManager.isProviderEnabled(providerName)){
+            mLocationManager.addTestProvider(providerName, true, true, true, true, true, true, true, Criteria.POWER_HIGH, Criteria.ACCURACY_HIGH);
+        }
+
+        location = new Location(providerName);
+        location.setAccuracy(Criteria.ACCURACY_HIGH);
+        location.setTime(System.currentTimeMillis());
+        location.setElapsedRealtimeNanos(System.currentTimeMillis());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @OnClick(R.id.GpsUpdateButton)
+    void updateGps(){
+        Random rnd = new Random();
+        location.setLatitude(rnd.nextDouble());
+        location.setLongitude(rnd.nextDouble());
+        mLocationManager.setTestProviderLocation(providerName, location);
         mLocationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, //LocationManager.NETWORK_PROVIDER,
+                providerName, //LocationManager.GPS_PROVIDER, //LocationManager.NETWORK_PROVIDER,
                 1000, // 通知のための最小時間間隔（ミリ秒）
                 3, // 通知のための最小距離間隔（メートル）
                 new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
-                        Toast.makeText(SampleGPSActivity.this, "onLocationChangedが呼ばれたよ！！。", Toast.LENGTH_LONG).show();
                         if (ActivityCompat.checkSelfPermission(SampleGPSActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SampleGPSActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            Toast.makeText(SampleGPSActivity.this, "しかしPermissionエラー・・・。", Toast.LENGTH_LONG).show();
                             return;
                         }
-                        Toast.makeText(SampleGPSActivity.this, "TextViewを更新するよ！！", Toast.LENGTH_LONG).show();
                         latitudeTextView.setText(String.valueOf(location.getLatitude()));
                         longitudeTextView.setText(String.valueOf(location.getLongitude()));
-
-//                    mLocationManager.removeUpdates(this);
+                        mLocationManager.removeUpdates(this);
                     }
 
                     @Override
