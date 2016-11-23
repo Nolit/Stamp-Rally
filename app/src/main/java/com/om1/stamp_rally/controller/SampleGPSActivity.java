@@ -99,7 +99,7 @@ public class SampleGPSActivity extends AppCompatActivity{
             @Override
             public void run(){
                 try {
-                    new WebSocketFactory().createSocket("ws://10.0.2.2:8080/stamp-rally/location", 5000)
+                    new WebSocketFactory().createSocket("ws://35.160.83.150/stamp-rally/location", 5000)
                             .connect()
                             .addListener(new WebSocketAdapter() {
                                 @Override
