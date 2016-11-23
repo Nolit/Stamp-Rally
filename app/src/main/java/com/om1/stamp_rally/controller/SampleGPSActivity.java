@@ -105,7 +105,6 @@ public class SampleGPSActivity extends AppCompatActivity{
                                 @Override
                                 public void onTextMessage(WebSocket websocket, String message)
                                         throws Exception {
-                                    Log.d("onTextMessage", message);
                                     String[] location = message.split(",", 0);
                                     double latitude = Double.valueOf(location[0]);
                                     double longitude = Double.valueOf(location[1]);
@@ -122,8 +121,7 @@ public class SampleGPSActivity extends AppCompatActivity{
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void updateGps(LocationEvent event){
-        Log.d("GPS", "updateGps");
+    void updateLocation(LocationEvent event){
         location.setLatitude(event.getLatitude());
         location.setLongitude(event.getLongitude());
         mLocationManager.setTestProviderLocation(providerName, location);
