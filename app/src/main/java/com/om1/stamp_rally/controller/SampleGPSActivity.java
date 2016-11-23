@@ -33,12 +33,39 @@ public class SampleGPSActivity extends AppCompatActivity{
     private Location location;
     private final String providerName = LocationManager.GPS_PROVIDER;
     private final EventBus eventBus = EventBus.getDefault();
+    private LocationListener listener;
 
 
     @InjectView(R.id.latitudeTextView)
     TextView latitudeTextView;
     @InjectView(R.id.longitudeTextView)
     TextView longitudeTextView;
+
+    public SampleGPSActivity(){
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if (ActivityCompat.checkSelfPermission(SampleGPSActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SampleGPSActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                latitudeTextView.setText(String.valueOf(location.getLatitude()));
+                longitudeTextView.setText(String.valueOf(location.getLongitude()));
+                mLocationManager.removeUpdates(this);
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,31 +128,14 @@ public class SampleGPSActivity extends AppCompatActivity{
         location.setLongitude(event.getLongitude());
         mLocationManager.setTestProviderLocation(providerName, location);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         mLocationManager.requestLocationUpdates(
                 providerName,
                 1000,
                 3,
-                new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        if (ActivityCompat.checkSelfPermission(SampleGPSActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SampleGPSActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
-                        latitudeTextView.setText(String.valueOf(location.getLatitude()));
-                        longitudeTextView.setText(String.valueOf(location.getLongitude()));
-                        mLocationManager.removeUpdates(this);
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-                    }
-                    @Override
-                    public void onProviderEnabled(String provider) {
-                    }
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-                    }
-                }
+                listener
         );
     }
 
