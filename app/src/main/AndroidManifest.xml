@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name="com.om1.stamp_rally.controller.MapsActivity"
+            android:name="com.om1.stamp_rally.controller.MapsFragment"
             android:label="MAP">
 
         </activity>

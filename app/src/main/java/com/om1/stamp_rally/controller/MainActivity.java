@@ -1,23 +1,17 @@
 package com.om1.stamp_rally.controller;
 
 import android.content.Intent;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TabHost;
-import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.om1.stamp_rally.R;
 
 import butterknife.ButterKnife;
@@ -70,9 +64,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             @Override
             public void onTabChanged(String tabId) {
                 Log.d("tab", tabId);
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(MainActivity.this);
+                getSupportFragmentManager().beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
             }
         });
 

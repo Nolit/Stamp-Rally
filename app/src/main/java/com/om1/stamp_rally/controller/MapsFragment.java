@@ -7,9 +7,14 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 
 
-public class MapsActivity extends FragmentActivity implements LocationListener,OnMapReadyCallback {
+public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback {
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
@@ -40,16 +45,23 @@ public class MapsActivity extends FragmentActivity implements LocationListener,O
     //debug用
     Marker oosakajo,harukasu,usj;
 
+    private LayoutInflater inflater;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        FragmentManager fm = getFragmentManager();
+        SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        this.inflater = inflater;
 
         //カメラボタンの透明化
-        cameraIcon = (ImageButton)findViewById(R.id.cameraIcon);
+        cameraIcon = (ImageButton) container.findViewById(R.id.cameraIcon);
         cameraIcon.setVisibility(View.INVISIBLE);
 
         //状態別マーカーの設定
@@ -57,6 +69,9 @@ public class MapsActivity extends FragmentActivity implements LocationListener,O
         nearMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
         completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 
+        mLocationManager = (LocationManager) inflater.getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        return inflater.inflate(R.layout.activity_maps, null);
     }
 
     @Override
@@ -71,7 +86,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener,O
         mMap.moveCamera(CameraUpdateFactory.newLatLng(start_position));
 
         //プロバイダの取得
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
 
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);       //高精度
@@ -95,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener,O
 
             @Override
             public View getInfoContents(Marker marker) {
-                View view = getLayoutInflater().inflate(R.layout.info_window, null);
+                View view = inflater.inflate(R.layout.info_window, null);
                 // タイトル設定
                 TextView title = (TextView) view.findViewById(R.id.info_title);
                 title.setText(marker.getTitle());
@@ -127,7 +142,7 @@ public class MapsActivity extends FragmentActivity implements LocationListener,O
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Toast.makeText(getApplicationContext(), "ここでスタンプ詳細表示", Toast.LENGTH_LONG).show();
+                Toast.makeText(inflater.getContext().getApplicationContext(), "ここでスタンプ詳細表示", Toast.LENGTH_LONG).show();
             }
 
         });
