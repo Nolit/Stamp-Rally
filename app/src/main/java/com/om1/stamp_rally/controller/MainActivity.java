@@ -1,20 +1,35 @@
 package com.om1.stamp_rally.controller;
 
 import android.content.Intent;
+import android.location.LocationListener;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TabHost;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.om1.stamp_rally.R;
 
-public class MainActivity extends AppCompatActivity {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
     Button loginButton;
     TextView newloginText;
+
+    @InjectView(R.id.tabHost)
+    TabHost th;
 
 
     //test
@@ -27,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
         //ログイン画面へ
         loginButton = (Button)findViewById(R.id.login);
@@ -47,6 +63,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        th.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
+            @Override
+            public void onTabChanged(String tabId) {
+                Log.d("tab", tabId);
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(MainActivity.this);
             }
         });
 
@@ -128,4 +154,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d("map", "ready");
+    }
 }
