@@ -5,45 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.om1.stamp_rally.NewMember">
+    tools:context="com.om1.stamp_rally.NewMemberActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    <include layout="@layout/content_new_member" />
-
-    <TextView
-        android:text="新規会員登録ページ"
-        android:layout_width="223dp"
-        android:id="@+id/NewMembaer"
-        android:layout_height="62dp"
-        android:layout_gravity="center_vertical|center_horizontal" />
-
-    <Button
-        android:text="Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button2"
-        app:layout_anchorGravity="center_vertical|center_horizontal"
-        android:layout_gravity="bottom|left" />
-
+        <TextView
+            android:text="新規会員登録ページ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView" />
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

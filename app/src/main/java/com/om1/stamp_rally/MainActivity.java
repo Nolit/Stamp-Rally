@@ -2,11 +2,8 @@ package com.om1.stamp_rally;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,17 +17,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     //test
-    Button test1;
-    EditText test2;
-    TextView test3;
-    String a = "";
+    //Button test1;
+    //EditText test2;
+    //TextView test3;
+    //String a = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ログインボタン
+        //ログイン画面へ
         loginButton = (Button)findViewById(R.id.login);
         loginButton.setText("ログイン");
 
@@ -41,37 +38,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //新規会員登録テキスト
+        //新規会員登録ページへ
         newloginText = (TextView) findViewById(R.id.newMem);
         newloginText.setText("新規会員登録");
 
         newloginText.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewMember.class);
+                Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
                 startActivity(intent);
             }
         });
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //test
-        test1 = (Button)findViewById(R.id.button4);
-        test2 = (EditText) findViewById(R.id.editText);
-        test3 = (TextView) findViewById(R.id.textView2);
+        //test1 = (Button)findViewById(R.id.button4);
+        //test2 = (EditText) findViewById(R.id.editText);
+        //test3 = (TextView) findViewById(R.id.textView2);
 
-        test1.setText("テスト");
-        test1.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                test3.setText(test2.getText());
-            }
-        });
-
-
-
-
-
-
-
+        //test1.setText("テスト");
+        //test1.setOnClickListener(new View.OnClickListener(){
+        //    public void onClick(View v) {
+        //        test3.setText(test2.getText());
+        //    }
+        //});
 
         // TabHostの初期化および設定処理
         initTabs();

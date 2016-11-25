@@ -16,7 +16,6 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".Test" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -28,12 +27,48 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewMember"
+            android:name=".NewMemberActivity"
             android:label="@string/title_activity_new_member"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".TopPage"
             android:label="@string/title_activity_top_page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ConfigurationActivity"
+            android:label="@string/title_activity_configuration"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FollowActivity"
+            android:label="@string/title_activity_follow"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FollowerActivity"
+            android:label="@string/title_activity_follower"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MyStampActivity"
+            android:label="@string/title_activity_mystamp"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StampDetailActivity"
+            android:label="@string/title_activity_stamp_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CompleteRallyActivity"
+            android:label="@string/title_activity_complete_rally"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FavoriteRallyActivity"
+            android:label="@string/title_activity_favorite_rally"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RallyDetailActivity"
+            android:label="@string/title_activity_rally_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

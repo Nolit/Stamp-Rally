@@ -6,16 +6,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
 
-public class NewMember extends AppCompatActivity {
-
-    TextView memberText;
+public class RallyDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_member);
+        setContentView(R.layout.activity_rally_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -27,9 +24,6 @@ public class NewMember extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        memberText = (TextView) findViewById(R.id.NewMembaer);
-        memberText.setText("新規会員登録");
     }
 
 }
