@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".controller.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -39,47 +39,43 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".NewMemberActivity"
+            android:name=".controller.NewMemberActivity"
             android:label="@string/title_activity_new_member"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".TopPage"
-            android:label="@string/title_activity_top_page"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".SearchActivity"
+            android:name=".controller.SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ConfigurationActivity"
+            android:name=".controller.ConfigurationActivity"
             android:label="@string/title_activity_configuration"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FollowActivity"
+            android:name=".controller.FollowActivity"
             android:label="@string/title_activity_follow"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FollowerActivity"
+            android:name=".controller.FollowerActivity"
             android:label="@string/title_activity_follower"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MyStampActivity"
+            android:name=".controller.MyStampActivity"
             android:label="@string/title_activity_mystamp"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".StampDetailActivity"
+            android:name=".controller.StampDetailActivity"
             android:label="@string/title_activity_stamp_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CompleteRallyActivity"
+            android:name=".controller.CompleteRallyActivity"
             android:label="@string/title_activity_complete_rally"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FavoriteRallyActivity"
+            android:name=".controller.FavoriteRallyActivity"
             android:label="@string/title_activity_favorite_rally"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RallyDetailActivity"
+            android:name=".controller.RallyDetailActivity"
             android:label="@string/title_activity_rally_detail"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

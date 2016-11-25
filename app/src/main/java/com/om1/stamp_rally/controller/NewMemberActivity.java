@@ -1,4 +1,4 @@
-package com.om1.stamp_rally;
+package com.om1.stamp_rally.controller;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -6,13 +6,18 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
-public class ConfigurationActivity extends AppCompatActivity {
+import com.om1.stamp_rally.R;
+
+public class NewMemberActivity extends AppCompatActivity {
+
+    TextView memberText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_configuration);
+        setContentView(R.layout.activity_new_member);
 
     }
 

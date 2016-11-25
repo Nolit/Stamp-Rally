@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.om1.stamp_rally.MainActivity">
+    tools:context="com.om1.stamp_rally.controller.MainActivity">
 
     <TabHost
         android:layout_width="match_parent"

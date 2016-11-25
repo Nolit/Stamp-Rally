@@ -1,4 +1,4 @@
-package com.om1.stamp_rally;
+package com.om1.stamp_rally.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.om1.stamp_rally.R;
 
 public class MainActivity extends AppCompatActivity {
 
