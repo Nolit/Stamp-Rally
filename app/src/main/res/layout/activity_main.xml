@@ -35,6 +35,212 @@
                     android:weightSum="1"
                     android:layout_weight="0.81">
 
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                app:srcCompat="@mipmap/ic_launcher"
+                                android:id="@+id/ThemeImage"
+                                android:layout_height="150dp" />
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                app:srcCompat="@mipmap/ic_launcher"
+                                android:id="@+id/OfficialImage"
+                                android:layout_height="80dp" />
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <FrameLayout
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|center_horizontal"
+                                android:layout_width="360dp">
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="97dp">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        app:srcCompat="@mipmap/ic_launcher"
+                                        android:id="@+id/IntroductionImage1"
+                                        android:layout_weight="1" />
+
+                                    <Space
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.20" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        app:srcCompat="@mipmap/ic_launcher"
+                                        android:id="@+id/IntroductionImage2"
+                                        android:layout_weight="1" />
+
+                                    <Space
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.20" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        app:srcCompat="@mipmap/ic_launcher"
+                                        android:id="@+id/IntroductionImage3"
+                                        android:layout_weight="1" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <FrameLayout android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|center_horizontal"
+                                android:layout_width="360dp">
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <EditText
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:inputType="textPersonName"
+                                        android:text="検索内容入力"
+                                        android:ems="10"
+                                        android:id="@+id/SearchEdit"
+                                        android:layout_weight="0.03" />
+
+                                    <Space
+                                        android:layout_width="10dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.01" />
+
+                                    <Button
+                                        android:text="検索"
+                                        android:layout_width="54dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.01"
+                                        android:id="@+id/SearchButton" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <TextView
+                                android:text="週刊ランキング"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/RankingsText"
+                                android:textSize="24sp"
+                                android:textColor="@android:color/black" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp">
+
+                                <Space
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.03"
+                                    android:layout_width="0dp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@mipmap/ic_launcher"
+                                    android:id="@+id/imageView8"
+                                    android:layout_weight="0.03" />
+
+                                <TextView
+                                    android:text="1位：東京ラーメンめぐり"
+                                    android:layout_width="33dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/RankingText1"
+                                    android:layout_weight="0.18"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:textSize="14sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp">
+
+                                <Space
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.03"
+                                    android:layout_width="0dp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@mipmap/ic_launcher"
+                                    android:id="@+id/imageView8"
+                                    android:layout_weight="0.03" />
+
+                                <TextView
+                                    android:text="2位：東京とんかつめぐり"
+                                    android:layout_width="33dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/RankingText2"
+                                    android:layout_weight="0.18"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:textSize="14sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp">
+
+                                <Space
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.03"
+                                    android:layout_width="0dp" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@mipmap/ic_launcher"
+                                    android:id="@+id/imageView9"
+                                    android:layout_weight="0.03" />
+
+                                <TextView
+                                    android:text="3位：東京うどんめぐり"
+                                    android:layout_width="33dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/RankingText3"
+                                    android:layout_weight="0.18"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:textSize="14sp"
+                                    android:textColor="@android:color/black" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </ScrollView>
                 </LinearLayout>
 
                 <LinearLayout
