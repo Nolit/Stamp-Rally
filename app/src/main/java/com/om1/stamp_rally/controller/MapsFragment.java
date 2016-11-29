@@ -50,18 +50,27 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FragmentManager fm = getFragmentManager();
-        SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         this.inflater = inflater;
 
+        return inflater.inflate(R.layout.activity_maps, null);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        FragmentManager fm = getChildFragmentManager();
+        SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         //カメラボタンの透明化
-        cameraIcon = (ImageButton) container.findViewById(R.id.cameraIcon);
+        cameraIcon = (ImageButton) view.findViewById(R.id.cameraIcon);
         cameraIcon.setVisibility(View.INVISIBLE);
 
         //状態別マーカーの設定
@@ -69,9 +78,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         nearMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
         completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 
-        mLocationManager = (LocationManager) inflater.getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        return inflater.inflate(R.layout.activity_maps, null);
+        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
     }
 
     @Override
@@ -142,7 +149,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Toast.makeText(inflater.getContext().getApplicationContext(), "ここでスタンプ詳細表示", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapsFragment.this.getContext(), "ここでスタンプ詳細表示", Toast.LENGTH_LONG).show();
             }
 
         });
