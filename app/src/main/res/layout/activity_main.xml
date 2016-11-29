@@ -416,7 +416,7 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:text="あほです。"
+                                android:text="こんにちは"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/textView10"
@@ -487,6 +487,22 @@
 
                 <LinearLayout
                     android:id="@+id/StampRegistration"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/Login"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/NewMember"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
