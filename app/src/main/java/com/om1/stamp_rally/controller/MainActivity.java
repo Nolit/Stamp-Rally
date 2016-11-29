@@ -19,12 +19,12 @@ import butterknife.InjectView;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
-    Button loginButton;
-    TextView newloginText;
+//    Button loginButton;
+//    TextView newloginText;
 
     @InjectView(R.id.tabHost)
     TabHost th;
-    int i = 1;
+    int i = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +34,25 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
         //ログイン画面へ
-        loginButton = (Button)findViewById(R.id.login);
-        loginButton.setText("ログイン");
-        loginButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        //新規会員登録ページへ
-        newloginText = (TextView) findViewById(R.id.newMem);
-        newloginText.setText("新規会員登録");
-        newloginText.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
-                startActivity(intent);
-            }
-        });
+//        loginButton = (Button)findViewById(R.id.login);
+//        loginButton.setText("ログイン");
+//        loginButton.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//
+//        //新規会員登録ページへ
+//        newloginText = (TextView) findViewById(R.id.newMem);
+//        newloginText.setText("新規会員登録");
+//        newloginText.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
         //スタンプラリーページを選択時のフラグメント起動
@@ -186,7 +186,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
-    
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("map", "ready");
