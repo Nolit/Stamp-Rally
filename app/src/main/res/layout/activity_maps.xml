@@ -1,15 +1,3 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="13"
-        android:text="ここにタブを配置する"/>
-
-
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -40,4 +28,3 @@
             android:src="@mipmap/camera_icon" />
 
     </FrameLayout>
-</LinearLayout>
