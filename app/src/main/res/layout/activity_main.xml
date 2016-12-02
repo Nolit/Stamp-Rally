@@ -28,6 +28,240 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/Login"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp" />
+
+                    <ImageView
+                        android:layout_width="133dp"
+                        android:layout_height="129dp"
+                        app:srcCompat="@mipmap/ic_launcher"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:background="@color/common_google_signin_btn_text_light_disabled"
+                        android:id="@+id/LoginThemeImage"
+                        android:layout_weight="0.09" />
+
+                    <ScrollView
+                        android:id="@+id/login_form"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/email_login_form"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/email"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/prompt_email"
+                                    android:inputType="textEmailAddress"
+                                    android:maxLines="1"
+                                    android:singleLine="true" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <EditText
+                                    android:id="@+id/password"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/prompt_password"
+                                    android:imeActionId="@+id/login"
+                                    android:imeActionLabel="@string/action_sign_in_short"
+                                    android:imeOptions="actionUnspecified"
+                                    android:inputType="textPassword"
+                                    android:maxLines="1"
+                                    android:singleLine="true" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <Button
+                                android:id="@+id/LoginBt"
+                                style="?android:textAppearanceSmall"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:text="SIGN IN"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </ScrollView>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="43dp">
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4.50" />
+
+                        <TextView
+                            android:text="新規会員登録"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:id="@+id/newmember"
+                            android:layout_weight="0.31"
+                            android:textColor="@color/wallet_holo_blue_light"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/MyPage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.27">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical" >
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="153dp"
+                                android:weightSum="1">
+
+                                <ImageView
+                                    android:layout_width="138dp"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@mipmap/ic_launcher"
+                                    android:id="@+id/imageView"
+                                    android:layout_row="1"
+                                    android:layout_column="0"
+                                    android:background="@color/common_google_signin_btn_text_dark_disabled" />
+
+                                <LinearLayout
+                                    android:orientation="vertical"
+                                    android:layout_width="138dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.95"
+                                    android:weightSum="1">
+
+                                    <Space
+                                        android:layout_width="match_parent"
+                                        android:layout_height="5dp" />
+
+                                    <LinearLayout
+                                        android:orientation="horizontal"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="36dp"
+                                        android:weightSum="1">
+
+                                        <TextView
+                                            android:text="OIC太郎"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/textView7"
+                                            android:textSize="24sp"
+                                            android:layout_weight="0.86"
+                                            android:textColor="@android:color/black" />
+
+                                        <Button
+                                            android:text="設定"
+                                            android:layout_width="58dp"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/button6"
+                                            android:textSize="14sp"
+                                            android:textColor="@android:color/black"
+                                            android:textStyle="normal|bold" />
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:text="　　ID:12345678"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/textView9"
+                                        android:textAlignment="textStart"
+                                        android:textSize="12sp" />
+
+                                    <Space
+                                        android:layout_width="match_parent"
+                                        android:layout_height="10dp" />
+
+                                    <TextView
+                                        android:text="オススメスタンプラリー"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/textView8"
+                                        android:textSize="18sp"
+                                        android:textAlignment="center"
+                                        android:textColor="@android:color/holo_green_light" />
+
+                                    <Space
+                                        android:layout_width="match_parent"
+                                        android:layout_height="10dp" />
+
+                                    <LinearLayout
+                                        android:orientation="horizontal"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp">
+
+                                        <TextView
+                                            android:text="フォロー:12"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/textView13"
+                                            android:layout_weight="36.70"
+                                            android:textSize="12sp" />
+
+                                        <TextView
+                                            android:text="フォロワー:10"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:id="@+id/textView14"
+                                            android:layout_weight="45.27"
+                                            android:textSize="12sp" />
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:text="マイスタンプ帳:22"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="27dp"
+                                        android:id="@+id/textView11"
+                                        android:textSize="12sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </ScrollView>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/TOP"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -48,7 +282,8 @@
                                 android:layout_width="match_parent"
                                 app:srcCompat="@mipmap/ic_launcher"
                                 android:id="@+id/ThemeImage"
-                                android:layout_height="150dp" />
+                                android:layout_height="150dp"
+                                android:background="@color/common_google_signin_btn_text_light_disabled" />
 
                             <Space
                                 android:layout_width="match_parent"
@@ -58,7 +293,8 @@
                                 android:layout_width="match_parent"
                                 app:srcCompat="@mipmap/ic_launcher"
                                 android:id="@+id/OfficialImage"
-                                android:layout_height="80dp" />
+                                android:layout_height="80dp"
+                                android:background="@color/common_google_signin_btn_text_light_disabled" />
 
                             <Space
                                 android:layout_width="match_parent"
@@ -79,7 +315,8 @@
                                         android:layout_height="match_parent"
                                         app:srcCompat="@mipmap/ic_launcher"
                                         android:id="@+id/IntroductionImage1"
-                                        android:layout_weight="1" />
+                                        android:layout_weight="1"
+                                        android:background="@color/common_google_signin_btn_text_light_disabled" />
 
                                     <Space
                                         android:layout_width="wrap_content"
@@ -91,7 +328,8 @@
                                         android:layout_height="match_parent"
                                         app:srcCompat="@mipmap/ic_launcher"
                                         android:id="@+id/IntroductionImage2"
-                                        android:layout_weight="1" />
+                                        android:layout_weight="1"
+                                        android:background="@color/common_google_signin_btn_text_light_disabled" />
 
                                     <Space
                                         android:layout_width="wrap_content"
@@ -103,7 +341,8 @@
                                         android:layout_height="match_parent"
                                         app:srcCompat="@mipmap/ic_launcher"
                                         android:id="@+id/IntroductionImage3"
-                                        android:layout_weight="1" />
+                                        android:layout_weight="1"
+                                        android:background="@color/common_google_signin_btn_text_light_disabled" />
                                 </LinearLayout>
                             </FrameLayout>
 
@@ -158,7 +397,7 @@
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="60dp">
+                                android:layout_height="50dp">
 
                                 <Space
                                     android:layout_height="match_parent"
@@ -170,7 +409,8 @@
                                     android:layout_height="match_parent"
                                     app:srcCompat="@mipmap/ic_launcher"
                                     android:id="@+id/StamoRallyImage1"
-                                    android:layout_weight="0.03" />
+                                    android:layout_weight="0.03"
+                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
 
                                 <TextView
                                     android:text="1位：東京ラーメンめぐり"
@@ -183,10 +423,14 @@
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
 
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="60dp">
+                                android:layout_height="50dp">
 
                                 <Space
                                     android:layout_height="match_parent"
@@ -198,7 +442,8 @@
                                     android:layout_height="match_parent"
                                     app:srcCompat="@mipmap/ic_launcher"
                                     android:id="@+id/StamoRallyImage2"
-                                    android:layout_weight="0.03" />
+                                    android:layout_weight="0.03"
+                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
 
                                 <TextView
                                     android:text="2位：東京とんかつめぐり"
@@ -211,10 +456,14 @@
                                     android:textColor="@android:color/black" />
                             </LinearLayout>
 
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="60dp">
+                                android:layout_height="50dp">
 
                                 <Space
                                     android:layout_height="match_parent"
@@ -226,7 +475,8 @@
                                     android:layout_height="match_parent"
                                     app:srcCompat="@mipmap/ic_launcher"
                                     android:id="@+id/StamoRallyImage3"
-                                    android:layout_weight="0.03" />
+                                    android:layout_weight="0.03"
+                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
 
                                 <TextView
                                     android:text="3位：東京うどんめぐり"
@@ -241,152 +491,6 @@
 
                         </LinearLayout>
                     </ScrollView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/MyPage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:weightSum="1">
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="123dp"
-                        android:weightSum="1"
-                        android:layout_weight="0.07">
-
-                        <ImageView
-                            android:layout_width="138dp"
-                            android:layout_height="match_parent"
-                            app:srcCompat="@mipmap/ic_launcher"
-                            android:id="@+id/imageView"
-                            android:layout_row="1"
-                            android:layout_column="0" />
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="138dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.95"
-                            android:weightSum="1">
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="14dp" />
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="33dp"
-                                android:weightSum="1">
-
-                                <TextView
-                                    android:text="OIC太郎"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/textView7"
-                                    android:textSize="24sp"
-                                    android:layout_weight="0.86"
-                                    android:textColor="@android:color/black" />
-
-                                <Button
-                                    android:text="フォロー"
-                                    android:layout_width="58dp"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/button6"
-                                    android:textSize="12sp"
-                                    android:layout_weight="0.19"
-                                    android:textColor="@android:color/black" />
-                            </LinearLayout>
-
-                            <TextView
-                                android:text="　　ID:12345678"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/textView9"
-                                android:textAlignment="textStart"
-                                android:textSize="12sp" />
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <TextView
-                                android:text="オススメスタンプラリー"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/textView8"
-                                android:textSize="18sp"
-                                android:textAlignment="center"
-                                android:textColor="@android:color/holo_green_light" />
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <TextView
-                                    android:text="フォロー:12"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/textView13"
-                                    android:layout_weight="36.70"
-                                    android:textSize="12sp" />
-
-                                <TextView
-                                    android:text="フォロワー:10"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/textView14"
-                                    android:layout_weight="45.27"
-                                    android:textSize="12sp" />
-
-                            </LinearLayout>
-
-                            <TextView
-                                android:text="マイスタンプ帳:22"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/textView11"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="16dp"
-                        android:layout_weight="0.27">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical" >
-
-                            <TextView
-                                android:text="紹介文"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/textView15"
-                                android:textSize="18sp" />
-
-                            <TextView
-                                android:text="こんにちは"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/textView10"
-                                android:textColor="@android:color/black"
-                                android:textSize="18sp" />
-                        </LinearLayout>
-                    </ScrollView>
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -412,21 +516,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/Login"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/NewMember"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>

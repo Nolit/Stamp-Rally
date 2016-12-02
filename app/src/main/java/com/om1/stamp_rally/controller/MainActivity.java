@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -19,12 +21,25 @@ import butterknife.InjectView;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
-//    Button loginButton;
-//    TextView newloginText;
+    //ログイン
+    Button loginButton;
+    TextView newloginText;
+    AutoCompleteTextView id;
+    EditText pass;
+    String loginid = "";
+    String loginpass = "";
 
+    //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
-    int i = 0;
+
+    //リロード
+    Bundle savedInstanceState;
+
+
+    //ログインテスト
+    int i = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,27 +47,41 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+        //インスタンスの保存
+        this.savedInstanceState = savedInstanceState;
 
-        //ログイン画面へ
-//        loginButton = (Button)findViewById(R.id.login);
-//        loginButton.setText("ログイン");
-//        loginButton.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//
-//        //新規会員登録ページへ
-//        newloginText = (TextView) findViewById(R.id.newMem);
-//        newloginText.setText("新規会員登録");
-//        newloginText.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+
+        //ログイン
+        id = (AutoCompleteTextView) findViewById(R.id.email);
+        pass = (EditText) findViewById(R.id.password);
+        loginButton = (Button)findViewById(R.id.LoginBt);
+        loginButton.setText("ログイン");
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(id.getText().equals(loginid) && pass.getText().equals(loginpass)){
+
+
+
+
+
+                }
+                else{
+
+
+                }
+            }
+        });
+
+
+        //新規会員登録ページへ
+        newloginText = (TextView) findViewById(R.id.newmember);
+        newloginText.setText("新規会員登録");
+        newloginText.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         //スタンプラリーページを選択時のフラグメント起動
@@ -82,44 +111,40 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.setup();
             TabHost.TabSpec spec;
 
-            // Tab1
+            // TOPページタブ
             spec = tabHost.newTabSpec("TOP")
                     .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
-            // Tab2
+            // マイページタブ
             spec = tabHost.newTabSpec("MyPage")
                     .setIndicator("マイページ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.MyPage);
             tabHost.addTab(spec);
 
-            // Tab3
+            // タイムラインタブ
             spec = tabHost.newTabSpec("TimeLine")
                     .setIndicator("タイムライン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TimeLine);
             tabHost.addTab(spec);
 
-            // Tab4
+            // スタンプラリータブ
             spec = tabHost.newTabSpec("StampRally")
                     .setIndicator("スタンプラリー", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
 
-            // Tab5
+            // スタンプ登録タブ
             spec = tabHost.newTabSpec("StampRegistration")
                     .setIndicator("スタンプ登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRegistration);
             tabHost.addTab(spec);
 
+            //ログインタブ
             spec = tabHost.newTabSpec("Login")
                     .setIndicator("ログイン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.Login);
-            //tabHost.addTab(spec);
-
-            spec = tabHost.newTabSpec("NewMember")
-                    .setIndicator("新規会員登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.NewMember);
             //tabHost.addTab(spec);
 
             tabHost.setCurrentTab(0);
@@ -138,47 +163,49 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.setup();
             TabHost.TabSpec spec;
 
-            // Tab1
+            // TOPページタブ
             spec = tabHost.newTabSpec("TOP")
                     .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
-            // Tab2
+            // マイページタブ
             spec = tabHost.newTabSpec("マイページ")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.MyPage);
             //tabHost.addTab(spec);
 
-            // Tab3
+            // タイムラインタブ
             spec = tabHost.newTabSpec("TimeLine")
                     .setIndicator("タイムライン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TimeLine);
             //tabHost.addTab(spec);
 
-            // Tab4
+            // スタンプラリータブ
             spec = tabHost.newTabSpec("StampRally")
                     .setIndicator("スタンプラリー", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             //tabHost.addTab(spec);
 
-            // Tab5
+            // スタンプ登録タブ
             spec = tabHost.newTabSpec("StampRegistration")
                     .setIndicator("スタンプ登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRegistration);
             //tabHost.addTab(spec);
 
+            //ログインタブ
             spec = tabHost.newTabSpec("Login")
                     .setIndicator("ログイン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.Login);
             tabHost.addTab(spec);
-
-            spec = tabHost.newTabSpec("NewMember")
-                    .setIndicator("新規会員登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.NewMember);
-            tabHost.addTab(spec);
-
             tabHost.setCurrentTab(0);
+
+            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
+                @Override
+                public void onTabChanged(String tabId) {
+                    MainActivity.this.onStart();
+                }
+            });
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (RuntimeException e) {
@@ -190,5 +217,11 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d("map", "ready");
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.d("yahbhou", "hello!!");
     }
 }
