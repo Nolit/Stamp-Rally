@@ -7,12 +7,17 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -37,13 +42,17 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback {
+public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback ,NavigationView.OnNavigationItemSelectedListener {
     private static final int CAN_STAMP_METER= 50;
+
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     @InjectView(R.id.cameraIcon_map)
     ImageButton cameraIcon;
+
+    @InjectView(R.id.nav_view)
+    NavigationView navigationView;
 
     //状態別マーカーの宣言
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
@@ -54,9 +63,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     private LayoutInflater inflater;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +82,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         FragmentManager fm = getChildFragmentManager();
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        navigationView.setNavigationItemSelectedListener(this);
 
         cameraIcon.setVisibility(View.INVISIBLE);
 
@@ -214,4 +223,72 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     }
 
+    //ここから↓ NavigationDrawer
+//    @Override
+//    public void onBackPressed() {
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        //ビューの取得
+        View view = inflater.inflate(R.layout.info_window, null);
+
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @OnClick(R.id.menuButton_map)
+    public void showMenu(View view) {
+        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
+    }
 }
+
+
