@@ -42,7 +42,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
-    @InjectView(R.id.cameraIcon)
+    @InjectView(R.id.cameraIcon_map)
     ImageButton cameraIcon;
 
     //状態別マーカーの宣言
@@ -209,7 +209,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         mLocationManager.removeUpdates(this);    // 位置情報の更新を止める
     }
 
-    @OnClick(R.id.cameraIcon)
+    @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon() {
 
     }
