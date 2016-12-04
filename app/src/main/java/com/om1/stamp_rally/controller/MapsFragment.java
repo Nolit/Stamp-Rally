@@ -21,8 +21,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.om1.stamp_rally.view.MesuredDrawerLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -54,8 +58,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     @InjectView(R.id.drawer_layout)
     DrawerLayout drawer;
-//    @InjectView(R.id.nav_view)
-//    NavigationView navigationView;
+    @InjectView(R.id.nav_view)
+    NavigationView navigationView;
 
     //状態別マーカーの宣言
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
@@ -88,7 +92,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-//        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
 
         cameraIcon.setVisibility(View.INVISIBLE);
 
@@ -98,10 +102,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-//        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-//        drawer.openDrawer(GravityCompat.START);
-//        drawer.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
     }
 
     @Override
@@ -136,7 +136,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         });
 
         setUpLocationManager();
-
         setMapListeners();
 
         //スタンプラリーのスポット3点（デバッグ用）
