@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,16 +41,27 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.om1.stamp_rally.model.StampRallyModel;
+import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.view.MesuredDrawerLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import database.entities.Sample;
+import database.entities.StampRallys;
+import database.entities.Stamps;
 
 
 public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback ,NavigationView.OnNavigationItemSelectedListener {
     private static final int CAN_STAMP_METER= 50;
-
+    private final EventBus eventBus = EventBus.getDefault();
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
@@ -61,6 +73,9 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @InjectView(R.id.nav_view)
     NavigationView navigationView;
 
+    //データベース用変数
+    StampRallys stampRally;
+
     //状態別マーカーの宣言
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
 
@@ -70,7 +85,14 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     private LayoutInflater inflater;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        eventBus.register(this);
+
+        //データベースと通信
+        StampRallyModel stampRallyModel = StampRallyModel.getInstance();
+        stampRallyModel.fetchJson();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,6 +125,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -224,6 +247,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     public void onStop() {
         super.onStop();
         mLocationManager.removeUpdates(this);    // 位置情報の更新を止める
+        eventBus.unregister(this);
     }
 
     @OnClick(R.id.cameraIcon_map)
@@ -248,6 +272,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu, inflater);
+
     }
 
     @Override
@@ -302,6 +327,27 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         }
         Log.d("status", "close");
         drawer.openDrawer(GravityCompat.START);
+    }
+
+    //ここからデータベースとの通信処理
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void fetchedJson(FetchJsonEvent event) {
+        if (!event.isSuccess()) {
+//            Toast.makeText(this, "通信に失敗しました。", Toast.LENGTH_SHORT).show();
+            System.out.println("失敗！！！！！！");
+            return;
+        }
+        try {
+            //Json文字列をSampleオブジェクトに変換
+            stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
+
+            for(Stamps i:stampRally.getStampsCollection()){
+                Log.d("スタンプ名", i.getStampName());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
