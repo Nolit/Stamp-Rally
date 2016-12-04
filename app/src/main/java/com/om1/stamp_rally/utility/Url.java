@@ -6,13 +6,13 @@ package com.om1.stamp_rally.utility;
 
 public final class Url {
     //AWS
-    public static final String HOST = "35.160.83.150";
+//    public static final String HOST = "35.160.83.150";
 //    public static final String HOST = "localhost";
     //エミュレーターから見たホストPC
-//    public static final String HOST = "10.0.2.2";
+    public static final String HOST = "10.0.2.2";
 
-    public static final Integer PORT = 80;
-//    public static final Integer PORT = 8080;
+//    public static final Integer PORT = 80;
+    public static final Integer PORT = 8080;
 
     private Url(){}
 }
