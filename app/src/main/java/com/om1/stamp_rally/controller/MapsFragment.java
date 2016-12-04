@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @InjectView(R.id.cameraIcon_map)
     ImageButton cameraIcon;
 
-    @InjectView(R.id.nav_view)
-    NavigationView navigationView;
+    @InjectView(R.id.drawer_layout)
+    DrawerLayout drawer;
+//    @InjectView(R.id.nav_view)
+//    NavigationView navigationView;
 
     //状態別マーカーの宣言
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
@@ -71,6 +74,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         super.onCreateView(inflater, container, savedInstanceState);
         this.inflater = inflater;
 
+        setHasOptionsMenu(true);
+
         return inflater.inflate(R.layout.activity_maps, null);
     }
 
@@ -83,7 +88,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        navigationView.setNavigationItemSelectedListener(this);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         cameraIcon.setVisibility(View.INVISIBLE);
 
@@ -93,6 +98,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+//        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+//        drawer.openDrawer(GravityCompat.START);
+//        drawer.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
     }
 
     @Override
@@ -226,7 +235,9 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     //ここから↓ NavigationDrawer
 //    @Override
 //    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        View view = inflater.inflate(R.layout.info_window, null);
+//
+//        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
 //        if (drawer.isDrawerOpen(GravityCompat.START)) {
 //            drawer.closeDrawer(GravityCompat.START);
 //        } else {
@@ -234,12 +245,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 //        }
 //    }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -279,14 +289,19 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @OnClick(R.id.menuButton_map)
+    @OnClick(R.id.menuIcon_map)
     public void showMenu(View view) {
-        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        Log.d("click", "showMenu");
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            Log.d("status", "open");
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+        Log.d("status", "close");
         drawer.openDrawer(GravityCompat.START);
     }
 }

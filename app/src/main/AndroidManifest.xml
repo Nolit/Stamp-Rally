@@ -33,11 +33,6 @@
         </activity>
 
         <activity
-            android:name="com.om1.stamp_rally.controller.MapsFragment"
-            android:label="MAP">
-
-        </activity>
-        <activity
             android:name=".controller.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
