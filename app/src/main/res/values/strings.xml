@@ -27,4 +27,6 @@
     <string name="title_activity_complete_rally">CompleteRallyActivity</string>
     <string name="title_activity_favorite_rally">FavoriteRallyActivity</string>
     <string name="title_activity_rally_detail">RallyDetailActivity</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_stamp_preview">StampPreviewActivity</string>
 </resources>
