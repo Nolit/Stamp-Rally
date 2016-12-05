@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.isseiaoki.simplecropview.CropImageView;
 import com.om1.stamp_rally.R;
+import com.om1.stamp_rally.model.GetStampModel;
 
 import java.io.ByteArrayOutputStream;
 
@@ -92,12 +93,10 @@ public class StampPreviewActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
             String title = titleEdit.getText().toString();
             if(title.equals("")){
-                Log.d("title", "empty");
                 stampTitleError.setText(ERROR_MESSAGE);
                 return;
             }
-                Log.d("title", "not empty");
-                saveStamp();
+            saveStamp();
             }
         });
         builder.setNegativeButton(NO_BUTTON_MESSAGE, null);
@@ -116,5 +115,6 @@ public class StampPreviewActivity extends AppCompatActivity {
         String title = titleEdit.getText().toString();
         String note = noteEdit.getText().toString();
 
+        GetStampModel.getInstance().postGotStamp(title, note, stampPicture);
     }
 }
