@@ -25,8 +25,6 @@ public class MesuredDrawerLayout extends DrawerLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int a = MeasureSpec.getMode(widthMeasureSpec);
-        Log.d("onMeasure", ""+a);
         widthMeasureSpec = MeasureSpec.makeMeasureSpec(
                 MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY);
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(
