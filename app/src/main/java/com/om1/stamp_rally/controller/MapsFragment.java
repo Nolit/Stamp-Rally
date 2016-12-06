@@ -1,16 +1,14 @@
 package com.om1.stamp_rally.controller;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,18 +19,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.om1.stamp_rally.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -40,49 +35,40 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyModel;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
-import com.om1.stamp_rally.view.MesuredDrawerLayout;
+import java.io.IOException;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.IOException;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import database.entities.Sample;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
 
 public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback ,NavigationView.OnNavigationItemSelectedListener {
-    private static final int CAN_STAMP_METER= 50;
     private final EventBus eventBus = EventBus.getDefault();
-
+    private final LatLng START_POSITION = new LatLng(21.308889,-157.826111);  //ビューカメラの初期化
+    private static final int CAN_STAMP_METER= 50;
+    private LayoutInflater inflater;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
+    private StampRallys stampRally; //データベース
     @InjectView(R.id.cameraIcon_map)
     ImageButton cameraIcon;
-
     @InjectView(R.id.drawer_layout)
     DrawerLayout drawer;
     @InjectView(R.id.nav_view)
     NavigationView navigationView;
-
-    //データベース用変数
-    StampRallys stampRally;
-
-    //状態別マーカーの宣言
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
+
 
     //debug用
     Marker oosakajo,harukasu,usj;
-
-    private LayoutInflater inflater;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,13 +81,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         this.inflater = inflater;
-
         setHasOptionsMenu(true);
-
         return inflater.inflate(R.layout.activity_maps, null);
     }
 
@@ -114,15 +97,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        navigationView.setNavigationItemSelectedListener(this);
-
         cameraIcon.setVisibility(View.INVISIBLE);
-
-        //状態別マーカーの設定
-        defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-        nearMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
-        completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-
+        navigationView.setNavigationItemSelectedListener(this);
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
     }
 
@@ -130,13 +106,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);    //現在地に戻るボタン(on)
-        mMap.getUiSettings().setMapToolbarEnabled(false);   //mapToolBarの表示(off)
-        mMap.getUiSettings().setZoomControlsEnabled(true);  //ズームボタン(on/デバッグ用)
-
-        //ビューカメラの初期位置（ホノルル）→GPSが取得できない場合に表示される
-        LatLng start_position = new LatLng(21.308889,-157.826111);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(start_position));
+        mMap.setMyLocationEnabled(true);                     //現在地に戻るボタン(on)
+        mMap.getUiSettings().setMapToolbarEnabled(false);    //mapToolBarの表示(off)
+        mMap.getUiSettings().setZoomControlsEnabled(true);   //ズームボタン(on/デバッグ用)
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(START_POSITION));
 
         //infoWindowのカスタマイズ
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -190,16 +163,13 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         }
     }
 
+    //LocationManagerの設定
     private void setUpLocationManager(){
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);       //高精度
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-        String provider = mLocationManager.getBestProvider(criteria, true);
-        if(mLocationManager.isProviderEnabled(provider)){
-            System.out.println("取得したプロバイダ:"+provider);
-        }
-        //位置情報取得
-        mLocationManager.requestLocationUpdates(provider, 1, 1, this);
+        criteria.setAccuracy(Criteria.NO_REQUIREMENT);      //プロバイダ条件選択なし
+        String provider = mLocationManager.getBestProvider(criteria, true);     //プロバイダ取得
+        mLocationManager.requestLocationUpdates(provider, 1, 1, this);          //位置情報取得
     }
 
     private void setMapListeners(){
@@ -215,8 +185,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         //地図上をタップ時のイベントハンドラ（カメラボタンを非常時にする）
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng point) {
-                cameraIcon.setVisibility(View.INVISIBLE);
+            public void onMapClick(LatLng point) { cameraIcon.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -231,13 +200,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
-    }
+    public void onProviderDisabled(String provider) { }
 
     @Override   //プロバイダが利用可能になった時に呼び出される
-    public void onProviderEnabled(String provider) {
-        System.out.println("プロバイダが有効になりました:"+provider);
-    }
+    public void onProviderEnabled(String provider) { Log.d("デバッグ","プロバイダが有効になりました:"+provider); }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -317,6 +283,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         return true;
     }
 
+    //NavigationViewの表示
     @OnClick(R.id.menuIcon_map)
     public void showMenu(View view) {
         Log.d("click", "showMenu");
@@ -329,16 +296,15 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         drawer.openDrawer(GravityCompat.START);
     }
 
-    //ここからデータベースとの通信処理
+    //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fetchedJson(FetchJsonEvent event) {
         if (!event.isSuccess()) {
-//            Toast.makeText(this, "通信に失敗しました。", Toast.LENGTH_SHORT).show();
-            System.out.println("失敗！！！！！！");
+            Log.d("デバッグ","データベースとの通信に失敗");
             return;
         }
         try {
-            //Json文字列をSampleオブジェクトに変換
+            //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
 
             for(Stamps i:stampRally.getStampsCollection()){
