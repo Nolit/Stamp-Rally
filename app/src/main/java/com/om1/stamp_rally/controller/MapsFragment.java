@@ -100,6 +100,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         cameraIcon.setVisibility(View.INVISIBLE);
         navigationView.setNavigationItemSelectedListener(this);
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+        nearMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+        completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+        
     }
 
 
@@ -308,7 +313,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
 
             for(Stamps i:stampRally.getStampsCollection()){
-                Log.d("スタンプ名", i.getStampName());
+                Log.d("デバッグ", i.getStampName());
             }
 
         } catch (IOException e) {
