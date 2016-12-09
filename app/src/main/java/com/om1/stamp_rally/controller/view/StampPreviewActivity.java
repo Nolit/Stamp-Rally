@@ -45,29 +45,19 @@ public class StampPreviewActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.inject(this);
 
-        byte[] bytes =  getIntent().getByteArrayExtra("pictureImage");
-        byte[] pictureImage = changeDisplayOrientation(bytes);
 
-        Bitmap bmp = BitmapFactory.decodeByteArray(pictureImage, 0, pictureImage.length);
-        cropImageView.setImageBitmap(bmp);
+        Bitmap pictureImage = changeDisplayOrientation(getIntent().getByteArrayExtra("pictureImage"));
+        cropImageView.setImageBitmap(pictureImage);
     }
 
-    private byte[] changeDisplayOrientation(byte[] data){
-        Bitmap tmp_bitmap = BitmapFactory.decodeByteArray (data, 0, data.length);
+    private Bitmap changeDisplayOrientation(byte[] image){
+        Bitmap tmp_bitmap = BitmapFactory.decodeByteArray (image, 0, image.length);
         int width = tmp_bitmap.getWidth ();
         int height = tmp_bitmap.getHeight ();
         Matrix matrix = new Matrix();
         matrix.postRotate (90);
-        Bitmap bitmap = Bitmap.createBitmap (tmp_bitmap, 0, 0, width, height, matrix, true);
-        return convertFromBitmap(bitmap);
+        return Bitmap.createBitmap (tmp_bitmap, 0, 0, width, height, matrix, true);
     }
-
-    private byte[] convertFromBitmap(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
-    }
-
 
     @OnClick(R.id.takeAgainButton)
     void backActivity(){
@@ -85,11 +75,17 @@ public class StampPreviewActivity extends AppCompatActivity {
         showEditStampDialog(layout);
     }
 
+    private void initDialogViews(View layout){
+        titleEdit = findById(layout, R.id.stampTitleEdit);
+        noteEdit = findById(layout, R.id.stampNoteEdit);
+        stampTitleError = findById(layout, R.id.stampTitleError);
+    }
+
     private void showEditStampDialog(View layout){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(DIALOG_TITLE);
-        builder.setView(layout);
-        builder.setPositiveButton(OK_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this)
+        .setTitle(DIALOG_TITLE)
+        .setView(layout)
+        .setPositiveButton(OK_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
             String title = titleEdit.getText().toString();
             if(title.equals("")){
@@ -98,23 +94,23 @@ public class StampPreviewActivity extends AppCompatActivity {
             }
             saveStamp();
             }
-        });
-        builder.setNegativeButton(NO_BUTTON_MESSAGE, null);
-        builder.setCancelable(false).create().show();
-    }
-
-    private void initDialogViews(View layout){
-        titleEdit = findById(layout, R.id.stampTitleEdit);
-        noteEdit = findById(layout, R.id.stampNoteEdit);
-        stampTitleError = findById(layout, R.id.stampTitleError);
+        })
+        .setNegativeButton(NO_BUTTON_MESSAGE, null)
+        .setCancelable(false).create().show();
     }
 
     private void saveStamp(){
         Bitmap bm = cropImageView.getCroppedBitmap();
-        byte[]  stampPicture = convertFromBitmap(bm);
+        byte[]  stampPicture = convert(bm);
         String title = titleEdit.getText().toString();
         String note = noteEdit.getText().toString();
 
         GetStampModel.getInstance().postGotStamp(title, note, stampPicture);
+    }
+
+    private byte[] convert(Bitmap bitmap){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return baos.toByteArray();
     }
 }
