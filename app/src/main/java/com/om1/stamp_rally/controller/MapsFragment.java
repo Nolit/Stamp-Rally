@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -38,12 +37,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyModel;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -54,10 +55,11 @@ import database.entities.Stamps;
 public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback ,NavigationView.OnNavigationItemSelectedListener {
     private final EventBus eventBus = EventBus.getDefault();
     private final LatLng START_POSITION = new LatLng(34.715602789654625,135.5946671962738);  //ビューカメラの初期化
-    private static final int CAN_STAMP_METER= 50;
+    private static final int CAN_STAMP_METER= 100;
     private LayoutInflater inflater;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
+    private LatLng position;        //確認！！！→　cameraIconの表示処理(VISIBLE)の時に使う。onLocationChangedが呼ばれない限り初期化されてない、onLocationChangedが更新されるまで前の位置情報が入ったままになる
     private StampRallys stampRally = null; //データベース
     @InjectView(R.id.cameraIcon_map)
     ImageButton cameraIcon;
@@ -66,20 +68,14 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @InjectView(R.id.nav_view)
     NavigationView navigationView;
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
-    ArrayList<Marker> markers = new ArrayList<Marker>();
-
-    //debug用
-    Marker oosakajo,harukasu,usj;
+    public ArrayList<Marker> markers = new ArrayList<Marker>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventBus.register(this);
-
-        //データベースと通信
         StampRallyModel stampRallyModel = StampRallyModel.getInstance();
-        stampRallyModel.fetchJson();
-
+        stampRallyModel.fetchJson();    //データベースと通信
     }
 
     @Override
@@ -141,48 +137,31 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         setUpLocationManager();
         setMapListeners();
 
-        //スタンプラリーのスポット3点（デバッグ用）
-//        oosakajo = mMap.addMarker(new MarkerOptions()
-//                .position(new LatLng(34.684581, 135.526349)).title("大阪城")
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-//        harukasu = mMap.addMarker(new MarkerOptions()
-//                .position(new LatLng(34.645842, 135.513971)).title("あべのハルカス").alpha(0.4f));
-//        usj = mMap.addMarker(new MarkerOptions()
-//                .position(new LatLng(34.6671654, 135.4356473)).title("USJ"));
-
-
-        if(stampRally != null){
-            Log.d("デバッグ","マーカーの配置");
-            for(Stamps stamp:stampRally.getStampsCollection()){
-                System.out.println(stamp.getStampName()+"を配置します");
-//                markers.add(mMap.addMarker(new MarkerOptions()
-//                    .position(new LatLng(stamp.getStamptableId().getLongitude(),stamp.getStamptableId().getLongitude()))
-//                    .title(stamp.getStampName())));
-
-                mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()))
-                    .title(stamp.getStampName()));
-
-            }
-            System.out.println("マーカーの配置完了");
-        }
     }
 
     @Override   //位置座標を取得したら引数に渡して呼び出される
     public void onLocationChanged(Location location) {
         //カメラを現在地に移動
-        LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+        position = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
-        //現在地から大阪城までの距離を計算（メートルで計算・WGS84楕円体）
-        float[] results = new float[1];
-        Location.distanceBetween(location.getLatitude(), location.getLongitude(), 34.684581, 135.526349, results);
+        //現在地からの距離100m以内のマーカーを切り替える（メートルで計算・WGS84楕円体）
+        float[] results_markerInitialization = new float[1];
+        for(Marker marker:markers) {
+            Location.distanceBetween(location.getLatitude(), location.getLongitude()
+                    , marker.getPosition().latitude
+                    , marker.getPosition().longitude
+                    , results_markerInitialization);
+            Log.d("デバッグ", "現在地から"+ marker.getTitle() +"までの距離" + results_markerInitialization[0] + "m");
 
-        //マーカーとの距離が50m以内の時にマーカーを切り替える
-        if(results[0] < CAN_STAMP_METER){
-            oosakajo.setIcon(nearMarker);
-        }else{
-            oosakajo.setIcon(defaultMarker);
+            if(results_markerInitialization[0] < CAN_STAMP_METER){
+                marker.setIcon(nearMarker);
+                Log.d("デバッグ",marker.getTitle()+"のマーカーをnearにセット");
+            }else{
+                marker.setIcon(defaultMarker);
+                Log.d("デバッグ",marker.getTitle()+"のマーカーをdefautにセット");
+            }
+
         }
     }
 
@@ -197,10 +176,19 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     private void setMapListeners(){
         //マーカータップ時のイベントハンドラ（カメラボタンを表示する）
-        mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                cameraIcon.setVisibility(View.VISIBLE);
+                cameraIcon.setVisibility(View.INVISIBLE);
+
+                float[] results_cameraIconVisible = new float[1];
+                Location.distanceBetween(position.latitude, position.longitude
+                        , marker.getPosition().latitude
+                        , marker.getPosition().longitude
+                        , results_cameraIconVisible);
+                if(results_cameraIconVisible[0] < CAN_STAMP_METER){
+                    cameraIcon.setVisibility(View.VISIBLE);
+                }
                 return false;
             }
         });
@@ -216,10 +204,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Toast.makeText(MapsFragment.this.getContext(), "ここでスタンプ詳細表示", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapsFragment.this.getContext(), marker.getTitle(), Toast.LENGTH_LONG).show();
             }
-
         });
+
     }
 
     @Override
@@ -229,8 +217,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     public void onProviderEnabled(String provider) { Log.d("デバッグ","プロバイダが有効になりました:"+provider); }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
     @Override
     public void onStop() {
@@ -241,7 +228,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon() {
-
+        System.out.println("カメラページにインテント");
     }
 
     //ここから↓ NavigationDrawer
@@ -325,15 +312,19 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         try {
             //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
+            Log.d("デバッグ","データベースとの通信に成功");
 
-//            for(Stamps i:stampRally.getStampsCollection()){
-//                Log.d("デバッグ", i.getStampName());
-//            }
+            //マーカーの配置・格納
+            if(stampRally != null){
+                for(Stamps stamp:stampRally.getStampsCollection()){
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()))
+                            .title(stamp.getStampName())));
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
-
-
