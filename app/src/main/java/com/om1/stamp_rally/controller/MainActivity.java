@@ -11,13 +11,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.om1.stamp_rally.R;
+import com.om1.stamp_rally.model.LoginModel;
+import com.om1.stamp_rally.model.event.FetchJsonEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import database.entities.Sample;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
@@ -36,6 +47,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //リロード
     Bundle savedInstanceState;
 
+    private final EventBus eventBus = EventBus.getDefault();
+
 
     //ログインテスト
     int i = 1;
@@ -46,6 +59,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        eventBus.register(this);
 
         //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
@@ -56,19 +70,14 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         pass = (EditText) findViewById(R.id.password);
         loginButton = (Button)findViewById(R.id.LoginBt);
         loginButton.setText("ログイン");
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(id.getText().equals(loginid) && pass.getText().equals(loginpass)){
+                String a = id.getText().toString();
+                String b = pass.getText().toString();
+                Log.d("method", a+" : "+b);
 
-
-
-
-
-                }
-                else{
-
-
-                }
+                LoginModel.getInstance().login("tarou2", "tarou2");
             }
         });
 
@@ -223,5 +232,29 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     public void onStart(){
         super.onStart();
         Log.d("yahbhou", "hello!!");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void LoginAuthentication(String loginText) {
+        Log.d("method", "LoginAuthentication");
+        try {
+            Boolean isLogin = new ObjectMapper().readValue(loginText, Boolean.class);
+            if(isLogin == true){
+                Toast.makeText(this, "成功だよ", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(this, "失敗じゃぼけ", Toast.LENGTH_LONG).show();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        //EventBusライブラリによる自身の登録解除
+        eventBus.unregister(this);
+        super.onPause();
     }
 }
