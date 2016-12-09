@@ -110,7 +110,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // Tab1
             spec = tabHost.newTabSpec("TOP")
-                    .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
@@ -121,20 +121,20 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
 
             // Tab3
-            spec = tabHost.newTabSpec("TimeLine")
-                    .setIndicator("タイムライン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+            spec = tabHost.newTabSpec("タイムライン")
+                    .setIndicator("TIME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TimeLine);
             tabHost.addTab(spec);
 
             // Tab4
-            spec = tabHost.newTabSpec("StampRally")
-                    .setIndicator("スタンプラリー", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+            spec = tabHost.newTabSpec("スタンプラリー")
+                    .setIndicator("PLAY", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
 
             // Tab5
-            spec = tabHost.newTabSpec("StampRegistration")
-                    .setIndicator("スタンプ登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+            spec = tabHost.newTabSpec("スタンプ")
+                    .setIndicator("STAMP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRegistration);
             tabHost.addTab(spec);
 
