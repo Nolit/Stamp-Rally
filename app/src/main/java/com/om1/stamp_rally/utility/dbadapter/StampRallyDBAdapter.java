@@ -2,6 +2,7 @@ package com.om1.stamp_rally.utility.dbadapter;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 
 /**
@@ -22,16 +23,27 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
                 + IS_CHALLENGE + " INTEGER DEFAULT 0);";
     }
 
-    public void createStampRally(int id, int size){
+    public void createStampRally(int size){
         ContentValues values = new ContentValues();
-        values.put(ID, id);
         values.put(SIZE, size);
         db.insertOrThrow(tableName, null, values);
     }
 
-    public void challengeStampRally(int id){
+    public Cursor getTryingStampRally(){
+        return db.query(tableName, null, IS_CHALLENGE + " = 1", null, null, null, null, null);
+    }
+
+    public void tryStampRally(int id){
+        cancelTryingStampRally();
+
         ContentValues values = new ContentValues();
         values.put(IS_CHALLENGE, 1);
+        db.update(tableName, values, ID + " = " + id, null);
+    }
+
+    private void cancelTryingStampRally(){
+        ContentValues values = new ContentValues();
+        values.put(IS_CHALLENGE, 0);
         db.update(tableName, values, IS_CHALLENGE + " = 1", null);
     }
 }

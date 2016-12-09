@@ -2,6 +2,7 @@ package com.om1.stamp_rally.controller.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -17,7 +18,8 @@ import android.widget.TextView;
 
 import com.isseiaoki.simplecropview.CropImageView;
 import com.om1.stamp_rally.R;
-import com.om1.stamp_rally.model.GetStampModel;
+import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
+import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
 import java.io.ByteArrayOutputStream;
 
@@ -105,7 +107,16 @@ public class StampPreviewActivity extends AppCompatActivity {
         String title = titleEdit.getText().toString();
         String note = noteEdit.getText().toString();
 
-        GetStampModel.getInstance().postGotStamp(title, note, stampPicture);
+        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(this);
+        stampRallyDbAdapter.open();
+        Cursor c = stampRallyDbAdapter.getTryingStampRally();
+        startManagingCursor(c);
+        c.moveToFirst();
+        int stampRallyId = c.getInt(c.getColumnIndex("stampRallyId"));
+
+        StampDbAdapter stampDbAdapter = new StampDbAdapter(this);
+        stampDbAdapter.createStamp(stampRallyId, title, note, stampPicture);
+        Log.d("method", "saveStamp");
     }
 
     private byte[] convert(Bitmap bitmap){
