@@ -61,7 +61,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void takePicture(StampEvent event) {
+    void takePicture(final StampEvent event) {
         Camera.ShutterCallback shutterListener = new Camera.ShutterCallback() {
             public void onShutter() {
             }
@@ -70,6 +70,11 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             public void onPictureTaken(byte[] data,Camera camera) {
                 Intent intent = new Intent(getContext(), StampPreviewActivity.class);
                 intent.putExtra("pictureImage", data);
+                intent.putExtra("stampId", event.getStampId());
+                intent.putExtra("stampRallyId", event.getStampRallyId());
+                intent.putExtra("latitude", event.getLatitude());
+                intent.putExtra("longitude", event.getLongitude());
+
                 getContext().startActivity(intent);
             }
         });

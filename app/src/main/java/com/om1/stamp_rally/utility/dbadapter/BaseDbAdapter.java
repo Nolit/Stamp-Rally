@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class BaseDbAdapter {
     static final String DATABASE_NAME = "stamp-rally.db";
-    static final int DATABASE_VERSION = 7;
+    static final int DATABASE_VERSION = 9;
 
     protected String tableName;
     protected String dll;

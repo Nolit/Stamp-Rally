@@ -21,11 +21,6 @@ import com.isseiaoki.simplecropview.CropImageView;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.utility.ByteConverter;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
-import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
-
-import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -40,8 +35,8 @@ public class StampPreviewActivity extends AppCompatActivity {
     CropImageView cropImageView;
 
     private final String DIALOG_TITLE = "スタンプ獲得！！";
-    private final String OK_BUTTON_MESSAGE = "スタンプを押す";
-    private final String NO_BUTTON_MESSAGE = "戻る";
+    private final String OK_BUTTON_MESSAGE = "これでスタンプ";
+    private final String NO_BUTTON_MESSAGE = "撮り直し";
     private final String ERROR_MESSAGE = "名称を入力してください";
 
     @Override
@@ -50,7 +45,7 @@ public class StampPreviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stamp_preview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.inject(this);
-a();
+
         Bitmap pictureImage = changeDisplayOrientation(getIntent().getByteArrayExtra("pictureImage"));
         cropImageView.setImageBitmap(pictureImage);
     }
@@ -98,7 +93,7 @@ a();
                 return;
             }
             saveStamp();
-            nextActivity();
+            startActivity(new Intent(StampPreviewActivity.this, TakeStampActivity.class));
             }
         })
         .setNegativeButton(NO_BUTTON_MESSAGE, null)
@@ -106,31 +101,16 @@ a();
     }
 
     private void saveStamp(){
-        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(this);
         StampDbAdapter stampAdapter = new StampDbAdapter(this);
-        Map<String, Object> stampRally  = stampRallyDbAdapter.getTryingStampRally();
 
-        Integer stampRallyId = (Integer)stampRally.get(StampRallyDbAdapter.ID);
+        int stampId = getIntent().getIntExtra("stampId", 0);
+        int stampRallyId = getIntent().getIntExtra("stampRallyId", 0);
+        double latitude = getIntent().getDoubleExtra("latitude", 0);
+        double longitude = getIntent().getDoubleExtra("longitude", 0);
         String title = titleEdit.getText().toString();
         String note = noteEdit.getText().toString();
         byte[]  picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
 
-        stampAdapter.createStamp(stampRallyId, title, note, picture);
-    }
-
-    private void nextActivity(){
-        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(StampPreviewActivity.this);
-        int id = (Integer)stampRallyDbAdapter.getTryingStampRally().get(StampRallyDbAdapter.ID);
-        if(stampRallyDbAdapter.isClear(id)){
-            startActivity(new Intent(this, ClearActivity.class));
-            return;
-        }
-        startActivity(new Intent(this, TakeStampActivity.class));
-    }
-
-    private void a(){
-        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(StampPreviewActivity.this);
-        int size = (Integer)stampRallyDbAdapter.getTryingStampRally().get(StampRallyDbAdapter.SIZE);
-        Log.d("stamp_rally", ""+size);
+        stampAdapter.createStamp(stampId, stampRallyId, title, note, picture, latitude, longitude);
     }
 }

@@ -72,6 +72,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     NavigationView navigationView;
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
     public ArrayList<Marker> markers = new ArrayList<Marker>();
+    private Integer selectedStampId = 3, tryingStampRallyId = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        cameraIcon.setVisibility(View.INVISIBLE);
+//        cameraIcon.setVisibility(View.INVISIBLE);
         navigationView.setNavigationItemSelectedListener(this);
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
@@ -231,7 +232,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon(){
-        startActivity(new Intent(getContext(), TakeStampActivity.class));
+        Intent intent = new Intent(getContext(), TakeStampActivity.class);
+        intent.putExtra("stampId", selectedStampId);
+        intent.putExtra("stampRallyId", tryingStampRallyId);
+        startActivity(intent);
     }
 
     //ここから↓ NavigationDrawer

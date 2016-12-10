@@ -48,7 +48,7 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
 
     public boolean isClear(int id){
         int stampRallySize = (Integer)getById(id).get(SIZE);
-        int stampCount = new StampDbAdapter(context).getListByStampRallyId(id).size();
+        int stampCount = new StampDbAdapter(context).getByStampRallyIdAsList(id).size();
 
         return stampRallySize == stampCount;
     }

@@ -35,7 +35,12 @@ public class TakeStampActivity extends AppCompatActivity {
         ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBusUtil.defaultBus.post(new StampEvent());
+                Integer stampRallyId = Integer.valueOf(getIntent().getIntExtra("stampRallyId", 0));
+                Integer stampId = Integer.valueOf(getIntent().getIntExtra("stampId", 0));
+                Double latitude = Double.valueOf(getIntent().getLongExtra("latitude", 0));
+                Double longitude = Double.valueOf(getIntent().getLongExtra("longitude", 0));
+
+                EventBusUtil.defaultBus.post(new StampEvent(stampId, stampRallyId, latitude, longitude));
             }
         });
     }
