@@ -5,7 +5,7 @@ package com.om1.stamp_rally.model;
  */
 
 public class StampRallyModel {
-    private static StampRallyModel instance;
+    private static StampRallyModel instance = new StampRallyModel();
 
     public static StampRallyModel getInstance(){
         return instance;
