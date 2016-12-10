@@ -92,6 +92,10 @@
             android:name=".controller.StampPreviewActivity"
             android:label="@string/title_activity_stamp_preview"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".controller.StampEditListActivity"
+            android:label="StampEditListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

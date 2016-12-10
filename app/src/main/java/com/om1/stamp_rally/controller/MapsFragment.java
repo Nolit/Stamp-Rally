@@ -315,7 +315,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         try {
             //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
-            Log.d("デバッグ","データベースとの通信に成功");
+            Log.d("デバッグ","MapsFragment:データベースとの通信に成功");
 
             //マーカーの配置・格納
             if(stampRally != null){
