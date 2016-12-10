@@ -89,7 +89,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".controller.view.StampPreviewActivity"
+            android:name=".controller.StampPreviewActivity"
             android:label="@string/title_activity_stamp_preview"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

@@ -3,6 +3,7 @@ package com.om1.stamp_rally.controller;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +14,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -94,7 +97,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         mMap.getUiSettings().setZoomControlsEnabled(true);  //ズームボタン(on/デバッグ用)
 
         //ビューカメラの初期位置（ホノルル）→GPSが取得できない場合に表示される
-        LatLng start_position = new LatLng(21.308889,-157.826111);
+        LatLng start_position = new LatLng(34.684581, 135.526349);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(start_position));
 
         //infoWindowのカスタマイズ
@@ -210,8 +213,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     }
 
     @OnClick(R.id.cameraIcon)
-    void pushCameraIcon() {
-
+    public void pushCameraIcon(){
+        startActivity(new Intent(getContext(), TakeStampActivity.class));
     }
-
 }

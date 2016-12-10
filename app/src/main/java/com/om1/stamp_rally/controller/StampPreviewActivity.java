@@ -1,7 +1,8 @@
-package com.om1.stamp_rally.controller.view;
+package com.om1.stamp_rally.controller;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,10 +19,13 @@ import android.widget.TextView;
 
 import com.isseiaoki.simplecropview.CropImageView;
 import com.om1.stamp_rally.R;
+import com.om1.stamp_rally.utility.ByteConverter;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
 import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -102,26 +106,15 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     private void saveStamp(){
-        Bitmap bm = cropImageView.getCroppedBitmap();
-        byte[]  stampPicture = convert(bm);
+        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(this);
+        StampDbAdapter stampAdapter = new StampDbAdapter(this);
+
+        Integer stampRallyId  = (Integer)stampRallyDbAdapter.getTryingStampRally().get(StampRallyDbAdapter.ID);
         String title = titleEdit.getText().toString();
         String note = noteEdit.getText().toString();
+        byte[]  picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
 
-        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(this);
-        stampRallyDbAdapter.open();
-        Cursor c = stampRallyDbAdapter.getTryingStampRally();
-        startManagingCursor(c);
-        c.moveToFirst();
-        int stampRallyId = c.getInt(c.getColumnIndex("stampRallyId"));
-
-        StampDbAdapter stampDbAdapter = new StampDbAdapter(this);
-        stampDbAdapter.createStamp(stampRallyId, title, note, stampPicture);
-        Log.d("method", "saveStamp");
-    }
-
-    private byte[] convert(Bitmap bitmap){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();
+        stampAdapter.createStamp(stampRallyId, title, note, picture);
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

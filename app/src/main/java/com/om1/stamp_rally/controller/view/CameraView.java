@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.om1.stamp_rally.controller.StampPreviewActivity;
 import com.om1.stamp_rally.model.event.StampEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 
@@ -51,7 +52,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // カメラのプレビュー停止
         camera.setPreviewCallback(null);
         camera.stopPreview();
         camera.release();
@@ -62,12 +62,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     void takePicture(StampEvent event) {
-        // カメラのスクリーンショットの取得
-        Camera.ShutterCallback shutterListener = null;
-//        shutterListener = new Camera.ShutterCallback() {
-//            public void onShutter() {
-//            }
-//        };
+        Camera.ShutterCallback shutterListener = new Camera.ShutterCallback() {
+            public void onShutter() {
+            }
+        };
         camera.takePicture(shutterListener, null,new Camera.PictureCallback() {
             public void onPictureTaken(byte[] data,Camera camera) {
                 Intent intent = new Intent(getContext(), StampPreviewActivity.class);
