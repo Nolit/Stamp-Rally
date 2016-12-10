@@ -18,7 +18,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.LoginModel;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,7 +27,6 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import database.entities.Sample;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
@@ -37,8 +35,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     TextView newloginText;
     AutoCompleteTextView id;
     EditText pass;
-    String loginid = "";
-    String loginpass = "";
 
     //tabHost
     @InjectView(R.id.tabHost)
@@ -66,32 +62,23 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
         //ログイン
-        id = (AutoCompleteTextView) findViewById(R.id.email);
-        pass = (EditText) findViewById(R.id.password);
         loginButton = (Button)findViewById(R.id.LoginBt);
-        loginButton.setText("ログイン");
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String a = id.getText().toString();
-                String b = pass.getText().toString();
-                Log.d("method", a+" : "+b);
-
-                LoginModel.getInstance().login("tarou2", "tarou2");
+                id = (AutoCompleteTextView) findViewById(R.id.email);
+                pass = (EditText) findViewById(R.id.password);
+                LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
             }
         });
 
         //新規会員登録ページへ
         newloginText = (TextView) findViewById(R.id.newmember);
-        newloginText.setText("新規会員登録");
-
         newloginText.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
                 startActivity(intent);
             }
         });
-
 
         //スタンプラリーページを選択時のフラグメント起動
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
@@ -101,7 +88,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 getSupportFragmentManager().beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
             }
         });
-
 
         //ログイン時とゲスト時のtabHostメソッド分け
         if(i == 0) {
