@@ -81,10 +81,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-
         //新規会員登録ページへ
         newloginText = (TextView) findViewById(R.id.newmember);
         newloginText.setText("新規会員登録");
+
         newloginText.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
@@ -133,20 +133,20 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
 
             // タイムラインタブ
-            spec = tabHost.newTabSpec("TimeLine")
-                    .setIndicator("タイムライン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+            spec = tabHost.newTabSpec("タイムライン")
+                    .setIndicator("TIME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TimeLine);
             tabHost.addTab(spec);
 
             // スタンプラリータブ
-            spec = tabHost.newTabSpec("StampRally")
-                    .setIndicator("スタンプラリー", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+            spec = tabHost.newTabSpec("スタンプラリー")
+                    .setIndicator("PLAY", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
 
             // スタンプ登録タブ
-            spec = tabHost.newTabSpec("StampRegistration")
-                    .setIndicator("スタンプ登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+            spec = tabHost.newTabSpec("スタンプ")
+                    .setIndicator("STAMP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRegistration);
             tabHost.addTab(spec);
 

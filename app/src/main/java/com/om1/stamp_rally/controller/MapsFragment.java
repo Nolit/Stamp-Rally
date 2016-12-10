@@ -1,16 +1,14 @@
 package com.om1.stamp_rally.controller;
 
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,16 +19,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.om1.stamp_rally.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,68 +34,55 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyModel;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
-import com.om1.stamp_rally.view.MesuredDrawerLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import database.entities.Sample;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
 
 public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback ,NavigationView.OnNavigationItemSelectedListener {
-    private static final int CAN_STAMP_METER= 50;
     private final EventBus eventBus = EventBus.getDefault();
-
+    private final LatLng START_POSITION = new LatLng(34.715602789654625,135.5946671962738);  //ビューカメラの初期化
+    private static final int CAN_STAMP_METER= 100;
+    private LayoutInflater inflater;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
+    private LatLng position;        //確認！！！→　cameraIconの表示処理(VISIBLE)の時に使う。onLocationChangedが呼ばれない限り初期化されてない、onLocationChangedが更新されるまで前の位置情報が入ったままになる
+    private StampRallys stampRally = null; //データベース
     @InjectView(R.id.cameraIcon_map)
     ImageButton cameraIcon;
-
     @InjectView(R.id.drawer_layout)
     DrawerLayout drawer;
     @InjectView(R.id.nav_view)
     NavigationView navigationView;
-
-    //データベース用変数
-    StampRallys stampRally;
-
-    //状態別マーカーの宣言
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
-
-    //debug用
-    Marker oosakajo,harukasu,usj;
-
-    private LayoutInflater inflater;
+    public ArrayList<Marker> markers = new ArrayList<Marker>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventBus.register(this);
-
-        //データベースと通信
         StampRallyModel stampRallyModel = StampRallyModel.getInstance();
-        stampRallyModel.fetchJson();
+        stampRallyModel.fetchJson();    //データベースと通信
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         this.inflater = inflater;
-
         setHasOptionsMenu(true);
-
         return inflater.inflate(R.layout.activity_maps, null);
     }
 
@@ -114,29 +95,24 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        navigationView.setNavigationItemSelectedListener(this);
-
         cameraIcon.setVisibility(View.INVISIBLE);
+        navigationView.setNavigationItemSelectedListener(this);
+        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         //状態別マーカーの設定
         defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
         nearMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
         completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 
-        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);    //現在地に戻るボタン(on)
-        mMap.getUiSettings().setMapToolbarEnabled(false);   //mapToolBarの表示(off)
-        mMap.getUiSettings().setZoomControlsEnabled(true);  //ズームボタン(on/デバッグ用)
-
-        //ビューカメラの初期位置（ホノルル）→GPSが取得できない場合に表示される
-        LatLng start_position = new LatLng(21.308889,-157.826111);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(start_position));
+        mMap.setMyLocationEnabled(true);                     //現在地に戻るボタン(on)
+        mMap.getUiSettings().setMapToolbarEnabled(false);    //mapToolBarの表示(off)
+        mMap.getUiSettings().setZoomControlsEnabled(true);   //ズームボタン(on/デバッグ用)
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(START_POSITION));
 
         //infoWindowのカスタマイズ
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -161,53 +137,58 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         setUpLocationManager();
         setMapListeners();
 
-        //スタンプラリーのスポット3点（デバッグ用）
-        oosakajo = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(34.684581, 135.526349)).title("大阪城")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        harukasu = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(34.645842, 135.513971)).title("あべのハルカス").alpha(0.4f));
-        usj = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(34.6671654, 135.4356473)).title("USJ"));
-
     }
 
     @Override   //位置座標を取得したら引数に渡して呼び出される
     public void onLocationChanged(Location location) {
         //カメラを現在地に移動
-        LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+        position = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
-        //現在地から大阪城までの距離を計算（メートルで計算・WGS84楕円体）
-        float[] results = new float[1];
-        Location.distanceBetween(location.getLatitude(), location.getLongitude(), 34.684581, 135.526349, results);
+        //現在地からの距離100m以内のマーカーを切り替える（メートルで計算・WGS84楕円体）
+        float[] results_markerInitialization = new float[1];
+        for(Marker marker:markers) {
+            Location.distanceBetween(location.getLatitude(), location.getLongitude()
+                    , marker.getPosition().latitude
+                    , marker.getPosition().longitude
+                    , results_markerInitialization);
+            Log.d("デバッグ", "現在地から"+ marker.getTitle() +"までの距離" + results_markerInitialization[0] + "m");
 
-        //マーカーとの距離が50m以内の時にマーカーを切り替える
-        if(results[0] < CAN_STAMP_METER){
-            oosakajo.setIcon(nearMarker);
-        }else{
-            oosakajo.setIcon(defaultMarker);
+            if(results_markerInitialization[0] < CAN_STAMP_METER){
+                marker.setIcon(nearMarker);
+                Log.d("デバッグ",marker.getTitle()+"のマーカーをnearにセット");
+            }else{
+                marker.setIcon(defaultMarker);
+                Log.d("デバッグ",marker.getTitle()+"のマーカーをdefautにセット");
+            }
+
         }
     }
 
+    //LocationManagerの設定
     private void setUpLocationManager(){
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);       //高精度
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-        String provider = mLocationManager.getBestProvider(criteria, true);
-        if(mLocationManager.isProviderEnabled(provider)){
-            System.out.println("取得したプロバイダ:"+provider);
-        }
-        //位置情報取得
-        mLocationManager.requestLocationUpdates(provider, 1, 1, this);
+        criteria.setAccuracy(Criteria.NO_REQUIREMENT);      //プロバイダ条件選択なし
+        String provider = mLocationManager.getBestProvider(criteria, true);     //プロバイダ取得
+        mLocationManager.requestLocationUpdates(provider, 1, 1, this);          //位置情報取得
     }
 
     private void setMapListeners(){
         //マーカータップ時のイベントハンドラ（カメラボタンを表示する）
-        mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                cameraIcon.setVisibility(View.VISIBLE);
+                cameraIcon.setVisibility(View.INVISIBLE);
+
+                float[] results_cameraIconVisible = new float[1];
+                Location.distanceBetween(position.latitude, position.longitude
+                        , marker.getPosition().latitude
+                        , marker.getPosition().longitude
+                        , results_cameraIconVisible);
+                if(results_cameraIconVisible[0] < CAN_STAMP_METER){
+                    cameraIcon.setVisibility(View.VISIBLE);
+                }
                 return false;
             }
         });
@@ -215,8 +196,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         //地図上をタップ時のイベントハンドラ（カメラボタンを非常時にする）
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng point) {
-                cameraIcon.setVisibility(View.INVISIBLE);
+            public void onMapClick(LatLng point) { cameraIcon.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -224,24 +204,20 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Toast.makeText(MapsFragment.this.getContext(), "ここでスタンプ詳細表示", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapsFragment.this.getContext(), marker.getTitle(), Toast.LENGTH_LONG).show();
             }
-
         });
+
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
-    }
+    public void onProviderDisabled(String provider) { }
 
     @Override   //プロバイダが利用可能になった時に呼び出される
-    public void onProviderEnabled(String provider) {
-        System.out.println("プロバイダが有効になりました:"+provider);
-    }
+    public void onProviderEnabled(String provider) { Log.d("デバッグ","プロバイダが有効になりました:"+provider); }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
     @Override
     public void onStop() {
@@ -252,7 +228,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon() {
-
+        System.out.println("カメラページにインテント");
     }
 
     //ここから↓ NavigationDrawer
@@ -277,12 +253,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -317,6 +289,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         return true;
     }
 
+    //NavigationViewの表示
     @OnClick(R.id.menuIcon_map)
     public void showMenu(View view) {
         Log.d("click", "showMenu");
@@ -329,20 +302,25 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         drawer.openDrawer(GravityCompat.START);
     }
 
-    //ここからデータベースとの通信処理
+    //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fetchedJson(FetchJsonEvent event) {
         if (!event.isSuccess()) {
-//            Toast.makeText(this, "通信に失敗しました。", Toast.LENGTH_SHORT).show();
-            System.out.println("失敗！！！！！！");
+            Log.d("デバッグ","データベースとの通信に失敗");
             return;
         }
         try {
-            //Json文字列をSampleオブジェクトに変換
+            //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
+            Log.d("デバッグ","データベースとの通信に成功");
 
-            for(Stamps i:stampRally.getStampsCollection()){
-                Log.d("スタンプ名", i.getStampName());
+            //マーカーの配置・格納
+            if(stampRally != null){
+                for(Stamps stamp:stampRally.getStampsCollection()){
+                    markers.add(mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()))
+                            .title(stamp.getStampName())));
+                }
             }
 
         } catch (IOException e) {
@@ -350,5 +328,3 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         }
     }
 }
-
-

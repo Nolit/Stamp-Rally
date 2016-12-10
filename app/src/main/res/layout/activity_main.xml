@@ -254,7 +254,7 @@
                             android:layout_height="match_parent"
                             android:id="@+id/newmember"
                             android:layout_weight="0.31"
-                            android:textColor="@color/wallet_holo_blue_light"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="18sp" />
 
                     </LinearLayout>
