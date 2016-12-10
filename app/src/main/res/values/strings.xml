@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StampShare</string>
+    <string name="app_name">Stamp-Rally</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
@@ -27,6 +27,8 @@
     <string name="title_activity_complete_rally">CompleteRallyActivity</string>
     <string name="title_activity_favorite_rally">FavoriteRallyActivity</string>
     <string name="title_activity_rally_detail">RallyDetailActivity</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_stamp_preview">StampPreviewActivity</string>
 
     <!-- Navigation Drawer -->
     <string name="action_settings">Settings</string>

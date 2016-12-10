@@ -2,6 +2,7 @@ package com.om1.stamp_rally.controller;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -227,8 +230,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     }
 
     @OnClick(R.id.cameraIcon_map)
-    void pushCameraIcon() {
-        System.out.println("カメラページにインテント");
+    void pushCameraIcon(){
+        startActivity(new Intent(getContext(), TakeStampActivity.class));
     }
 
     //ここから↓ NavigationDrawer

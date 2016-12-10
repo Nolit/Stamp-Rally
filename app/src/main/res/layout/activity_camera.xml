@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical" >
+
+<com.om1.stamp_rally.controller.view.CameraView
+    android:id="@+id/camera_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.Translucent"/>
+
+    <ImageButton
+        android:id="@+id/stamp_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:src="@mipmap/stamp_icon"
+        android:background="#FA8072"/>
+
+</FrameLayout>

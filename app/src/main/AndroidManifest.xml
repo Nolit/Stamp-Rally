@@ -31,9 +31,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-
         </activity>
 
         <activity
@@ -41,13 +39,11 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".controller.SampleActivity"
-            android:label="SampleActivity">
-        </activity>
+            android:label="SampleActivity" />
         <activity
             android:name=".controller.SampleGPSActivity"
             android:label="@string/title_activity_gps"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.NewMemberActivity"
             android:label="@string/title_activity_new_member"
@@ -87,7 +83,15 @@
         <activity
             android:name=".controller.RallyDetailActivity"
             android:label="@string/title_activity_rally_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.TakeStampActivity"
+            android:label="@string/title_activity_camera"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".controller.StampPreviewActivity"
+            android:label="@string/title_activity_stamp_preview"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
