@@ -50,8 +50,7 @@ public class StampPreviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stamp_preview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.inject(this);
-
-
+a();
         Bitmap pictureImage = changeDisplayOrientation(getIntent().getByteArrayExtra("pictureImage"));
         cropImageView.setImageBitmap(pictureImage);
     }
@@ -71,7 +70,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.decideButton)
-    void nextActivity(){
+    void decidePicture(){
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(
                 LAYOUT_INFLATER_SERVICE);
         final View layout = inflater.inflate(R.layout.stamp_info,
@@ -99,6 +98,7 @@ public class StampPreviewActivity extends AppCompatActivity {
                 return;
             }
             saveStamp();
+            nextActivity();
             }
         })
         .setNegativeButton(NO_BUTTON_MESSAGE, null)
@@ -108,13 +108,29 @@ public class StampPreviewActivity extends AppCompatActivity {
     private void saveStamp(){
         StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(this);
         StampDbAdapter stampAdapter = new StampDbAdapter(this);
+        Map<String, Object> stampRally  = stampRallyDbAdapter.getTryingStampRally();
 
-        Integer stampRallyId  = (Integer)stampRallyDbAdapter.getTryingStampRally().get(StampRallyDbAdapter.ID);
+        Integer stampRallyId = (Integer)stampRally.get(StampRallyDbAdapter.ID);
         String title = titleEdit.getText().toString();
         String note = noteEdit.getText().toString();
         byte[]  picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
 
         stampAdapter.createStamp(stampRallyId, title, note, picture);
-        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    private void nextActivity(){
+        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(StampPreviewActivity.this);
+        int id = (Integer)stampRallyDbAdapter.getTryingStampRally().get(StampRallyDbAdapter.ID);
+        if(stampRallyDbAdapter.isClear(id)){
+            startActivity(new Intent(this, ClearActivity.class));
+            return;
+        }
+        startActivity(new Intent(this, TakeStampActivity.class));
+    }
+
+    private void a(){
+        StampRallyDbAdapter stampRallyDbAdapter = new StampRallyDbAdapter(StampPreviewActivity.this);
+        int size = (Integer)stampRallyDbAdapter.getTryingStampRally().get(StampRallyDbAdapter.SIZE);
+        Log.d("stamp_rally", ""+size);
     }
 }

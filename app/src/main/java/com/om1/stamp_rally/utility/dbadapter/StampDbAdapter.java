@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by b3176 on 2016/12/06.
@@ -41,6 +45,28 @@ public class StampDbAdapter extends BaseDbAdapter {
         values.put(CREATE_TIME, System.currentTimeMillis());
         db.insertOrThrow(tableName, null, values);
         close();
+    }
+
+    public List<Map<String, Object>> getListByStampRallyId(int stampRallyId){
+        List<Map<String, Object>> stampList = new ArrayList<>();
+        open();
+        Cursor c = db.query(tableName, null, STAMP_RALLY_ID + " = " + stampRallyId, null, null, null, null, null);
+        if(c.moveToFirst()){
+            do {
+                Map<String, Object> stamp = new HashMap<>();
+                stamp.put(ID, c.getInt(c.getColumnIndex(ID)));
+                stamp.put(STAMP_RALLY_ID, c.getInt(c.getColumnIndex(STAMP_RALLY_ID)));
+                stamp.put(TITLE, c.getString(c.getColumnIndex(TITLE)));
+                stamp.put(MEMO, c.getString(c.getColumnIndex(MEMO)));
+                stamp.put(PICTURE, c.getBlob(c.getColumnIndex(PICTURE)));
+                stamp.put(CREATE_TIME, c.getLong(c.getColumnIndex(CREATE_TIME)));
+                stampList.add(stamp);
+            }while(c.moveToNext());
+        }
+        c.close();
+        close();
+
+        return stampList;
     }
 
     public void dropTable(){
