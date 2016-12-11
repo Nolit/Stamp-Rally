@@ -3,27 +3,26 @@ package com.om1.stamp_rally.controller;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isseiaoki.simplecropview.CropImageView;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampUpload;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.model.event.StampUploadEvent;
 import com.om1.stamp_rally.utility.ByteConverter;
 import com.om1.stamp_rally.utility.EventBusUtil;
@@ -32,14 +31,10 @@ import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
-import database.entities.Sample;
-
 import static butterknife.ButterKnife.findById;
+import butterknife.OnClick;
 
 public class StampPreviewActivity extends AppCompatActivity {
     EditText titleEdit;
@@ -52,6 +47,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     private final String OK_BUTTON_MESSAGE = "アップロード";
     private final String NO_BUTTON_MESSAGE = "後で";
     private final String ERROR_MESSAGE = "名称を入力してください";
+    private final float OVERLAY_ALPHA = 0.7f;
 
     private int stampId;
     private int stampRallyId;
@@ -59,6 +55,9 @@ public class StampPreviewActivity extends AppCompatActivity {
     private double longitude;
     private String title;
     private String note;
+
+    //trueの時、戻るボタンを無効化にする
+    private boolean decidePictureFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +99,7 @@ public class StampPreviewActivity extends AppCompatActivity {
 
     @OnClick(R.id.decideButton)
     void decidePicture(){
+        decidePictureFlag = true;
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(
                 LAYOUT_INFLATER_SERVICE);
         final View layout = inflater.inflate(R.layout.stamp_info,
@@ -148,27 +148,50 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     private void uploadStamp(){
+        showOverlay();
         byte[] picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
         long createTime = System.currentTimeMillis();
-        StampUpload.getInstance().uploadStamp(stampId, stampRallyId, latitude, longitude, title, note, picture, createTime);
+        SharedPreferences pref = getSharedPreferences("stamp-rally", MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE);
+        String email = pref.getString("email", "tarou2");
+        String password = pref.getString("password", "tarou2");
+        StampUpload.getInstance().uploadStamp(stampId, stampRallyId, latitude, longitude, title, note, picture, createTime, email, password);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void uploadedStamp(StampUploadEvent event) {
         if(!event.isSuccess()){
-            Log.d("スタンプラリー", "アップロードに失敗");
-            return;
+            Toast.makeText(this, "アップロードに失敗しました\n時間を置いてお試しください", Toast.LENGTH_LONG).show();
+            saveStamp();
+        }else if(event.isClear()){
+            Toast.makeText(this, "クリア！", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "アップロードしました", Toast.LENGTH_LONG).show();
         }
-        Log.d("スタンプラリー", "アップロードに成功");
-        if(event.isClear()){
-            Log.d("スタンプラリー", "クリア！");
-            return;
-        }
-        Log.d("スタンプラリー", "ページ遷移します");
+        startActivity(new Intent(StampPreviewActivity.this, MainActivity.class));
     }
 
     private void saveStamp(){
         byte[] picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
         new StampDbAdapter(this).createStamp(stampId, stampRallyId, title, note, picture, latitude, longitude);
+    }
+
+    private void showOverlay(){
+        FrameLayout overlayLayout = findById(this, R.id.uploading_overlay);
+        overlayLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        overlayLayout.setAlpha(OVERLAY_ALPHA);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(decidePictureFlag){
+            Toast.makeText(this, "スタンプを保存してください", Toast.LENGTH_LONG).show();
+            return;
+        }
+        super.onBackPressed();
     }
 }

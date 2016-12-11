@@ -1,5 +1,7 @@
 package com.om1.stamp_rally.model;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
@@ -7,6 +9,7 @@ import com.om1.stamp_rally.model.event.StampUploadEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -34,7 +37,7 @@ public class StampUpload {
     }
 
     //OkHttpライブラリを使用したサーバーとの通信
-    public void uploadStamp(int stampId, int stampRallyId, double latitude, double longitude, String title, String note, byte[] picture, long createDate){
+    public void uploadStamp(int stampId, int stampRallyId, double latitude, double longitude, String title, String note, byte[] picture, long createDate, String email, String password){
         List<Map<String, Object>> stampList = new ArrayList<>();
         Map<String, Object> stamp = new HashMap<>();
         stamp.put("stampId", stampId);
@@ -47,10 +50,10 @@ public class StampUpload {
         stamp.put("createDate", createDate);
         stampList.add(stamp);
 
-        uploadStamp(stampList);
+        uploadStamp(stampList, email, password);
     }
 
-    public void uploadStamp(List<Map<String, Object>> stampList){
+    public void uploadStamp(List<Map<String, Object>> stampList, String email, String password){
         String stampListJson;
         try {
             stampListJson = new ObjectMapper().writeValueAsString(stampList);
@@ -58,10 +61,14 @@ public class StampUpload {
             e.printStackTrace();
             return;
         }
-        RequestBody body = RequestBody.create(MediaType.parse("json"), stampListJson);
+        RequestBody body = new FormEncodingBuilder()
+                .add("stampList", stampListJson)
+                .add("email", email)
+                .add("password", password)
+                .build();
 
         Request request = new Request.Builder()
-                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/uploadStamp")
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/stampUpload")
                 .post(body)
                 .build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {
@@ -75,6 +82,7 @@ public class StampUpload {
             @Override
             public void onResponse(Response response) throws IOException {
                 boolean isSuccess = response.isSuccessful();
+                Log.d("スタンプラリー", response.body().string());
                 boolean isClear = Boolean.valueOf(response.body().string());
                 EventBusUtil.defaultBus.post(new StampUploadEvent(isSuccess, isClear));
             }
