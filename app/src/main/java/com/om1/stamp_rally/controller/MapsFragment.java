@@ -24,12 +24,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -39,6 +41,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyModel;
+import com.om1.stamp_rally.model.bean.StampBean;
+import com.om1.stamp_rally.model.bean.StampListAdapter;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,15 +72,22 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     ImageButton cameraIcon;
     @InjectView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @InjectView(R.id.nav_view)
-    NavigationView navigationView;
+//    @InjectView(R.id.nav_view)
+//    NavigationView navigationView;
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
     public ArrayList<Marker> markers = new ArrayList<Marker>();
+
+    @InjectView(R.id.nav_view)
+    ListView listView;
+    StampBean stampBean;
+    ArrayList<StampBean> stampList = new ArrayList<StampBean>();
+    StampListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventBus.register(this);
+
         StampRallyModel stampRallyModel = StampRallyModel.getInstance();
         stampRallyModel.fetchJson();    //データベースと通信
     }
@@ -98,8 +109,15 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        stampBean = new StampBean();
+        stampList = new ArrayList<StampBean>();
+        adapter = new StampListAdapter(getActivity());
+        adapter.setStampList(stampList);
+        listView.setAdapter(adapter);
+
         cameraIcon.setVisibility(View.INVISIBLE);
-        navigationView.setNavigationItemSelectedListener(this);
+//        navigationView.setNavigationItemSelectedListener(this);
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         //状態別マーカーの設定
@@ -315,7 +333,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         try {
             //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
-            Log.d("デバッグ","MapsFragment:データベースとの通信に成功");
+            Log.d("デバッグ","データベースとの通信に成功");
+            stampList.clear();
 
             //マーカーの配置・格納
             if(stampRally != null){
@@ -323,7 +342,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                     markers.add(mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()))
                             .title(stamp.getStampName())));
+                    stampBean = new StampBean();
+                    stampBean.setStampTitle(stamp.getStampName());
+                    stampList.add(stampBean);
                 }
+                adapter.notifyDataSetChanged(); //リストの更新
             }
 
         } catch (IOException e) {
