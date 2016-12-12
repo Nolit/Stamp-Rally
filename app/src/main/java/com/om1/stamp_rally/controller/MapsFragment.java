@@ -1,6 +1,5 @@
 package com.om1.stamp_rally.controller;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -58,26 +57,24 @@ import butterknife.OnClick;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
-
 public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback ,NavigationView.OnNavigationItemSelectedListener {
     private final EventBus eventBus = EventBus.getDefault();
     private final LatLng START_POSITION = new LatLng(34.715602789654625,135.5946671962738);  //ビューカメラの初期化
     private static final int CAN_STAMP_METER= 100;
+    private StampRallys stampRally; //データベース
     private LayoutInflater inflater;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
-    private LatLng position;        //確認！！！→　cameraIconの表示処理(VISIBLE)の時に使う。onLocationChangedが呼ばれない限り初期化されてない、onLocationChangedが更新されるまで前の位置情報が入ったままになる
-    private StampRallys stampRally = null; //データベース
-    @InjectView(R.id.cameraIcon_map)
-    ImageButton cameraIcon;
-    @InjectView(R.id.drawer_layout)
-    DrawerLayout drawer;
-//    @InjectView(R.id.nav_view)
-//    NavigationView navigationView;
+    private LatLng position = null;        //確認！！！→　cameraIconの表示処理(VISIBLE)の時に使う。onLocationChangedが呼ばれない限り初期化されてない、onLocationChangedが更新されるまで前の位置情報が入ったままになる
+    //Marker
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
     public ArrayList<Marker> markers = new ArrayList<Marker>();
-
-    @InjectView(R.id.nav_view)
+    @InjectView(R.id.cameraIcon_map)
+    ImageButton cameraIcon;
+    //DrawerLayout・ListView
+    @InjectView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @InjectView(R.id.listView)
     ListView listView;
     StampBean stampBean;
     ArrayList<StampBean> stampList = new ArrayList<StampBean>();
@@ -87,7 +84,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventBus.register(this);
-
         StampRallyModel stampRallyModel = StampRallyModel.getInstance();
         stampRallyModel.fetchJson();    //データベースと通信
     }
@@ -108,7 +104,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         FragmentManager fm = getChildFragmentManager();
         SupportMapFragment mapFragment = (SupportMapFragment)fm.findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         stampBean = new StampBean();
         stampList = new ArrayList<StampBean>();
@@ -201,14 +196,16 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
             @Override
             public boolean onMarkerClick(Marker marker) {
                 cameraIcon.setVisibility(View.INVISIBLE);
-
                 float[] results_cameraIconVisible = new float[1];
-                Location.distanceBetween(position.latitude, position.longitude
-                        , marker.getPosition().latitude
-                        , marker.getPosition().longitude
-                        , results_cameraIconVisible);
-                if(results_cameraIconVisible[0] < CAN_STAMP_METER){
-                    cameraIcon.setVisibility(View.VISIBLE);
+
+                if(position != null){
+                    Location.distanceBetween(position.latitude, position.longitude
+                            , marker.getPosition().latitude
+                            , marker.getPosition().longitude
+                            , results_cameraIconVisible);
+                    if(results_cameraIconVisible[0] < CAN_STAMP_METER){
+                        cameraIcon.setVisibility(View.VISIBLE);
+                    }
                 }
                 return false;
             }
@@ -269,7 +266,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
         super.onCreateOptionsMenu(menu, inflater);
-
     }
 
     @Override
@@ -310,16 +306,14 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         return true;
     }
 
-    //NavigationViewの表示
+    //DrawerLayoutの表示
     @OnClick(R.id.menuIcon_map)
     public void showMenu(View view) {
-        Log.d("click", "showMenu");
         if(drawer.isDrawerOpen(GravityCompat.START)){
             Log.d("status", "open");
             drawer.closeDrawer(GravityCompat.START);
             return;
         }
-        Log.d("status", "close");
         drawer.openDrawer(GravityCompat.START);
     }
 
