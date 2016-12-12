@@ -79,6 +79,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     StampBean stampBean;
     ArrayList<StampBean> stampList = new ArrayList<StampBean>();
     StampListAdapter adapter;
+    //intent
+    String stampTitle = null;
+    String stampId = null;
+    String stampRallyId = null;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -205,6 +210,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                             , results_cameraIconVisible);
                     if(results_cameraIconVisible[0] < CAN_STAMP_METER){
                         cameraIcon.setVisibility(View.VISIBLE);
+
+                        //intent
+                        stampTitle = marker.getTitle();
+                        stampId = marker.getId().replaceAll("m", "");
+                        stampId = Integer.toString(stampList.get(Integer.valueOf(stampId)).getStampId());
                     }
                 }
                 return false;
@@ -214,7 +224,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         //地図上をタップ時のイベントハンドラ（カメラボタンを非常時にする）
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng point) { cameraIcon.setVisibility(View.INVISIBLE);
+            public void onMapClick(LatLng point) {
+                cameraIcon.setVisibility(View.INVISIBLE);
+                //intent
+                stampId = null;
+                stampTitle = null;
             }
         });
 
@@ -246,7 +260,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon(){
-        startActivity(new Intent(getContext(), TakeStampActivity.class));
+        Intent i= new Intent(getContext(),TakeStampActivity.class);
+        i.putExtra("stampTitle", stampTitle);
+        i.putExtra("stampId", stampId);
+        i.putExtra("stampRallyId", stampRallyId);
+        startActivity(i);
     }
 
     //ここから↓ NavigationDrawer
@@ -338,6 +356,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                             .title(stamp.getStampName())));
                     stampBean = new StampBean();
                     stampBean.setStampTitle(stamp.getStampName());
+                    stampBean.setStampId(stamp.getStampId());
                     stampList.add(stampBean);
                 }
                 adapter.notifyDataSetChanged(); //リストの更新
