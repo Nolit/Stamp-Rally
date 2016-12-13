@@ -39,14 +39,24 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
     public Map<String, Object> getTryingStampRally(){
         open();
         Cursor c = db.query(tableName, null, IS_CHALLENGE + " = 1", null, null, null, null, null);
-        if(!c.moveToFirst()){
-            return null;
-        }
+        Map<String, Object> stampRally = convert(c);
+        c.close();
+        close();
 
-        Map<String, Object> stampRally = new HashMap<>();
-        stampRally.put(ID, c.getInt(c.getColumnIndex(ID)));
-        stampRally.put(SIZE, c.getInt(c.getColumnIndex(SIZE)));
-        stampRally.put(IS_CHALLENGE, c.getInt(c.getColumnIndex(IS_CHALLENGE)));
+        return stampRally;
+    }
+
+    public boolean isClear(int id){
+        int stampRallySize = (Integer)getById(id).get(SIZE);
+        int stampCount = new StampDbAdapter(context).getByStampRallyIdAsList(id).size();
+
+        return stampRallySize == stampCount;
+    }
+
+    private Map<String, Object> getById(int id){
+        open();
+        Cursor c = db.query(tableName, null, ID + " = " + id, null, null, null, null, null);
+        Map<String, Object> stampRally = convert(c);
         c.close();
         close();
 
@@ -80,5 +90,18 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
             }while(c.moveToNext());
         }
         close();
+    }
+
+    private Map<String, Object> convert(Cursor c){
+        if(!c.moveToFirst()){
+            return null;
+        }
+
+        Map<String, Object> stampRally = new HashMap<>();
+        stampRally.put(ID, c.getInt(c.getColumnIndex(ID)));
+        stampRally.put(SIZE, c.getInt(c.getColumnIndex(SIZE)));
+        stampRally.put(IS_CHALLENGE, c.getInt(c.getColumnIndex(IS_CHALLENGE)));
+
+        return stampRally;
     }
 }

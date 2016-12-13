@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.SampleModel;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,7 +29,6 @@ import database.entities.Sample;
  * 3. Jacksonライブラリによる、Json文字列のクラスへの変換
  */
 public class SampleActivity extends AppCompatActivity {
-    private final EventBus eventBus = EventBus.getDefault();
     private final SampleModel model = SampleModel.getInstance();
 
     //ButterKnifeライブラリによるビューの読み込み
@@ -42,7 +42,7 @@ public class SampleActivity extends AppCompatActivity {
         //ButterKnifeライブラリを使用する時はこのメソッドを初めに呼ぶ
         ButterKnife.inject(this);
         //EventBusライブラリによる自身の登録
-        eventBus.register(this);
+        EventBusUtil.defaultBus.register(this);
 
         model.fetchJson();
     }
@@ -50,8 +50,8 @@ public class SampleActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         //EventBusライブラリによる自身の登録解除
-        eventBus.unregister(this);
-        super.onPause();
+        EventBusUtil.defaultBus.unregister(this);
+        super.onStop();
     }
 
     //EventBusライブラリによるイベントの登録
