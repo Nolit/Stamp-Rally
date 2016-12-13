@@ -1,6 +1,7 @@
 package com.om1.stamp_rally.controller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +38,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     EditText id;
     EditText pass;
 
+    SharedPreferences mainPref;
+
     //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
@@ -44,12 +47,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //リロード
     Bundle savedInstanceState;
 
+    int i = 0;
+
     private final EventBus eventBus = EventBus.getDefault();
-
-
-    //ログインテスト
-    int i = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +57,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         eventBus.register(this);
+        mainPref = getSharedPreferences("main", MODE_PRIVATE);
 
         //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
-
 
         //ログイン
         loginButton = (Button)findViewById(R.id.LoginBt);
@@ -68,9 +68,13 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 id = (EditText) findViewById(R.id.emailAddress);
                 pass = (EditText) findViewById(R.id.password);
-                //Log.d(""+id, ""+pass);
-                LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
 
+                SharedPreferences.Editor mainEdit = mainPref.edit();
+                mainEdit.putString("mailAddress", id.getText().toString());
+                mainEdit.putString("password", pass.getText().toString());
+                mainEdit.commit();
+
+                LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
             }
         });
 
@@ -92,8 +96,11 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
+
+        String useId = mainPref.getString("mailAddress", null);
+
         //ログイン時とゲスト時のtabHostメソッド分け
-        if(i == 0) {
+        if(useId != null) {
             initLoginTabs();
         }
         else{
@@ -208,12 +215,13 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
             tabHost.setCurrentTab(0);
 
-            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
-                @Override
-                public void onTabChanged(String tabId) {
-                    MainActivity.this.onStart();
-                }
-            });
+            //タブ切り替え時にアクディビディ再読み込み
+//            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
+//                @Override
+//                public void onTabChanged(String tabId) {
+//                    MainActivity.this.onStart();
+//                }
+//            });
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (RuntimeException e) {
@@ -230,21 +238,23 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onStart(){
         super.onStart();
-        Log.d("yahbhou", "hello!!");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void LoginAuthentication(String loginText) {
-        Log.d("method", "LoginAuthentication");
         try {
             Boolean isLogin = new ObjectMapper().readValue(loginText, Boolean.class);
             if(isLogin == true){
-                Toast.makeText(this, "成功だよ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "ログインに成功しました", Toast.LENGTH_LONG).show();
+                Intent intent=new Intent();
+                intent.setClass(this, this.getClass());
+                startActivity(intent);
+                finish();
             }
             else{
-                Toast.makeText(this, "失敗じゃぼけ", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, "ログインに失敗しました", Toast.LENGTH_LONG).show();
 
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

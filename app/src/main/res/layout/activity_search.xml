@@ -42,7 +42,8 @@
                         android:text="Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/SearchBt" />
+                        android:id="@+id/SearchBt"
+                        tools:text="検索" />
                 </LinearLayout>
             </FrameLayout>
 
