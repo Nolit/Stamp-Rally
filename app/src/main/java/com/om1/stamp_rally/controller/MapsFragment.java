@@ -120,9 +120,9 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     //ListViewのイベントハンドラ
     listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
         public void onItemClick (AdapterView < ? > parent, View view,int pos, long id) {
-            ListView listView1 = (ListView) parent;
-            StampBean StampListItem = (StampBean) listView1.getItemAtPosition(pos);
-
+            ListView listView = (ListView) parent;
+            StampBean stampListItem = (StampBean) listView.getItemAtPosition(pos);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(stampListItem.getStampLatLng())); //選択したスタンプタイトルのマーカーに移動
             drawer.closeDrawer(GravityCompat.START);
         }
     });
@@ -344,6 +344,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                     stampBean = new StampBean();
                     stampBean.setStampTitle(stamp.getStampName());
                     stampBean.setStampId(stamp.getStampId());
+                    stampBean.setLatLng(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()));
                     stampList.add(stampBean);
                 }
                 adapter.notifyDataSetChanged(); //リストの更新
