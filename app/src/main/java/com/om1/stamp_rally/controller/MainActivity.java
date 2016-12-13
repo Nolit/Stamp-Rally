@@ -66,9 +66,11 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         loginButton = (Button)findViewById(R.id.LoginBt);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                id = (EditText) findViewById(R.id.emailAdress);
+                id = (EditText) findViewById(R.id.emailAddress);
                 pass = (EditText) findViewById(R.id.password);
+                //Log.d(""+id, ""+pass);
                 LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
+
             }
         });
 

@@ -61,11 +61,9 @@ public class LoginModel {
             @Override
             //データの取得に成功したとは限らないが、サーバーに接続出来た場合に呼ばれる
             public void onResponse(Response response) throws IOException {
-                Log.d("method", "onResponse");
                 //イベントバスによるアクティビティへの通知
                 //取得したデータを持ったイベントオブジェクトを渡す
                 String a = response.body().string();
-
                 eventBus.post(a);
             }
         });
