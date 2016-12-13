@@ -32,8 +32,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
     //ログイン
     Button loginButton;
+    Button SearchButton;
     TextView newloginText;
-    AutoCompleteTextView id;
+    EditText id;
     EditText pass;
 
     //tabHost
@@ -65,7 +66,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         loginButton = (Button)findViewById(R.id.LoginBt);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                id = (AutoCompleteTextView) findViewById(R.id.email);
+                id = (EditText) findViewById(R.id.emailAdress);
                 pass = (EditText) findViewById(R.id.password);
                 LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
             }
@@ -96,6 +97,16 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         else{
             initGuestTabs();
         }
+
+
+        //検索
+        SearchButton = (Button)findViewById(R.id.SearchBt);
+        SearchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

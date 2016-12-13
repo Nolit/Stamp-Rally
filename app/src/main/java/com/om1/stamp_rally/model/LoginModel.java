@@ -5,6 +5,7 @@ import android.util.Log;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -36,15 +37,18 @@ public class LoginModel {
     }
 
     //OkHttpライブラリを使用したサーバーとの通信
-    public void login(String email, String password){
-        Log.d("method", "login");
-//        String json = new JSONObject(createParameter(email, password)).toString();
-//        RequestBody requestBody = RequestBody.create(MediaType.parse("json"), json);
+    public void login(String email, String password) {
+
+        RequestBody body = new FormEncodingBuilder()
+                .add("email", email)
+                .add("password", password)
+                .build();
 
         Request request = new Request.Builder()
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/login?mailAddress="+email+"&password="+password)
+
                 //GET通信かPOST通信か指定
-                .get()
+                .post(body)
                 .build();
         //requestに基づいた通信を別スレッドで行う
         new OkHttpClient().newCall(request).enqueue(new Callback() {
@@ -61,7 +65,6 @@ public class LoginModel {
                 //イベントバスによるアクティビティへの通知
                 //取得したデータを持ったイベントオブジェクトを渡す
                 String a = response.body().string();
-                Log.d("method", a);
 
                 eventBus.post(a);
             }
