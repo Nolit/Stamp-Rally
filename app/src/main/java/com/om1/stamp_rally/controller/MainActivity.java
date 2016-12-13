@@ -36,6 +36,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     AutoCompleteTextView id;
     EditText pass;
 
+    //スタンプ管理タブ
+    Button stampEditButton;
+
     //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
@@ -47,7 +50,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
     //ログインテスト
-    int i = 1;
+    int i = 0;
 
 
     @Override
@@ -76,6 +79,15 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         newloginText.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //スタンプ編集一覧ページへのインテントボタン
+        stampEditButton = (Button) findViewById(R.id.EditStamp);
+        stampEditButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
                 startActivity(intent);
             }
         });
