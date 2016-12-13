@@ -21,6 +21,7 @@ import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -115,6 +116,19 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         adapter = new StampListAdapter(getActivity());
         adapter.setStampList(stampList);
         listView.setAdapter(adapter);
+
+    //ListViewのイベントハンドラ
+    listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        public void onItemClick (AdapterView < ? > parent, View view,int pos, long id) {
+            ListView listView1 = (ListView) parent;
+            StampBean StampListItem = (StampBean) listView1.getItemAtPosition(pos);
+
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    });
+
+
+
 
         cameraIcon.setVisibility(View.INVISIBLE);
 //        navigationView.setNavigationItemSelectedListener(this);
@@ -215,6 +229,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                         stampTitle = marker.getTitle();
                         stampId = marker.getId().replaceAll("m", "");
                         stampId = Integer.toString(stampList.get(Integer.valueOf(stampId)).getStampId());
+                        stampRallyId = Integer.toString(stampRally.getStamprallyId());
                     }
                 }
                 return false;
@@ -258,6 +273,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         eventBus.unregister(this);
     }
 
+    //カメラアイコン押下・カメラページへインテント
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon(){
         Intent i= new Intent(getContext(),TakeStampActivity.class);
@@ -267,36 +283,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         startActivity(i);
     }
 
-    //ここから↓ NavigationDrawer
-//    @Override
-//    public void onBackPressed() {
-//        View view = inflater.inflate(R.layout.info_window, null);
-//
-//        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    //Drawer・ListView
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -324,7 +311,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         return true;
     }
 
-    //DrawerLayoutの表示
+    //メニューアイコン押下・DrawerLayoutの表示
     @OnClick(R.id.menuIcon_map)
     public void showMenu(View view) {
         if(drawer.isDrawerOpen(GravityCompat.START)){
