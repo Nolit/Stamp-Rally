@@ -1,10 +1,12 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -34,6 +36,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //ログイン
     Button loginButton;
     Button SearchButton;
+    Button LogoutButton;
     TextView newloginText;
     EditText id;
     EditText pass;
@@ -68,15 +71,37 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 id = (EditText) findViewById(R.id.emailAddress);
                 pass = (EditText) findViewById(R.id.password);
-
                 SharedPreferences.Editor mainEdit = mainPref.edit();
                 mainEdit.putString("mailAddress", id.getText().toString());
                 mainEdit.putString("password", pass.getText().toString());
                 mainEdit.commit();
-
                 LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
             }
         });
+
+
+        //ログアウト
+        LogoutButton = (Button)findViewById(R.id.LogoutBt);
+        LogoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("ログアウトしてよろしいですか？")
+                        .setPositiveButton("ログアウト", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        SharedPreferences.Editor mainEdit = mainPref.edit();
+                                        mainEdit.remove("mailAddress");
+                                        mainEdit.commit();
+                                        //Toast.makeText(MainActivity.this, mainPref.getString("mailAddress","からだよ"), Toast.LENGTH_LONG).show();
+                                        Intent intent=new Intent();
+                                        intent.setClass(MainActivity.this, MainActivity.this.getClass());
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                builder.show();
+            }
+        });
+
 
         //新規会員登録ページへ
         newloginText = (TextView) findViewById(R.id.newmember);
@@ -99,14 +124,13 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
         String useId = mainPref.getString("mailAddress", null);
 
-        //ログイン時とゲスト時のtabHostメソッド分け
+        //ログイン時とゲスト時のtabHost
         if(useId != null) {
             initLoginTabs();
         }
         else{
             initGuestTabs();
         }
-
 
         //検索
         SearchButton = (Button)findViewById(R.id.SearchBt);
@@ -119,6 +143,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     }
 
 
+
+
     //ログイン時のtabHost
     protected void initLoginTabs() {
         try {
@@ -128,14 +154,14 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // TOPページタブ
             spec = tabHost.newTabSpec("TOP")
-                    .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
             // マイページタブ
-            spec = tabHost.newTabSpec("MyPage")
-                    .setIndicator("マイページ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.MyPage);
+            spec = tabHost.newTabSpec("HOME")
+                    .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setContent(R.id.Home);
             tabHost.addTab(spec);
 
             // タイムラインタブ
@@ -171,6 +197,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     }
 
 
+
+
     //ゲスト時のtabHost
     protected void initGuestTabs() {
         try {
@@ -180,14 +208,14 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // TOPページタブ
             spec = tabHost.newTabSpec("TOP")
-                    .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
             // マイページタブ
-            spec = tabHost.newTabSpec("マイページ")
+            spec = tabHost.newTabSpec("HOME")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.MyPage);
+                    .setContent(R.id.Home);
             //tabHost.addTab(spec);
 
             // タイムラインタブ
