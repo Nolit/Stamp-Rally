@@ -28,6 +28,251 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
+                    android:id="@+id/TOP"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:weightSum="1"
+                    android:layout_weight="0.81">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                app:srcCompat="@mipmap/ic_launcher"
+                                android:id="@+id/ThemeImage"
+                                android:src="@drawable/s256_f_object_151_0bg"
+                                android:background="@color/common_google_signin_btn_text_light_disabled"
+                                android:layout_height="80dp" />
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:src="@drawable/s256_f_object_151_0bg"
+                                app:srcCompat="@mipmap/ic_launcher"
+                                android:id="@+id/OfficialImage"
+                                android:background="@color/common_google_signin_btn_text_light_disabled"
+                                android:layout_height="150dp" />
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <FrameLayout
+                                android:layout_gravity="center_vertical|center_horizontal"
+                                android:layout_width="370dp"
+                                android:layout_height="120dp">
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="370dp"
+                                    android:layout_height="120dp">
+
+                                    <ImageView
+                                        android:src="@drawable/s256_f_object_151_0bg"
+                                        app:srcCompat="@mipmap/ic_launcher"
+                                        android:id="@+id/IntroductionImage1"
+                                        android:layout_weight="1"
+                                        android:background="@color/common_google_signin_btn_text_light_disabled"
+                                        android:layout_width="120dp"
+                                        android:layout_height="120dp" />
+
+                                    <Space
+                                        android:layout_height="100dp"
+                                        android:layout_weight="0.20"
+                                        android:layout_width="5dp" />
+
+                                    <ImageView
+                                        android:src="@drawable/s256_f_object_151_0bg"
+                                        app:srcCompat="@mipmap/ic_launcher"
+                                        android:id="@+id/IntroductionImage2"
+                                        android:layout_weight="1"
+                                        android:background="@color/common_google_signin_btn_text_light_disabled"
+                                        android:layout_width="120dp"
+                                        android:layout_height="120dp" />
+
+                                    <Space
+                                        android:layout_height="100dp"
+                                        android:layout_weight="0.20"
+                                        android:layout_width="5dp" />
+
+                                    <ImageView
+                                        android:src="@drawable/s256_f_object_151_0bg"
+                                        app:srcCompat="@mipmap/ic_launcher"
+                                        android:id="@+id/IntroductionImage3"
+                                        android:layout_weight="1"
+                                        android:background="@color/common_google_signin_btn_text_light_disabled"
+                                        android:layout_width="120dp"
+                                        android:layout_height="120dp" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <FrameLayout android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|center_horizontal"
+                                android:layout_width="380dp">
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="360dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|center_horizontal">
+
+                                    <EditText
+                                        android:id="@+id/SearchEdit"
+                                        android:layout_height="wrap_content"
+                                        android:hint="検索"
+                                        android:inputType="textEmailAddress"
+                                        android:maxLines="1"
+                                        android:singleLine="true"
+                                        android:layout_weight="0.07"
+                                        android:layout_width="280dp" />
+
+                                    <Space
+                                        android:layout_width="10dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.01" />
+
+                                    <Button
+                                        android:text="検索"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.01"
+                                        android:id="@+id/SearchBt"
+                                        android:layout_width="70dp" />
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <TextView
+                                android:text="週刊ランキング"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/RankingsText"
+                                android:textSize="24sp"
+                                android:textColor="@android:color/black" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="380dp"
+                                android:layout_height="100dp">
+
+                                <Space
+                                    android:layout_height="100dp"
+                                    android:layout_weight="0.03"
+                                    android:layout_width="10dp" />
+
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:src="@drawable/s256_f_object_151_0bg"
+                                    android:layout_height="100dp"
+                                    app:srcCompat="@mipmap/ic_launcher"
+                                    android:id="@+id/StamoRallyImage1"
+                                    android:layout_weight="0.03"
+                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
+
+                                <TextView
+                                    android:text="1位：東京ラーメンめぐり"
+                                    android:layout_height="100dp"
+                                    android:id="@+id/RankingText1"
+                                    android:layout_weight="0.18"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:textSize="18sp"
+                                    android:textColor="@android:color/black"
+                                    android:layout_width="270dp"
+                                    android:gravity="center" />
+                            </LinearLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="380dp"
+                                android:layout_height="100dp">
+
+                                <Space
+                                    android:layout_height="100dp"
+                                    android:layout_weight="0.03"
+                                    android:layout_width="10dp" />
+
+                                <ImageView
+                                    android:layout_width="100dp"
+                                    android:src="@drawable/s256_f_object_151_0bg"
+                                    android:layout_height="100dp"
+                                    app:srcCompat="@mipmap/ic_launcher"
+                                    android:id="@+id/StamoRallyImage2"
+                                    android:layout_weight="0.03"
+                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
+
+                                <TextView
+                                    android:text="2位：東京とんかつめぐり"
+                                    android:layout_height="100dp"
+                                    android:id="@+id/RankingText2"
+                                    android:layout_weight="0.18"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:textSize="18sp"
+                                    android:textColor="@android:color/black"
+                                    android:layout_width="270dp"
+                                    android:gravity="center" />
+                            </LinearLayout>
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="380dp"
+                                android:layout_height="100dp">
+
+                                <Space
+                                    android:layout_height="100dp"
+                                    android:layout_weight="0.03"
+                                    android:layout_width="10dp" />
+
+                                <ImageView
+                                    android:layout_height="100dp"
+                                    android:src="@drawable/s256_f_object_151_0bg"
+                                    app:srcCompat="@mipmap/ic_launcher"
+                                    android:id="@+id/StamoRallyImage3"
+                                    android:layout_weight="0.03"
+                                    android:background="@color/common_google_signin_btn_text_light_disabled"
+                                    android:layout_width="100dp" />
+
+                                <TextView
+                                    android:text="3位：東京うどんめぐり"
+                                    android:layout_height="100dp"
+                                    android:id="@+id/RankingText3"
+                                    android:layout_weight="0.18"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:textSize="18sp"
+                                    android:textColor="@android:color/black"
+                                    android:layout_width="270dp"
+                                    android:gravity="center" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </ScrollView>
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/Home"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -46,25 +291,26 @@
 
                             <LinearLayout
                                 android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="153dp"
-                                android:weightSum="1">
+                                android:layout_width="380dp"
+                                android:weightSum="1"
+                                android:layout_height="150dp">
 
                                 <ImageView
-                                    android:layout_width="138dp"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="150dp"
                                     app:srcCompat="@mipmap/ic_launcher"
+                                    android:src="@drawable/s256_f_object_151_0bg"
                                     android:id="@+id/imageView"
                                     android:layout_row="1"
                                     android:layout_column="0"
-                                    android:background="@color/common_google_signin_btn_text_dark_disabled" />
+                                    android:background="@color/common_google_signin_btn_text_dark_disabled"
+                                    android:layout_width="150dp" />
 
                                 <LinearLayout
                                     android:orientation="vertical"
-                                    android:layout_width="138dp"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="150dp"
                                     android:layout_weight="0.95"
-                                    android:weightSum="1">
+                                    android:weightSum="1"
+                                    android:layout_width="230dp">
 
                                     <Space
                                         android:layout_width="match_parent"
@@ -73,8 +319,8 @@
                                     <LinearLayout
                                         android:orientation="horizontal"
                                         android:layout_width="match_parent"
-                                        android:layout_height="36dp"
-                                        android:weightSum="1">
+                                        android:weightSum="1"
+                                        android:layout_height="35dp">
 
                                         <TextView
                                             android:text="OIC太郎"
@@ -92,16 +338,17 @@
                                             android:id="@+id/ConfigurationBt"
                                             android:textSize="14sp"
                                             android:textColor="@android:color/black"
-                                            android:textStyle="normal|bold" />
+                                            android:textStyle="normal|bold"
+                                            android:gravity="center" />
                                     </LinearLayout>
 
                                     <TextView
                                         android:text="　　ID:12345678"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
                                         android:id="@+id/IdTxt"
                                         android:textAlignment="textStart"
-                                        android:textSize="12sp" />
+                                        android:textSize="12sp"
+                                        android:layout_height="15dp" />
 
                                     <Space
                                         android:layout_width="match_parent"
@@ -110,7 +357,7 @@
                                     <TextView
                                         android:text="オススメスタンプラリー"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="20dp"
                                         android:id="@+id/FavoriteTxt"
                                         android:textSize="18sp"
                                         android:textAlignment="center"
@@ -146,9 +393,9 @@
                                     <TextView
                                         android:text="マイスタンプ帳:22"
                                         android:layout_width="match_parent"
-                                        android:layout_height="27dp"
                                         android:id="@+id/MystampTxt"
-                                        android:textSize="12sp" />
+                                        android:textSize="12sp"
+                                        android:layout_height="15dp" />
 
                                 </LinearLayout>
 
@@ -191,238 +438,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/TOP"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:weightSum="1"
-                    android:layout_weight="0.81">
-
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical" >
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                app:srcCompat="@mipmap/ic_launcher"
-                                android:id="@+id/ThemeImage"
-                                android:background="@color/common_google_signin_btn_text_light_disabled"
-                                android:layout_height="80dp" />
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                app:srcCompat="@mipmap/ic_launcher"
-                                android:id="@+id/OfficialImage"
-                                android:background="@color/common_google_signin_btn_text_light_disabled"
-                                android:layout_height="150dp" />
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <FrameLayout
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical|center_horizontal"
-                                android:layout_width="360dp">
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="97dp">
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        app:srcCompat="@mipmap/ic_launcher"
-                                        android:id="@+id/IntroductionImage1"
-                                        android:layout_weight="1"
-                                        android:background="@color/common_google_signin_btn_text_light_disabled" />
-
-                                    <Space
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.20" />
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        app:srcCompat="@mipmap/ic_launcher"
-                                        android:id="@+id/IntroductionImage2"
-                                        android:layout_weight="1"
-                                        android:background="@color/common_google_signin_btn_text_light_disabled" />
-
-                                    <Space
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.20" />
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        app:srcCompat="@mipmap/ic_launcher"
-                                        android:id="@+id/IntroductionImage3"
-                                        android:layout_weight="1"
-                                        android:background="@color/common_google_signin_btn_text_light_disabled" />
-                                </LinearLayout>
-                            </FrameLayout>
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <FrameLayout android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical|center_horizontal"
-                                android:layout_width="360dp">
-
-                                <LinearLayout
-                                    android:orientation="horizontal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <EditText
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:inputType="textPersonName"
-                                        android:text="検索内容入力"
-                                        android:ems="10"
-                                        android:id="@+id/SearchEdit"
-                                        android:layout_weight="0.03" />
-
-                                    <Space
-                                        android:layout_width="10dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.01" />
-
-                                    <Button
-                                        android:text="検索"
-                                        android:layout_width="54dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="0.01"
-                                        android:id="@+id/SearchBt" />
-                                </LinearLayout>
-                            </FrameLayout>
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <TextView
-                                android:text="週刊ランキング"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/RankingsText"
-                                android:textSize="24sp"
-                                android:textColor="@android:color/black" />
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp">
-
-                                <Space
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="0.03"
-                                    android:layout_width="0dp" />
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    app:srcCompat="@mipmap/ic_launcher"
-                                    android:id="@+id/StamoRallyImage1"
-                                    android:layout_weight="0.03"
-                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
-
-                                <TextView
-                                    android:text="1位：東京ラーメンめぐり"
-                                    android:layout_width="33dp"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/RankingText1"
-                                    android:layout_weight="0.18"
-                                    android:layout_gravity="center_vertical|center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@android:color/black" />
-                            </LinearLayout>
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp">
-
-                                <Space
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="0.03"
-                                    android:layout_width="0dp" />
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    app:srcCompat="@mipmap/ic_launcher"
-                                    android:id="@+id/StamoRallyImage2"
-                                    android:layout_weight="0.03"
-                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
-
-                                <TextView
-                                    android:text="2位：東京とんかつめぐり"
-                                    android:layout_width="33dp"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/RankingText2"
-                                    android:layout_weight="0.18"
-                                    android:layout_gravity="center_vertical|center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@android:color/black" />
-                            </LinearLayout>
-
-                            <Space
-                                android:layout_width="match_parent"
-                                android:layout_height="10dp" />
-
-                            <LinearLayout
-                                android:orientation="horizontal"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp">
-
-                                <Space
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="0.03"
-                                    android:layout_width="0dp" />
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    app:srcCompat="@mipmap/ic_launcher"
-                                    android:id="@+id/StamoRallyImage3"
-                                    android:layout_weight="0.03"
-                                    android:background="@color/common_google_signin_btn_text_light_disabled" />
-
-                                <TextView
-                                    android:text="3位：東京うどんめぐり"
-                                    android:layout_width="33dp"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/RankingText3"
-                                    android:layout_weight="0.18"
-                                    android:layout_gravity="center_vertical|center_horizontal"
-                                    android:textSize="14sp"
-                                    android:textColor="@android:color/black" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </ScrollView>
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/Login"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -436,6 +451,7 @@
                     <ImageView
                         android:layout_width="133dp"
                         android:layout_height="129dp"
+                        android:src="@drawable/s256_f_object_151_0bg"
                         app:srcCompat="@mipmap/ic_launcher"
                         android:layout_gravity="center_vertical|center_horizontal"
                         android:background="@color/common_google_signin_btn_text_light_disabled"

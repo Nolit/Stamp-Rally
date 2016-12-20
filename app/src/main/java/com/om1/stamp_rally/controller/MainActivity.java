@@ -1,17 +1,22 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +43,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     Button SearchButton;
     Button LogoutButton;
     TextView newloginText;
+    EditText search;
     EditText id;
     EditText pass;
+
 
     SharedPreferences mainPref;
 
@@ -65,8 +72,23 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
 
+        search = (EditText) findViewById(R.id.SearchEdit);
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // EditTextのフォーカスが外れた場合
+                if (hasFocus == false) {
+                    // ソフトキーボードを非表示にする
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
+
+
         //ログイン
-        loginButton = (Button)findViewById(R.id.LoginBt);
+        loginButton = (Button) findViewById(R.id.LoginBt);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 id = (EditText) findViewById(R.id.emailAddress);
@@ -81,23 +103,23 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
         //ログアウト
-        LogoutButton = (Button)findViewById(R.id.LogoutBt);
+        LogoutButton = (Button) findViewById(R.id.LogoutBt);
         LogoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setMessage("ログアウトしてよろしいですか？")
                         .setPositiveButton("ログアウト", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        SharedPreferences.Editor mainEdit = mainPref.edit();
-                                        mainEdit.remove("mailAddress");
-                                        mainEdit.commit();
-                                        //Toast.makeText(MainActivity.this, mainPref.getString("mailAddress","からだよ"), Toast.LENGTH_LONG).show();
-                                        Intent intent=new Intent();
-                                        intent.setClass(MainActivity.this, MainActivity.this.getClass());
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
+                            public void onClick(DialogInterface dialog, int id) {
+                                SharedPreferences.Editor mainEdit = mainPref.edit();
+                                mainEdit.remove("mailAddress");
+                                mainEdit.commit();
+                                //Toast.makeText(MainActivity.this, mainPref.getString("mailAddress","からだよ"), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent();
+                                intent.setClass(MainActivity.this, MainActivity.this.getClass());
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
                 builder.show();
             }
         });
@@ -105,7 +127,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
         //新規会員登録ページへ
         newloginText = (TextView) findViewById(R.id.newmember);
-        newloginText.setOnClickListener(new View.OnClickListener(){
+        newloginText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
                 startActivity(intent);
@@ -113,7 +135,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         });
 
         //スタンプラリーページを選択時のフラグメント起動
-        th.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
+        th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
                 Log.d("tab", tabId);
@@ -125,25 +147,24 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         String useId = mainPref.getString("mailAddress", null);
 
         //ログイン時とゲスト時のtabHost
-        if(useId != null) {
+        if (useId != null) {
             initLoginTabs();
-        }
-        else{
+        } else {
             initGuestTabs();
         }
 
         //検索
-        SearchButton = (Button)findViewById(R.id.SearchBt);
+        SearchButton = (Button) findViewById(R.id.SearchBt);
         SearchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                search = (EditText) findViewById(R.id.SearchEdit);
+
+                //検索結果一覧ページへ
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
             }
         });
     }
-
-
-
 
     //ログイン時のtabHost
     protected void initLoginTabs() {
