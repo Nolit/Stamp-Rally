@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     private double longitude;
     private String title;
     private String note;
+    private byte[] picture;
 
     //trueの時、戻るボタンを無効化にする
     private boolean decidePictureFlag = false;
@@ -100,6 +102,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     @OnClick(R.id.decideButton)
     void decidePicture(){
         decidePictureFlag = true;
+        picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(
                 LAYOUT_INFLATER_SERVICE);
         final View layout = inflater.inflate(R.layout.stamp_info,
@@ -148,8 +151,9 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     private void uploadStamp(){
+        System.out.println("スタンプラリー: "+picture);
+        System.out.println("__________________________________________________");
         showOverlay();
-        byte[] picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
         long createTime = System.currentTimeMillis();
         SharedPreferences pref = getSharedPreferences("stamp-rally", MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE);
         String email = pref.getString("email", "tarou2");
