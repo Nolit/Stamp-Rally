@@ -227,9 +227,9 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
                         //intent
                         stampTitle = marker.getTitle();
-                        stampId = marker.getId().replaceAll("m", "");
-                        stampId = Integer.toString(stampList.get(Integer.valueOf(stampId)).getStampId());
-                        stampRallyId = Integer.toString(stampRally.getStamprallyId());
+                        selectedStampId = marker.getId().replaceAll("m", "");
+                        selectedStampId = Integer.toString(stampList.get(Integer.valueOf(selectedStampId)).getStampId());
+                        tryingStampRallyId = Integer.toString(stampRally.getStamprallyId());
                     }
                 }
                 return false;
@@ -242,7 +242,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
             public void onMapClick(LatLng point) {
                 cameraIcon.setVisibility(View.INVISIBLE);
                 //intent
-                stampId = null;
+                selectedStampId = null;
                 stampTitle = null;
             }
         });
