@@ -41,4 +41,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.isseiaoki:simplecropview:1.0.10'
+    compile 'commons-codec:commons-codec:1.10'
 }

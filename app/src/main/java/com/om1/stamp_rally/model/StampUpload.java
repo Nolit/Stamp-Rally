@@ -1,5 +1,6 @@
 package com.om1.stamp_rally.model;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,7 +20,10 @@ import com.squareup.okhttp.Response;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -45,7 +49,7 @@ public class StampUpload {
     }
 
     //OkHttpライブラリを使用したサーバーとの通信
-    public void uploadStamp(int stampId, int stampRallyId, double latitude, double longitude, String title, String note, byte[] picture, long createDate, String email, String password){
+    public void uploadStamp(int stampId, int stampRallyId, double latitude, double longitude, String title, String note, byte[] picture, long createDate, String mailAddress, String password){
         List<Map<String, Object>> stampList = new ArrayList<>();
         Map<String, Object> stamp = new HashMap<>();
         stamp.put("stampId", stampId);
@@ -54,14 +58,13 @@ public class StampUpload {
         stamp.put("longitude", longitude);
         stamp.put("title", title);
         stamp.put("note", note);
-        stamp.put("picture", picture);
+        stamp.put("picture", Base64.encodeToString(picture, Base64.DEFAULT));
         stamp.put("createDate", createDate);
         stampList.add(stamp);
-        System.out.println("スタンプラリー: "+picture);
-        uploadStamp(stampList, email, password);
+        uploadStamp(stampList, mailAddress, password);
     }
 
-    public void uploadStamp(List<Map<String, Object>> stampList, String email, String password){
+    public void uploadStamp(List<Map<String, Object>> stampList, String mailAddress, String password){
         String stampListJson;
         try {
             stampListJson = new ObjectMapper().writeValueAsString(stampList);
@@ -69,45 +72,12 @@ public class StampUpload {
             e.printStackTrace();
             return;
         }
-        RequestBody body = null;
-        List<Map<String, Object>> a = null;
-        try {
-            a = new ObjectMapper().readValue(stampListJson, List.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Map<String, Object> m = a.get(0);
+        RequestBody body = new FormEncodingBuilder()
+                .add("stampList", stampListJson)
+                .add("mailAddress", mailAddress)
+                .add("password", password)
+                .build();
 
-        String b = (String)m.get("picture");
-        byte[] c1 = b.getBytes(Charset.defaultCharset());
-        byte[] c2 = null;
-        byte[] c3 = null;
-        try {
-             c2 = b.getBytes("ISO_8859_1");
-             c3 = b.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        System.out.println("スタンプラリー: "+b.length());
-        System.out.println("スタンプラリー: "+b.lastIndexOf(10));
-        System.out.println("スタンプラリー: "+c1);
-        System.out.println("スタンプラリー: "+c2);
-        System.out.println("スタンプラリー: "+c3);
-
-//            body = new FormEncodingBuilder()
-//                    .add("stampList", stampListJson)
-//                    .add("email", email)
-//                    .add("password", password)
-//                    .build();
-            body = new MultipartBuilder()
-                    .type(MultipartBuilder.FORM)
-                    .add
-                    .addFormDataPart("stampList", stampListJson)
-                    .addFormDataPart("sample", "あいうえお")
-                    .addFormDataPart("email", email)
-                    .addFormDataPart("password", password)
-                    .build();
-//
         Request request = new Request.Builder()
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/stampUpload")
                 .post(body)
@@ -124,9 +94,8 @@ public class StampUpload {
             @Override
             public void onResponse(Response response) throws IOException {
                 boolean isSuccess = response.isSuccessful();
-                Log.d("スタンプラリー", response.body().string());
-//                boolean isClear = Boolean.valueOf(response.body().string());
-//                EventBusUtil.defaultBus.post(new StampUploadEvent(isSuccess, isClear));
+                boolean isCompleted = Boolean.valueOf(response.body().string());
+                EventBusUtil.defaultBus.post(new StampUploadEvent(isSuccess, isCompleted));
             }
         });
     }

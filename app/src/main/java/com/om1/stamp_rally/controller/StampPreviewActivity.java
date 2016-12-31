@@ -151,14 +151,12 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     private void uploadStamp(){
-        System.out.println("スタンプラリー: "+picture);
-        System.out.println("__________________________________________________");
         showOverlay();
         long createTime = System.currentTimeMillis();
         SharedPreferences pref = getSharedPreferences("stamp-rally", MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE);
-        String email = pref.getString("email", "tarou2");
+        String mailAddress = pref.getString("mailAddress", "tarou2");
         String password = pref.getString("password", "tarou2");
-        StampUpload.getInstance().uploadStamp(stampId, stampRallyId, latitude, longitude, title, note, picture, createTime, email, password);
+        StampUpload.getInstance().uploadStamp(stampId, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
