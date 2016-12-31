@@ -64,7 +64,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
     //ログインテスト
-    int i = 1;
+    int i = 0
+            ;
 
 
     @Override

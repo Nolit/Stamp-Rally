@@ -1,5 +1,6 @@
 package com.om1.stamp_rally.model;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +12,7 @@ import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -18,7 +20,17 @@ import com.squareup.okhttp.Response;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +48,7 @@ public class StampUpload {
         return instance;
     }
 
-    //OkHttpライブラリを使用したサーバーとの通信
-    public void uploadStamp(int stampId, int stampRallyId, double latitude, double longitude, String title, String note, byte[] picture, long createDate, String email, String password){
+    public void uploadStamp(int stampId, int stampRallyId, double latitude, double longitude, String title, String note, byte[] picture, long createDate, String mailAddress, String password){
         List<Map<String, Object>> stampList = new ArrayList<>();
         Map<String, Object> stamp = new HashMap<>();
         stamp.put("stampId", stampId);
@@ -46,14 +57,13 @@ public class StampUpload {
         stamp.put("longitude", longitude);
         stamp.put("title", title);
         stamp.put("note", note);
-        stamp.put("picture", picture);
+        stamp.put("picture", Base64.encodeToString(picture, Base64.DEFAULT));
         stamp.put("createDate", createDate);
         stampList.add(stamp);
-
-        uploadStamp(stampList, email, password);
+        uploadStamp(stampList, mailAddress, password);
     }
 
-    public void uploadStamp(List<Map<String, Object>> stampList, String email, String password){
+    public void uploadStamp(List<Map<String, Object>> stampList, String mailAddress, String password){
         String stampListJson;
         try {
             stampListJson = new ObjectMapper().writeValueAsString(stampList);
@@ -63,7 +73,7 @@ public class StampUpload {
         }
         RequestBody body = new FormEncodingBuilder()
                 .add("stampList", stampListJson)
-                .add("email", email)
+                .add("mailAddress", mailAddress)
                 .add("password", password)
                 .build();
 
@@ -71,6 +81,7 @@ public class StampUpload {
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/stampUpload")
                 .post(body)
                 .build();
+
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -82,9 +93,8 @@ public class StampUpload {
             @Override
             public void onResponse(Response response) throws IOException {
                 boolean isSuccess = response.isSuccessful();
-                Log.d("スタンプラリー", response.body().string());
-                boolean isClear = Boolean.valueOf(response.body().string());
-                EventBusUtil.defaultBus.post(new StampUploadEvent(isSuccess, isClear));
+                boolean isCompleted = Boolean.valueOf(response.body().string());
+                EventBusUtil.defaultBus.post(new StampUploadEvent(isSuccess, isCompleted));
             }
         });
     }

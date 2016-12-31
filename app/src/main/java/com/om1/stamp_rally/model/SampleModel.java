@@ -3,8 +3,13 @@ package com.om1.stamp_rally.model;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,10 +35,22 @@ public class SampleModel {
 
     //OkHttpライブラリを使用したサーバーとの通信
     public void fetchJson(){
+        RequestBody body = null;
+
+        body = new FormEncodingBuilder()
+        .addEncoded("sample", "あいうえ")
+        .build();
+//        body = new MultipartBuilder()
+//                .type(MultipartBuilder.FORM)
+//                .addPart(
+//                        Headers.of("Content-Disposition", "form-data; name=\"sample\""),
+//                        RequestBody.create(MediaType.parse("text/plain; charset=utf-8"), "あいうえお")
+//                )
+//                .build();
         Request request = new Request.Builder()
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/sample")
                 //GET通信かPOST通信か指定
-                .get()
+                .post(body)
                 .build();
         //requestに基づいた通信を別スレッドで行う
         new OkHttpClient().newCall(request).enqueue(new Callback() {
