@@ -161,14 +161,15 @@ public class StampPreviewActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void uploadedStamp(StampUploadEvent event) {
-        if(!event.isSuccess()){
-            Toast.makeText(this, "アップロードに失敗しました\n時間を置いてお試しください", Toast.LENGTH_LONG).show();
-            saveStamp();
-        }else if(event.isClear()){
-            Toast.makeText(this, "クリア！", Toast.LENGTH_LONG).show();
+        String message;
+        if(event.isSuccess()){
+            message = event.isClear() ? "クリア！" : "アップロードしました";
         }else{
-            Toast.makeText(this, "アップロードしました", Toast.LENGTH_LONG).show();
+            message = "アップロードに失敗しました\n時間を置いてお試しください";
+            saveStamp();
         }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        
         startActivity(new Intent(StampPreviewActivity.this, MainActivity.class));
     }
 
