@@ -1,4 +1,4 @@
-package com.om1.stamp_rally.controller.view;
+package com.om1.stamp_rally.view;
 
 import android.content.Context;
 import android.content.Intent;
