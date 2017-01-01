@@ -35,6 +35,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
@@ -328,5 +329,12 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         //EventBusライブラリによる自身の登録解除
         eventBus.unregister(this);
         super.onPause();
+    }
+
+    @OnClick(R.id.stampRegistrationButton)
+    void clickStampRagistrationButton(){
+        Intent intent = new Intent(this, TakeStampActivity.class);
+        intent.putExtra("stampRegisterFlag", true);
+        startActivity(intent);
     }
 }

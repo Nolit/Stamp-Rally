@@ -64,10 +64,14 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 //            public void onShutter() {
 //            }
 //        };
-        intent.setClassName(getContext(), StampPreviewActivity.class.getName());
         Camera.ShutterCallback shutterListener = null;
+        intent.setClassName(getContext(), StampPreviewActivity.class.getName());
         camera.takePicture(shutterListener, null,new Camera.PictureCallback() {
             public void onPictureTaken(byte[] data,Camera camera) {
+                //スタンプ取得時ではなくスタンプ登録時の処理
+                if(intent.getBooleanExtra("stampRegisterFlag", false) == true){
+                    //位置情報を取得してインテントに保存する処理
+                }
                 intent.putExtra("pictureImage", data);
                 getContext().startActivity(intent);
             }

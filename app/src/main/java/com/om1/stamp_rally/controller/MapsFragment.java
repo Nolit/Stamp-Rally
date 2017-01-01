@@ -277,6 +277,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon(){
         Intent intent = new Intent(getContext(), TakeStampActivity.class);
+        intent.putExtra("stampRegisterFlag", false);
         intent.putExtra("stampId", selectedStampId);
         intent.putExtra("stampRallyId", tryingStampRallyId);
         startActivity(intent);
