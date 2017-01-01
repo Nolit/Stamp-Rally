@@ -3,6 +3,7 @@ package com.om1.stamp_rally.controller.view;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.location.LocationManager;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -68,10 +69,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         intent.setClassName(getContext(), StampPreviewActivity.class.getName());
         camera.takePicture(shutterListener, null,new Camera.PictureCallback() {
             public void onPictureTaken(byte[] data,Camera camera) {
-                //スタンプ取得時ではなくスタンプ登録時の処理
-                if(intent.getBooleanExtra("stampRegisterFlag", false) == true){
-                    //位置情報を取得してインテントに保存する処理
-                }
                 intent.putExtra("pictureImage", data);
                 getContext().startActivity(intent);
             }
