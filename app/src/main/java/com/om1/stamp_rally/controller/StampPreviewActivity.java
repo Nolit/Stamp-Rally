@@ -48,6 +48,10 @@ public class StampPreviewActivity extends AppCompatActivity {
     private final String OK_BUTTON_MESSAGE = "アップロード";
     private final String NO_BUTTON_MESSAGE = "後で";
     private final String ERROR_MESSAGE = "名称を入力してください";
+    private final String UPLOAD_SUCCESS_MESSAGE = "アップロードしました";
+    private final String UPLOAD_FAILE_MESSAGE = "アップロードに失敗しました\n時間を置いてお試しください";
+    private final String RALLY_COMPLETE_MESSAGE = "クリアしました！";
+    private final String ATTENTION_STAMP_SAVE_MESSAGE = "スタンプを保存してください！";
     private final float OVERLAY_ALPHA = 0.7f;
 
     private int stampId;
@@ -163,9 +167,9 @@ public class StampPreviewActivity extends AppCompatActivity {
     public void uploadedStamp(StampUploadEvent event) {
         String message;
         if(event.isSuccess()){
-            message = event.isClear() ? "クリア！" : "アップロードしました";
+            message = event.isClear() ? RALLY_COMPLETE_MESSAGE : UPLOAD_SUCCESS_MESSAGE;
         }else{
-            message = "アップロードに失敗しました\n時間を置いてお試しください";
+            message =UPLOAD_FAILE_MESSAGE;
             saveStamp();
         }
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -192,7 +196,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(decidePictureFlag){
-            Toast.makeText(this, "スタンプを保存してください", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, ATTENTION_STAMP_SAVE_MESSAGE, Toast.LENGTH_LONG).show();
             return;
         }
         super.onBackPressed();
