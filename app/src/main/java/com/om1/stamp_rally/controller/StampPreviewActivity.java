@@ -49,7 +49,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     private final String NO_BUTTON_MESSAGE = "後で";
     private final String ERROR_MESSAGE = "名称を入力してください";
     private final String UPLOAD_SUCCESS_MESSAGE = "アップロードしました";
-    private final String UPLOAD_FAILE_MESSAGE = "アップロードに失敗しました\n時間を置いてお試しください";
+    private final String UPLOAD_FAILE_MESSAGE = "アップロードに失敗しました\n編集画面からもう一度お試しください";
     private final String RALLY_COMPLETE_MESSAGE = "クリアしました！";
     private final String ATTENTION_STAMP_SAVE_MESSAGE = "スタンプを保存してください！";
     private final float OVERLAY_ALPHA = 0.7f;
