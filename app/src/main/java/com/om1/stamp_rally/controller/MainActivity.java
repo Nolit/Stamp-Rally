@@ -47,9 +47,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
     SharedPreferences mainPref;
 
-    //スタンプ管理タブ
-    Button stampEditButton;
-
     //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
@@ -134,15 +131,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         newloginText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //スタンプ編集一覧ページへのインテントボタン
-        stampEditButton = (Button) findViewById(R.id.editStamp);
-        stampEditButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
                 startActivity(intent);
             }
         });
@@ -331,6 +319,12 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     void clickStampRagistrationButton(){
         Intent intent = new Intent(this, TakeStampActivity.class);
         intent.putExtra("stampRegisterFlag", true);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.editStamp)
+    void clickEditStamp(){
+        Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
         startActivity(intent);
     }
 }
