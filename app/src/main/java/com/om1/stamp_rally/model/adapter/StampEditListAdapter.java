@@ -2,58 +2,42 @@ package com.om1.stamp_rally.model.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.om1.stamp_rally.R;
 
 import java.util.List;
+import java.util.Map;
+
+import database.entities.Stamps;
 
 
-public class StampEditListAdapter extends ArrayAdapter<StampEditListAdapter.StampData> {
+public class StampEditListAdapter extends ArrayAdapter<Stamps> {
     private LayoutInflater layoutInflater;
 
-    public StampEditListAdapter(Context context, int resource, List<StampData> objects) {
+    public StampEditListAdapter(Context context, int resource, List<Stamps> objects) {
         super(context, resource, objects);
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        StampData stampData = getItem(position);
+        Stamps stamp = getItem(position);
         if (null == convertView) {
             convertView = layoutInflater.inflate(R.layout.list_row_stamp, parent, false);
         }
 
-        ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stampData.getTitle());
-//        ((ImageView)convertView.findViewById(R.id.stampThumbnail)).setImageBitmap(stampData.getThumbnail());
+        byte[] pictureByte = stamp.getPicture();
+        Bitmap picture = BitmapFactory.decodeByteArray(pictureByte, 0, pictureByte.length);
+//        ((ImageView)convertView.findViewById(R.id.stampThumbnail)).setImageBitmap(picture);
+        ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stamp.getStampName());
 
         return convertView;
-    }
-
-    public StampData createData(){
-        return new StampData();
-    }
-
-    public class StampData{
-        private String title;
-        private Bitmap thumbnail;
-
-        public String getTitle() {
-            return title;
-        }
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public Bitmap getThumbnail() {
-            return thumbnail;
-        }
-        public void setThumbnail(Bitmap thumbnail) {
-            this.thumbnail = thumbnail;
-        }
     }
 }
