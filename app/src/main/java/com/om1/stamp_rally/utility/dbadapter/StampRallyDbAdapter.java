@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,22 +15,23 @@ import java.util.Map;
 
 public class StampRallyDbAdapter extends BaseDbAdapter {
     public static final String ID = "id";
-    public static final String SIZE = "size";
+    public static final String NAME = "name";
     public static final String IS_CHALLENGE = "isChallenge";
 
     public StampRallyDbAdapter(Context context) {
         super(context);
         tableName = "stamp_rally";
         dll = "CREATE TABLE " + tableName + " ("
-                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + SIZE + " INTEGER NOT NULL,"
+                + ID + " INTEGER PRIMARY KEY,"
+                + NAME + " TEXT NOT NULL,"
                 + IS_CHALLENGE + " INTEGER DEFAULT 0);";
     }
 
-    public void createStampRally(int size){
+    public void createStampRally(Integer id, String name){
         open();
         ContentValues values = new ContentValues();
-        values.put(SIZE, size);
+        values.put(ID, id);
+        values.put(NAME, name);
         db.insertOrThrow(tableName, null, values);
         close();
     }
@@ -46,14 +46,7 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
         return stampRally;
     }
 
-    public boolean isClear(int id){
-        int stampRallySize = (Integer)getById(id).get(SIZE);
-        int stampCount = new StampDbAdapter(context).getByStampRallyIdAsList(id).size();
-
-        return stampRallySize == stampCount;
-    }
-
-    private Map<String, Object> getById(int id){
+    public Map<String, Object> getById(int id){
         open();
         Cursor c = db.query(tableName, null, ID + " = " + id, null, null, null, null, null);
         Map<String, Object> stampRally = convert(c);
@@ -84,9 +77,9 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
         Cursor c = getAll();
         if(c.moveToFirst()){
             do {
-                Log.d("id: ", c.getString(c.getColumnIndex("id")));
-                Log.d("size: ", ""+c.getInt(c.getColumnIndex("size")));
-                Log.d("isChallenge: ", ""+c.getInt(c.getColumnIndex("isChallenge")));
+                Log.d("id: ", c.getString(c.getColumnIndex(ID)));
+                Log.d("size: ", ""+c.getString(c.getColumnIndex(NAME)));
+                Log.d("isChallenge: ", ""+c.getInt(c.getColumnIndex(IS_CHALLENGE)));
             }while(c.moveToNext());
         }
         close();
@@ -99,7 +92,7 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
 
         Map<String, Object> stampRally = new HashMap<>();
         stampRally.put(ID, c.getInt(c.getColumnIndex(ID)));
-        stampRally.put(SIZE, c.getInt(c.getColumnIndex(SIZE)));
+        stampRally.put(NAME, c.getString(c.getColumnIndex(NAME)));
         stampRally.put(IS_CHALLENGE, c.getInt(c.getColumnIndex(IS_CHALLENGE)));
 
         return stampRally;

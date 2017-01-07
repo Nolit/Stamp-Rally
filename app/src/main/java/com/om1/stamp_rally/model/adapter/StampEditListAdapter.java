@@ -3,6 +3,7 @@ package com.om1.stamp_rally.model.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.om1.stamp_rally.R;
+import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
 import java.util.List;
 import java.util.Map;
 
+import database.entities.StampRallys;
 import database.entities.Stamps;
 
 
@@ -35,8 +38,10 @@ public class StampEditListAdapter extends ArrayAdapter<Stamps> {
 
         byte[] pictureByte = stamp.getPicture();
         Bitmap picture = BitmapFactory.decodeByteArray(pictureByte, 0, pictureByte.length);
-//        ((ImageView)convertView.findViewById(R.id.stampThumbnail)).setImageBitmap(picture);
+        ((ImageView)convertView.findViewById(R.id.stampThumbnail)).setImageBitmap(picture);
         ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stamp.getStampName());
+        StampRallys stampRallys = stamp.getStampRallysList().get(0);
+        ((TextView)convertView.findViewById(R.id.stampRallyTitle)).setText(stampRallys.getStamprallyName());
 
         return convertView;
     }
