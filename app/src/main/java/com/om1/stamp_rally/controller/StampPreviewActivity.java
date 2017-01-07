@@ -90,12 +90,12 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     private Bitmap changeDisplayOrientation(byte[] image){
-        Bitmap tmp_bitmap = BitmapFactory.decodeByteArray (image, 0, image.length);
-        int width = tmp_bitmap.getWidth ();
-        int height = tmp_bitmap.getHeight ();
+        Bitmap origin_bitmap = BitmapFactory.decodeByteArray (image, 0, image.length);
+        int width = origin_bitmap.getWidth ();
+        int height = origin_bitmap.getHeight ();
         Matrix matrix = new Matrix();
         matrix.postRotate (90);
-        return Bitmap.createBitmap (tmp_bitmap, 0, 0, width, height, matrix, true);
+        return Bitmap.createBitmap (origin_bitmap, 0, 0, width, height, matrix, true);
     }
 
     @OnClick(R.id.takeAgainButton)
