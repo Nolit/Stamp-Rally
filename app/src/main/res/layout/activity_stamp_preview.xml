@@ -38,23 +38,5 @@
         </LinearLayout>
 
     </LinearLayout>
-    <FrameLayout
-        android:id="@+id/uploading_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#888"
-        android:alpha="0">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="アップロードしています"
-            android:textSize="60px"
-            android:textColor="#EAF"
-            android:layout_gravity="center"
-            android:gravity="center"/>
-        <ImageView
-            android:id="@+id/sampleImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+    <include layout="@layout/uploading_overlay"/>
 </FrameLayout>
