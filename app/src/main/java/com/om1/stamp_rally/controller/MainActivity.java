@@ -38,6 +38,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
     //スタンプ管理タブ
     Button stampEditButton;
+    Button stampRallyDetailIntentButton;
 
     //tabHost
     @InjectView(R.id.tabHost)
@@ -88,6 +89,14 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         stampEditButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
+                startActivity(intent);
+            }
+        });
+        //スタンプラリー詳細ページへのテスト用ボタン
+        stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
+        stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
                 startActivity(intent);
             }
         });

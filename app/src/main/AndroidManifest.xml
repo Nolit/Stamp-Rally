@@ -69,7 +69,7 @@
             android:label="@string/title_activity_mystamp"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.StampDetailActivity"
+            android:name=".controller.StampRallyDetailActivity"
             android:label="@string/title_activity_stamp_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
