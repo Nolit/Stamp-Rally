@@ -3,6 +3,11 @@ package com.om1.stamp_rally.controller;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,6 +25,8 @@ import java.io.IOException;
 
 import database.entities.StampRallys;
 import database.entities.Stamps;
+
+import static com.om1.stamp_rally.R.id.stampTitle;
 
 public class StampRallyDetailActivity extends AppCompatActivity {
     private final EventBus eventBus = EventBus.getDefault();
@@ -46,10 +53,24 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
             Log.d("デバッグ","データベースとの通信に成功");
+            System.out.println("デバッグ"+stampRally.getStamprallyName()+0);
 
             for(Stamps stamps:stampRally.getStampsCollection()){
                 System.out.println("デバッグ:詳細:" + stamps.getStampName());
             }
+
+            //サムネイルを横スクロールで表示
+            LinearLayout layout = (LinearLayout) findViewById(R.id.DetailLinearLayoutAddThumbnail);
+            for (Stamps stamps:stampRally.getStampsCollection()) {
+                View view = getLayoutInflater().inflate(R.layout.sub_stmaprally_detail_thumbnail, null);
+                layout.addView(view);
+                ImageButton stampThumbnail = (ImageButton) view.findViewById(R.id.stampThumbnail);
+    //            stampThumbnail.setImageBitmap();
+
+                TextView stampTitle = (TextView) view.findViewById(R.id.stampTitle);
+                stampTitle.setText(stamps.getStampName());
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
