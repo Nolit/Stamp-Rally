@@ -5,18 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,9 +46,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
     SharedPreferences mainPref;
-
-    //スタンプ管理タブ
-    Button stampEditButton;
 
     //tabHost
     @InjectView(R.id.tabHost)
@@ -138,15 +131,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         newloginText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //スタンプ編集一覧ページへのインテントボタン
-        stampEditButton = (Button) findViewById(R.id.EditStamp);
-        stampEditButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
                 startActivity(intent);
             }
         });
@@ -335,6 +319,12 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     void clickStampRagistrationButton(){
         Intent intent = new Intent(this, TakeStampActivity.class);
         intent.putExtra("stampRegisterFlag", true);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.editStamp)
+    void clickEditStamp(){
+        Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
         startActivity(intent);
     }
 }

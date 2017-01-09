@@ -9,23 +9,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/stampThumbnail"
             android:src="@mipmap/oosakajo"
             android:layout_margin="5dp">
         </ImageView>
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:padding="5dp"
-            android:text="stampTitle"
-            android:id="@+id/stampTitle" />
-
+            android:layout_height="60dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:text="stampTitle"
+                android:textSize="15dp"
+                android:id="@+id/stampTitle" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom"
+                android:text="stampRallyTitle"
+                android:textSize="15dp"
+                android:id="@+id/stampRallyTitle" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

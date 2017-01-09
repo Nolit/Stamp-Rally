@@ -337,14 +337,14 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
             //マーカーの配置・格納
             if(stampRally != null){
-                for(Stamps stamp:stampRally.getStampsCollection()){
+                for(Stamps stamp:stampRally.getStampList()){
                     markers.add(mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()))
+                            .position(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()))
                             .title(stamp.getStampName())));
                     stampBean = new StampBean();
                     stampBean.setStampTitle(stamp.getStampName());
                     stampBean.setStampId(stamp.getStampId());
-                    stampBean.setLatLng(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()));
+                    stampBean.setLatLng(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()));
                     stampList.add(stampBean);
                 }
                 adapter.notifyDataSetChanged(); //リストの更新
