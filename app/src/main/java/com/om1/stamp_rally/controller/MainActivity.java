@@ -46,6 +46,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     EditText id;
     EditText pass;
 
+    //スタンプ管理タブ
+    Button stampEditButton;
+    Button stampRallyDetailIntentButton;
 
     SharedPreferences mainPref;
 
@@ -134,6 +137,15 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
+        //スタンプラリー詳細ページへのテスト用ボタン
+        stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
+        stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //スタンプラリーページを選択時のフラグメント起動
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
@@ -153,6 +165,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         } else {
             initGuestTabs();
         }
+
 
         //検索
         SearchButton = (Button) findViewById(R.id.SearchBt);
