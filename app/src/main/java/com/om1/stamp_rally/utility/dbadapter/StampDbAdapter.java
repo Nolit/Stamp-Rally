@@ -81,17 +81,26 @@ public class StampDbAdapter extends BaseDbAdapter {
             do {
                 Map<String, Object> stamp = new HashMap<>();
                 stamp.put(ID, c.getInt(c.getColumnIndex(ID)));
+                stamp.put(STAMP_ID, c.getInt(c.getColumnIndex(STAMP_ID)));
                 stamp.put(STAMP_RALLY_ID, c.getInt(c.getColumnIndex(STAMP_RALLY_ID)));
                 stamp.put(TITLE, c.getString(c.getColumnIndex(TITLE)));
                 stamp.put(MEMO, c.getString(c.getColumnIndex(MEMO)));
                 stamp.put(PICTURE, c.getBlob(c.getColumnIndex(PICTURE)));
                 stamp.put(CREATE_TIME, c.getLong(c.getColumnIndex(CREATE_TIME)));
+                stamp.put(LATITUDE, c.getDouble(c.getColumnIndex(LATITUDE)));
+                stamp.put(LONGITUDE, c.getDouble(c.getColumnIndex(LONGITUDE)));
                 stampList.add(stamp);
             }while(c.moveToNext());
         }
         c.close();
 
         return stampList;
+    }
+
+    public void deleteById(int id){
+        open();
+        db.delete(tableName, ID + "=" + id, null);
+        close();
     }
 
     public void dropTable(){

@@ -24,13 +24,20 @@ import com.om1.stamp_rally.model.StampUpload;
 import com.om1.stamp_rally.model.adapter.StampEditListAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.om1.stamp_rally.model.event.StampUploadEvent;
 import com.om1.stamp_rally.utility.ByteConverter;
+import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
 import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import database.entities.StampPads;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
@@ -47,26 +54,25 @@ public class StampEditListActivity extends AppCompatActivity {
     private final String ATTENTION_STAMP_SAVE_MESSAGE = "スタンプを保存してください！";
     private final float OVERLAY_ALPHA = 0.7f;
 
-    private int stampId;
-    private int stampRallyId;
-    private double latitude;
-    private double longitude;
     private String title;
     private String note;
-    private byte[] picture;
 
     EditText titleEdit;
     TextView stampTitleError;
     EditText noteEdit;
 
+    private int selectedItemIndex;
+    private List<Stamps> stampDataList;
     private StampEditListAdapter adapter;
+    private List<Map<String, Object>> stampMapList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamp_edit_list);
+        EventBusUtil.defaultBus.register(this);
 
-        List<Stamps> stampDataList = loadStampData();
+        stampDataList = loadStampData();
         adapter = new StampEditListAdapter(this, 0, stampDataList);
 
         ListView listView = (ListView)findViewById(R.id.stampEditlistView);
@@ -84,14 +90,14 @@ public class StampEditListActivity extends AppCompatActivity {
                         (ViewGroup)findViewById(R.id.layout_root));
 
                 initDialogViews(layout, stamp);
+                selectedItemIndex = position;
                 showEditStampDialog(layout, stamp);
             }
         });
     }
 
     private List<Stamps> loadStampData(){
-        List<Map<String, Object>> stampMapList = new StampDbAdapter(this).getAllAsList();
-        Log.d("スタンプラリー", stampMapList.toString());
+        stampMapList = new StampDbAdapter(this).getAllAsList();
         List<Stamps> stampList = new ArrayList<>();
         for(Map<String, Object> stampMap : stampMapList){
             Stamps stampData = convertMapToStamp(stampMap);
@@ -102,9 +108,10 @@ public class StampEditListActivity extends AppCompatActivity {
     }
 
     private Stamps convertMapToStamp(Map<String, Object> stampMap){
-        Integer id = (Integer) stampMap.get("id");
+        Integer id = (Integer) stampMap.get("stampId");
         String title = (String) stampMap.get("title");
         String memo = (String) stampMap.get("memo");
+
         byte[] picture = (byte[]) stampMap.get("picture");
 
         Integer stampRallyId = (Integer)stampMap.get("stampRallyId");
@@ -115,12 +122,18 @@ public class StampEditListActivity extends AppCompatActivity {
             stampRally.setStamprallyName(name);
         }
 
+        StampPads pad = new StampPads();
+        pad.setLatitude((Double)stampMap.get("latitude"));
+        pad.setLongitude((Double)stampMap.get("longitude"));
+
         Stamps stamp = new Stamps();
         stamp.setStampId(id);
         stamp.setStampName(title);
         stamp.setStampComment(memo);
         stamp.setPicture(picture);
+        stamp.setStampDate(new Date(((Long)stampMap.get("create_time"))));
         stamp.getStampRallysList().add(stampRally);
+        stamp.setStampPads(pad);
 
         return stamp;
     }
@@ -133,29 +146,29 @@ public class StampEditListActivity extends AppCompatActivity {
         stampTitleError = findById(layout, R.id.stampTitleError);
     }
 
-    private void showEditStampDialog(final View layout, Stamps stamp){
+    private void showEditStampDialog(final View layout, final Stamps stamp){
         new AlertDialog.Builder(this)
-                .setTitle(DIALOG_TITLE)
-                .setView(layout)
-                .setPositiveButton(OK_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String title = titleEdit.getText().toString();
-                        if(title.equals("")){
-                            stampTitleError.setText(ERROR_MESSAGE);
-                            return;
-                        }
-                        applyDialogEditField();
-                        uploadStamp();
+            .setTitle(DIALOG_TITLE)
+            .setView(layout)
+            .setPositiveButton(OK_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    String title = titleEdit.getText().toString();
+                    if(title.equals("")){
+                        stampTitleError.setText(ERROR_MESSAGE);
+                        return;
                     }
-                })
-                .setNegativeButton(NO_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .setCancelable(false)
-                .create().show();
+                    applyDialogEditField();
+                    uploadStamp(stamp);
+                }
+            })
+            .setNegativeButton(NO_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            })
+            .setCancelable(false)
+            .create().show();
     }
 
     private void applyDialogEditField(){
@@ -174,16 +187,50 @@ public class StampEditListActivity extends AppCompatActivity {
         overlayLayout.setAlpha(OVERLAY_ALPHA);
     }
 
-    private void uploadStamp(){
+    private void hideOverlay(){
+        FrameLayout overlayLayout = findById(this, R.id.uploading_overlay);
+        overlayLayout.setOnTouchListener(null);
+        overlayLayout.setAlpha(0);
+    }
+
+    private void uploadStamp(Stamps stamp){
         showOverlay();
-        long createTime = System.currentTimeMillis();
+
+        Integer id = stamp.getStampId();
+        Integer stampRallyId = stamp.getStampRallysList().get(0).getStamprallyId();
+        double latitude = stamp.getStampPads().getLatitude();
+        double longitude = stamp.getStampPads().getLongitude();
+        byte[] picture = stamp.getPicture();
+        long createTime = stamp.getStampDate().getTime();
+
         SharedPreferences pref = getSharedPreferences("stamp-rally", MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE);
         String mailAddress = pref.getString("mailAddress", "tarou2");
         String password = pref.getString("password", "tarou2");
-        StampUpload.getInstance().uploadStamp(stampId, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
+
+        StampUpload.getInstance().uploadStamp(id, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void uploadedStamp(StampUploadEvent event) {
+        String message;
+        if(event.isSuccess()){
+            int id = (int)stampMapList.get(selectedItemIndex).get("id");
+            Log.d("スタンプラリー", ""+id);
+            new StampDbAdapter(this).deleteById(id);
+            message = event.isClear() ? RALLY_COMPLETE_MESSAGE : UPLOAD_SUCCESS_MESSAGE;
+        }else{
+            message =UPLOAD_FAILE_MESSAGE;
+        }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+        stampDataList.remove(selectedItemIndex);
+        adapter.notifyDataSetChanged();
+        hideOverlay();
+    }
+
     @Override
     public void onStop() {
         super.onStop();
+        EventBusUtil.defaultBus.unregister(this);
     }
 }
