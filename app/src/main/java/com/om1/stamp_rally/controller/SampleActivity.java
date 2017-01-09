@@ -1,7 +1,10 @@
 package com.om1.stamp_rally.controller;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import database.entities.Sample;
+import database.entities.Stamps;
 
 /**
  * これは以下の動作を行うサンプル用のクラスです
@@ -34,6 +38,8 @@ public class SampleActivity extends AppCompatActivity {
     //ButterKnifeライブラリによるビューの読み込み
     @InjectView(R.id.sampleTextView)
     TextView sampleView;
+    @InjectView(R.id.sampleImageView)
+    ImageView iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +70,10 @@ public class SampleActivity extends AppCompatActivity {
         }
         try {
             //Json文字列をSampleオブジェクトに変換
-            Sample entity = new ObjectMapper().readValue(event.getJson(), Sample.class);
-            sampleView.setText("name=" + entity.getName() + "\n" +
-                                "email=" + entity.getEmail());
+            Stamps entity = new ObjectMapper().readValue(event.getJson(), Stamps.class);
+            byte[] image = entity.getPicture();
+            Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+            iv.setImageBitmap(bmp);
         } catch (IOException e) {
             e.printStackTrace();
         }
