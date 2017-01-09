@@ -1,15 +1,14 @@
-package com.om1.stamp_rally.controller.view;
+package com.om1.stamp_rally.view;
 
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.location.LocationManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.om1.stamp_rally.controller.StampPreviewActivity;
-import com.om1.stamp_rally.model.event.StampEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -61,14 +60,15 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void takePicture(StampEvent event) {
-        Camera.ShutterCallback shutterListener = new Camera.ShutterCallback() {
-            public void onShutter() {
-            }
-        };
+    void takePicture(final Intent intent) {
+//        Camera.ShutterCallback shutterListener = new Camera.ShutterCallback() {
+//            public void onShutter() {
+//            }
+//        };
+        Camera.ShutterCallback shutterListener = null;
+        intent.setClassName(getContext(), StampPreviewActivity.class.getName());
         camera.takePicture(shutterListener, null,new Camera.PictureCallback() {
             public void onPictureTaken(byte[] data,Camera camera) {
-                Intent intent = new Intent(getContext(), StampPreviewActivity.class);
                 intent.putExtra("pictureImage", data);
                 getContext().startActivity(intent);
             }

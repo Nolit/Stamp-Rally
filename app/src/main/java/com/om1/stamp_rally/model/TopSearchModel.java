@@ -2,18 +2,15 @@ package com.om1.stamp_rally.model;
 
 import android.util.Log;
 
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,12 +24,12 @@ import java.util.Map;
  * 2. サーバーからデータを取得後、EventBusライブラリによるアクティビティへの通知
  */
 
-public class LoginModel {
+public class TopSearchModel {
     private final EventBus eventBus = EventBus.getDefault();
-    private static LoginModel instance = new LoginModel();
+    private static TopSearchModel instance = new TopSearchModel();
 
-    private LoginModel(){}
-    public static LoginModel getInstance() {
+    private TopSearchModel(){}
+    public static TopSearchModel getInstance() {
         return instance;
     }
 

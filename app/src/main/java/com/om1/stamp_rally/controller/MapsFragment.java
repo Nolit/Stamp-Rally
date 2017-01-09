@@ -44,6 +44,7 @@ import com.om1.stamp_rally.model.StampRallyModel;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.bean.StampListAdapter;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,16 +83,15 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     StampListAdapter adapter;
     //intent
     String stampTitle = null;
-    String stampId = null;
-    String stampRallyId = null;
+    String selectedStampId = null;
+    String tryingStampRallyId = null;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         eventBus.register(this);
-        StampRallyModel stampRallyModel = StampRallyModel.getInstance();
-        stampRallyModel.fetchJson();    //データベースと通信
     }
 
     @Override
@@ -172,6 +172,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         setUpLocationManager();
         setMapListeners();
 
+        StampRallyModel.getInstance().fetchJson(); //データベースと通信
     }
 
     @Override   //位置座標を取得したら引数に渡して呼び出される
@@ -227,9 +228,9 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
                         //intent
                         stampTitle = marker.getTitle();
-                        stampId = marker.getId().replaceAll("m", "");
-                        stampId = Integer.toString(stampList.get(Integer.valueOf(stampId)).getStampId());
-                        stampRallyId = Integer.toString(stampRally.getStamprallyId());
+                        selectedStampId = marker.getId().replaceAll("m", "");
+                        selectedStampId = Integer.toString(stampList.get(Integer.valueOf(selectedStampId)).getStampId());
+                        tryingStampRallyId = Integer.toString(stampRally.getStamprallyId());
                     }
                 }
                 return false;
@@ -242,7 +243,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
             public void onMapClick(LatLng point) {
                 cameraIcon.setVisibility(View.INVISIBLE);
                 //intent
-                stampId = null;
+                selectedStampId = null;
                 stampTitle = null;
             }
         });
@@ -276,11 +277,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     //カメラアイコン押下・カメラページへインテント
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon(){
-        Intent i= new Intent(getContext(),TakeStampActivity.class);
-        i.putExtra("stampTitle", stampTitle);
-        i.putExtra("stampId", stampId);
-        i.putExtra("stampRallyId", stampRallyId);
-        startActivity(i);
+        Intent intent = new Intent(getContext(), TakeStampActivity.class);
+        intent.putExtra("stampRegisterFlag", false);
+        intent.putExtra("stampId", selectedStampId);
+        intent.putExtra("stampRallyId", tryingStampRallyId);
+        startActivity(intent);
     }
 
     //Drawer・ListView
@@ -324,7 +325,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(FetchStampRallyEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ","データベースとの通信に失敗");
             return;
@@ -337,14 +338,14 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
             //マーカーの配置・格納
             if(stampRally != null){
-                for(Stamps stamp:stampRally.getStampsCollection()){
+                for(Stamps stamp:stampRally.getStampList()){
                     markers.add(mMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()))
+                            .position(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()))
                             .title(stamp.getStampName())));
                     stampBean = new StampBean();
                     stampBean.setStampTitle(stamp.getStampName());
                     stampBean.setStampId(stamp.getStampId());
-                    stampBean.setLatLng(new LatLng(stamp.getStamptableId().getLatitude(),stamp.getStamptableId().getLongitude()));
+                    stampBean.setLatLng(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()));
                     stampList.add(stampBean);
                 }
                 adapter.notifyDataSetChanged(); //リストの更新

@@ -1,12 +1,18 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
@@ -27,18 +33,23 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
     //ログイン
     Button loginButton;
+    Button SearchButton;
+    Button LogoutButton;
     TextView newloginText;
-    AutoCompleteTextView id;
+    EditText search;
+    EditText id;
     EditText pass;
 
     //スタンプ管理タブ
-    Button stampEditButton;
     Button stampRallyDetailIntentButton;
+
+    SharedPreferences mainPref;
 
     //tabHost
     @InjectView(R.id.tabHost)
@@ -49,10 +60,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
     private final EventBus eventBus = EventBus.getDefault();
 
-
-    //ログインテスト
-    int i = 0;
-
+    FragmentManager mapFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,65 +68,126 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         eventBus.register(this);
+        mainPref = getSharedPreferences("main", MODE_PRIVATE);
+        mapFragmentManager = getSupportFragmentManager();
 
         //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
 
+        search = (EditText) findViewById(R.id.SearchEdit);
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // EditTextのフォーカスが外れた場合
+                if (hasFocus == false) {
+                    // ソフトキーボードを非表示にする
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
+
 
         //ログイン
-        loginButton = (Button)findViewById(R.id.LoginBt);
+        loginButton = (Button) findViewById(R.id.LoginBt);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                id = (AutoCompleteTextView) findViewById(R.id.email);
+                id = (EditText) findViewById(R.id.emailAddress);
                 pass = (EditText) findViewById(R.id.password);
+                SharedPreferences.Editor mainEdit = mainPref.edit();
+                mainEdit.putString("mailAddress", id.getText().toString());
+                mainEdit.putString("password", pass.getText().toString());
+                mainEdit.commit();
                 LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
             }
         });
 
+
+        //ログアウト
+        LogoutButton = (Button) findViewById(R.id.LogoutBt);
+        LogoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("ログアウトしてよろしいですか？")
+                        .setPositiveButton("ログアウト", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SharedPreferences.Editor mainEdit = mainPref.edit();
+                                mainEdit.remove("mailAddress");
+                                mainEdit.commit();
+                                //Toast.makeText(MainActivity.this, mainPref.getString("mailAddress","からだよ"), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent();
+                                intent.setClass(MainActivity.this, MainActivity.this.getClass());
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                builder.show();
+            }
+        });
+
+
         //新規会員登録ページへ
         newloginText = (TextView) findViewById(R.id.newmember);
-        newloginText.setOnClickListener(new View.OnClickListener(){
+        newloginText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
                 startActivity(intent);
             }
         });
 
-        //スタンプ編集一覧ページへのインテントボタン
-        stampEditButton = (Button) findViewById(R.id.EditStamp);
-        stampEditButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
-                startActivity(intent);
-            }
-        });
         //スタンプラリー詳細ページへのテスト用ボタン
         stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
         stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+//                intent.putExtra("referenceUserId",);
+//                intent.putExtra("StampRallyId",);
                 startActivity(intent);
             }
         });
 
         //スタンプラリーページを選択時のフラグメント起動
-        th.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
+        th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Log.d("tab", tabId);
-                getSupportFragmentManager().beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
+                if(tabId.equals("PLAY") && mapFragmentManager.findFragmentById(R.id.StampRally) == null){
+                    mapFragmentManager.beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
+                }
             }
         });
 
-        //ログイン時とゲスト時のtabHostメソッド分け
-        if(i == 0) {
+        //テスト用にmainPrefいじる
+        SharedPreferences.Editor mainEdit = mainPref.edit();
+        mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
+        mainEdit.putString("playStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
+        mainEdit.commit();                              //ログアウト時には両方Delete
+        //テスト用ここまで
+
+
+//        String useId = mainPref.getString("mailAddress", null);
+        String useId = "login"; //テスト用でログイン状態にしてる
+
+        //ログイン時とゲスト時のtabHost
+        if (useId != null) {
             initLoginTabs();
-        }
-        else{
+        } else {
             initGuestTabs();
         }
-    }
 
+
+        //検索
+        SearchButton = (Button) findViewById(R.id.SearchBt);
+        SearchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                search = (EditText) findViewById(R.id.SearchEdit);
+
+                //検索結果一覧ページへ
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
     //ログイン時のtabHost
     protected void initLoginTabs() {
@@ -129,14 +198,14 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // TOPページタブ
             spec = tabHost.newTabSpec("TOP")
-                    .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
             // マイページタブ
             spec = tabHost.newTabSpec("MyPage")
                     .setIndicator("マイページ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.MyPage);
+                    .setContent(R.id.Home);
             tabHost.addTab(spec);
 
             // タイムラインタブ
@@ -146,7 +215,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
 
             // スタンプラリータブ
-            spec = tabHost.newTabSpec("スタンプラリー")
+            spec = tabHost.newTabSpec("PLAY")
                     .setIndicator("PLAY", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
@@ -181,14 +250,14 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // TOPページタブ
             spec = tabHost.newTabSpec("TOP")
-                    .setIndicator("トップ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
 
             // マイページタブ
-            spec = tabHost.newTabSpec("マイページ")
+            spec = tabHost.newTabSpec("HOME")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.MyPage);
+                    .setContent(R.id.Home);
             //tabHost.addTab(spec);
 
             // タイムラインタブ
@@ -216,12 +285,13 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
             tabHost.setCurrentTab(0);
 
-            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
-                @Override
-                public void onTabChanged(String tabId) {
-                    MainActivity.this.onStart();
-                }
-            });
+            //タブ切り替え時にアクディビディ再読み込み
+//            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
+//                @Override
+//                public void onTabChanged(String tabId) {
+//                    MainActivity.this.onStart();
+//                }
+//            });
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (RuntimeException e) {
@@ -238,21 +308,23 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onStart(){
         super.onStart();
-        Log.d("yahbhou", "hello!!");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void LoginAuthentication(String loginText) {
-        Log.d("method", "LoginAuthentication");
         try {
             Boolean isLogin = new ObjectMapper().readValue(loginText, Boolean.class);
             if(isLogin == true){
-                Toast.makeText(this, "成功だよ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "ログインに成功しました", Toast.LENGTH_LONG).show();
+                Intent intent=new Intent();
+                intent.setClass(this, this.getClass());
+                startActivity(intent);
+                finish();
             }
             else{
-                Toast.makeText(this, "失敗じゃぼけ", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, "ログインに失敗しました", Toast.LENGTH_LONG).show();
 
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -263,5 +335,18 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         //EventBusライブラリによる自身の登録解除
         eventBus.unregister(this);
         super.onPause();
+    }
+
+    @OnClick(R.id.stampRegistrationButton)
+    void clickStampRagistrationButton(){
+        Intent intent = new Intent(this, TakeStampActivity.class);
+        intent.putExtra("stampRegisterFlag", true);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.editStamp)
+    void clickEditStamp(){
+        Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
+        startActivity(intent);
     }
 }
