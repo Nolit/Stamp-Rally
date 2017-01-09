@@ -44,6 +44,7 @@ import com.om1.stamp_rally.model.StampRallyModel;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.bean.StampListAdapter;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -89,6 +90,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         eventBus.register(this);
         StampRallyModel stampRallyModel = StampRallyModel.getInstance();
         stampRallyModel.fetchJson();    //データベースと通信
@@ -324,7 +326,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
     //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(FetchStampRallyEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ","データベースとの通信に失敗");
             return;

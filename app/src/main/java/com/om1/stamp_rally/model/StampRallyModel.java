@@ -1,6 +1,9 @@
 package com.om1.stamp_rally.model;
 
+import android.util.Log;
+
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -28,12 +31,12 @@ public class StampRallyModel {
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new FetchJsonEvent(false,null));
+                eventBus.post(new FetchStampRallyEvent(false,null));
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new FetchJsonEvent(response.isSuccessful(), response.body().string()));
+                eventBus.post(new FetchStampRallyEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }

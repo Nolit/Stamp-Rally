@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -56,11 +58,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
     private final EventBus eventBus = EventBus.getDefault();
 
-
-    //ログインテスト
-    int i = 0
-            ;
-
+    FragmentManager mapFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +67,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         ButterKnife.inject(this);
         eventBus.register(this);
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
+        mapFragmentManager = getSupportFragmentManager();
 
         //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
@@ -139,8 +138,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Log.d("tab", tabId);
-                getSupportFragmentManager().beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
+                if(tabId.equals("PLAY") && mapFragmentManager.findFragmentById(R.id.StampRally) == null){
+                    mapFragmentManager.beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
+                }
             }
         });
 
@@ -193,7 +193,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
 
             // スタンプラリータブ
-            spec = tabHost.newTabSpec("スタンプラリー")
+            spec = tabHost.newTabSpec("PLAY")
                     .setIndicator("PLAY", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
