@@ -69,12 +69,20 @@
             android:text="概要"
             android:layout_gravity="center"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="説明文"
+            android:layout_gravity="center"
+            android:id="@+id/DescriptionText"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="遊ぶ"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            android:id="@+id/PlayButton"/>
 
 
 

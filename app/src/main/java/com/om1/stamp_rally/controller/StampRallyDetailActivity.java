@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,6 +33,8 @@ import static com.om1.stamp_rally.R.id.stampTitle;
 public class StampRallyDetailActivity extends AppCompatActivity {
     private final EventBus eventBus = EventBus.getDefault();
     private StampRallys stampRally;
+    private Button playButton;
+    private TextView description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,9 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         eventBus.register(this);
         StampRallyModel stampRallyModel = StampRallyModel.getInstance();
         stampRallyModel.fetchJson();
+
+        description = (TextView) findViewById(R.id.DescriptionText);    //概要
+        playButton = (Button) findViewById(R.id.PlayButton);            //遊ぶボタン
 
     }
 
@@ -65,11 +72,23 @@ public class StampRallyDetailActivity extends AppCompatActivity {
                 View view = getLayoutInflater().inflate(R.layout.sub_stmaprally_detail_thumbnail, null);
                 layout.addView(view);
                 ImageButton stampThumbnail = (ImageButton) view.findViewById(R.id.stampThumbnail);
-    //            stampThumbnail.setImageBitmap();
+
+                /* ここにImageButtonの画像セット処理を追加する */
 
                 TextView stampTitle = (TextView) view.findViewById(R.id.stampTitle);
                 stampTitle.setText(stamps.getStampName());
             }
+
+            //概要を設定
+            description.setText(stampRally.getStamrallyComment());
+
+            //遊ぶボタンを設定
+            playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(StampRallyDetailActivity.this.getApplication(), "スタンプラリーのマーカーをマップにセットしました", Toast.LENGTH_LONG).show();
+                }
+            });
 
         } catch (IOException e) {
             e.printStackTrace();
