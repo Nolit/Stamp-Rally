@@ -83,8 +83,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     StampListAdapter adapter;
     //intent
     String stampTitle = null;
-    String selectedStampId = null;
-    String tryingStampRallyId = null;
+    Integer selectedStampId = null;
+    Integer tryingStampRallyId = null;
 
 
     @Override
@@ -228,9 +228,9 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
                         //intent
                         stampTitle = marker.getTitle();
-                        selectedStampId = marker.getId().replaceAll("m", "");
-                        selectedStampId = Integer.toString(stampList.get(Integer.valueOf(selectedStampId)).getStampId());
-                        tryingStampRallyId = Integer.toString(stampRally.getStamprallyId());
+                        String markerPosition = marker.getId().replaceAll("m", "");
+                        selectedStampId = stampList.get(Integer.valueOf(markerPosition)).getStampId();
+                        tryingStampRallyId = stampRally.getStamprallyId();
                     }
                 }
                 return false;

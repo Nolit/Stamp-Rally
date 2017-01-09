@@ -13,6 +13,7 @@ import com.squareup.okhttp.Response;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class StampRallyModel {
     private final EventBus eventBus = EventBus.getDefault();
@@ -28,9 +29,12 @@ public class StampRallyModel {
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/map")
                 .get()
                 .build();
-        new OkHttpClient().newCall(request).enqueue(new Callback() {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(25, TimeUnit.SECONDS);
+        client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
                 eventBus.post(new FetchStampRallyEvent(false,null));
             }
 
