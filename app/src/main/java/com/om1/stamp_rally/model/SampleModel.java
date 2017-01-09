@@ -35,22 +35,11 @@ public class SampleModel {
 
     //OkHttpライブラリを使用したサーバーとの通信
     public void fetchJson(){
-        RequestBody body = null;
 
-        body = new FormEncodingBuilder()
-        .addEncoded("sample", "あいうえ")
-        .build();
-//        body = new MultipartBuilder()
-//                .type(MultipartBuilder.FORM)
-//                .addPart(
-//                        Headers.of("Content-Disposition", "form-data; name=\"sample\""),
-//                        RequestBody.create(MediaType.parse("text/plain; charset=utf-8"), "あいうえお")
-//                )
-//                .build();
         Request request = new Request.Builder()
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/sample")
                 //GET通信かPOST通信か指定
-                .post(body)
+                .get()
                 .build();
         //requestに基づいた通信を別スレッドで行う
         new OkHttpClient().newCall(request).enqueue(new Callback() {

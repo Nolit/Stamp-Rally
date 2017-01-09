@@ -40,6 +40,11 @@
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="center_vertical|center_horizontal"
         android:layout_gravity="center_vertical|center_horizontal" />
+    <ImageView
+        android:id="@+id/sampleImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/common_google_signin_btn_icon_dark_focused"/>
 
     <Button
         android:text="Button"
