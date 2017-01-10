@@ -5,18 +5,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +33,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
 
@@ -47,6 +46,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     EditText id;
     EditText pass;
 
+    //スタンプ管理タブ
+    Button stampEditButton;
+    Button stampRallyDetailIntentButton;
 
     SharedPreferences mainPref;
 
@@ -57,9 +59,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //リロード
     Bundle savedInstanceState;
 
-    int i = 0;
-
     private final EventBus eventBus = EventBus.getDefault();
+
+    FragmentManager mapFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         ButterKnife.inject(this);
         eventBus.register(this);
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
+        mapFragmentManager = getSupportFragmentManager();
 
         //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
@@ -134,12 +137,22 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
+        //スタンプラリー詳細ページへのテスト用ボタン
+        stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
+        stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //スタンプラリーページを選択時のフラグメント起動
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                Log.d("tab", tabId);
-                getSupportFragmentManager().beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
+                if(tabId.equals("PLAY") && mapFragmentManager.findFragmentById(R.id.StampRally) == null){
+                    mapFragmentManager.beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
+                }
             }
         });
 
@@ -152,6 +165,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         } else {
             initGuestTabs();
         }
+
 
         //検索
         SearchButton = (Button) findViewById(R.id.SearchBt);
@@ -180,8 +194,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
 
             // マイページタブ
-            spec = tabHost.newTabSpec("HOME")
-                    .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+            spec = tabHost.newTabSpec("MyPage")
+                    .setIndicator("マイページ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.Home);
             tabHost.addTab(spec);
 
@@ -192,7 +206,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             tabHost.addTab(spec);
 
             // スタンプラリータブ
-            spec = tabHost.newTabSpec("スタンプラリー")
+            spec = tabHost.newTabSpec("PLAY")
                     .setIndicator("PLAY", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
@@ -216,8 +230,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
     }
-
-
 
 
     //ゲスト時のtabHost
@@ -314,5 +326,18 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         //EventBusライブラリによる自身の登録解除
         eventBus.unregister(this);
         super.onPause();
+    }
+
+    @OnClick(R.id.stampRegistrationButton)
+    void clickStampRagistrationButton(){
+        Intent intent = new Intent(this, TakeStampActivity.class);
+        intent.putExtra("stampRegisterFlag", true);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.editStamp)
+    void clickEditStamp(){
+        Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
+        startActivity(intent);
     }
 }

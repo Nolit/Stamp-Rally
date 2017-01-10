@@ -290,6 +290,34 @@
                             android:orientation="vertical" >
 
                             <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"></LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="380dp"
+                                android:layout_height="30dp">
+
+                                <TextView
+                                    android:text="OIC太郎さんのマイページ"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/textView3"
+                                    android:layout_weight="1"
+                                    android:layout_width="300dp"
+                                    android:gravity="center_vertical|fill_horizontal|center"
+                                    android:textSize="18sp" />
+
+                                <Button
+                                    android:text="ログアウト"
+                                    android:layout_width="80dp"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/LogoutBt"
+                                    android:layout_weight="1"
+                                    android:textSize="10sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="380dp"
                                 android:weightSum="1"
@@ -352,7 +380,7 @@
 
                                     <Space
                                         android:layout_width="match_parent"
-                                        android:layout_height="10dp" />
+                                        android:layout_height="5dp" />
 
                                     <TextView
                                         android:text="オススメスタンプラリー"
@@ -365,7 +393,20 @@
 
                                     <Space
                                         android:layout_width="match_parent"
-                                        android:layout_height="10dp" />
+                                        android:layout_height="5dp" />
+
+                                    <TextView
+                                        android:text="マイスタンプラリー（22）"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="20dp"
+                                        android:id="@+id/MyStampTxt"
+                                        android:textSize="18sp"
+                                        android:textAlignment="center"
+                                        android:textColor="@android:color/holo_orange_light" />
+
+                                    <Space
+                                        android:layout_width="match_parent"
+                                        android:layout_height="5dp" />
 
                                     <LinearLayout
                                         android:orientation="horizontal"
@@ -388,14 +429,19 @@
                                             android:layout_weight="45.27"
                                             android:textSize="12sp" />
 
+
+
                                     </LinearLayout>
 
                                     <TextView
-                                        android:text="マイスタンプ帳:22"
+                                        android:text="　友達を探す"
                                         android:layout_width="match_parent"
-                                        android:id="@+id/MystampTxt"
-                                        android:textSize="12sp"
-                                        android:layout_height="15dp" />
+                                        android:layout_height="20dp"
+                                        android:id="@+id/FriendSearch"
+                                        android:textSize="16sp"
+                                        android:textAlignment="inherit"
+                                        android:textColor="@android:color/holo_blue_light" />
+
 
                                 </LinearLayout>
 
@@ -426,11 +472,22 @@
                                 </LinearLayout>
                             </ScrollView>
 
-                            <Button
-                                android:text="ログアウト"
+                            <Space
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/LogoutBt" />
+                                android:layout_height="5dp" />
+
+                            <TextView
+                                android:text="OIC太郎さんのタイムライン"
+                                android:layout_width="match_parent"
+                                android:id="@+id/TimeLineTxt"
+                                android:textColor="?attr/actionModeSplitBackground"
+                                android:textSize="18sp"
+                                android:layout_height="20dp" />
+
+                            <ListView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:id="@+id/TimeLineLV" />
 
                         </LinearLayout>
                     </ScrollView>
@@ -556,14 +613,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    </LinearLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/StampRegistration"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <include layout="@layout/content_stamp_registration" android:id="@+id/content_stamp_registration"/>
+                    <include layout="@layout/activity_stamp_registration" android:id="@+id/content_stamp_registration"/>
 
                 </LinearLayout>
 
