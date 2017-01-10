@@ -7,19 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyDetailModel;
-import com.om1.stamp_rally.model.StampRallyModel;
-import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,12 +26,9 @@ import java.io.IOException;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
-import static com.om1.stamp_rally.R.id.stampTitle;
-
 public class StampRallyDetailActivity extends AppCompatActivity {
     SharedPreferences mainPref;
-    private Intent acceptIntent;
-    private String userId;
+    private String loginUserId;
     private String referenceUserId;
     private String stampRallyId;
 
@@ -53,15 +45,18 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         eventBus.register(this);
 
         //データベース通信
-        getSharedPreferences("main", MODE_PRIVATE);
-        userId = mainPref.getString("loginUserId", null);                   //ログイン中のUserId
-
-        acceptIntent = getIntent();
-        referenceUserId = acceptIntent.getStringExtra("referenceUserId");   //表示するスタンプのUserId
-        stampRallyId = acceptIntent.getStringExtra("StampRallyId");         //表示するスタンプラリーのId
-
+        mainPref = getSharedPreferences("main", MODE_PRIVATE);
+        loginUserId = mainPref.getString("loginUserId", null);             //ログイン中のUserId (Preferencesを使用)
+        referenceUserId = getIntent().getStringExtra("referenceUserId");   //表示するスタンプのUserId (getIntentを使用)
+        stampRallyId = getIntent().getStringExtra("StampRallyId");         //表示するスタンプラリーのId (getIntentを使用)
         StampRallyDetailModel stampRallyDetailModel = StampRallyDetailModel.getInstance();
-        stampRallyDetailModel.fetchJson(userId, referenceUserId, stampRallyId);    //通信開始
+
+        if(loginUserId != null && referenceUserId != null && stampRallyId != null){
+            stampRallyDetailModel.fetchJson(loginUserId, referenceUserId, stampRallyId);    //通信開始
+        }else{
+            /* mainPrefかIntentの値渡しが失敗してる時に分岐 */
+            Log.d("デバッグ","fetchJsonの引数の値がnullです。");
+        }
 
         //ビュー・レイアウト
         description = (TextView) findViewById(R.id.DescriptionText);    //概要

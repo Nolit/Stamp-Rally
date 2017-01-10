@@ -141,8 +141,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
-//                intent.putExtra("referenceUserId",);
-//                intent.putExtra("StampRallyId",);
+                intent.putExtra("referenceUserId", "5");
+                intent.putExtra("StampRallyId", "5");
                 startActivity(intent);
             }
         });
@@ -161,9 +161,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         SharedPreferences.Editor mainEdit = mainPref.edit();
         mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
         mainEdit.putString("playStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
-        mainEdit.commit();                              //ログアウト時には両方Delete
+        mainEdit.commit();                              //ログアウト時には両方Removeでok
         //テスト用ここまで
-
 
 //        String useId = mainPref.getString("mailAddress", null);
         String useId = "login"; //テスト用でログイン状態にしてる

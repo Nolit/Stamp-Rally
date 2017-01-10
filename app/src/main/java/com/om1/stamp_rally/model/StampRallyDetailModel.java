@@ -22,9 +22,9 @@ public class StampRallyDetailModel {
         return instance;
     }
 
-    public void fetchJson(String userId, String referenceUserId, String StampRallyId){
+    public void fetchJson(String loginUserId, String referenceUserId, String StampRallyId){
         RequestBody body = new FormEncodingBuilder()
-                .add("userId", userId)
+                .add("loginUserId", loginUserId)
                 .add("referenceUserId", referenceUserId)
                 .add("StampRallyId", StampRallyId)
                 .build();
