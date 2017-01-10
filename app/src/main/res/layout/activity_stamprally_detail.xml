@@ -46,11 +46,11 @@
                 android:layout_weight="1"
                 android:text="評価値" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src=""/>
+            <!--<ImageButton-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:src=""/>-->
 
         </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.om1.stamp_rally.controller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -164,7 +165,12 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                 title.setText(marker.getTitle());
                 // 画像設定
                 ImageView img = (ImageView) view.findViewById(R.id.info_image);
-                img.setImageResource(R.mipmap.oosakajo);
+                for(StampBean bean:stampList){
+                    if(marker.getId().equals(bean.getMarkerId())){
+                        img.setImageBitmap(BitmapFactory.decodeByteArray(bean.getPictPath(), 0, bean.getPictPath().length));
+                        break;
+                    }
+                }
                 return view;
             }
         });
@@ -338,14 +344,20 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
             //マーカーの配置・格納
             if(stampRally != null){
+                int counter = 0;
                 for(Stamps stamp:stampRally.getStampList()){
                     markers.add(mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()))
                             .title(stamp.getStampName())));
                     stampBean = new StampBean();
+
+                    stampBean.setMarkerId("m"+Integer.toString(counter));
+                    counter++;
+
                     stampBean.setStampTitle(stamp.getStampName());
                     stampBean.setStampId(stamp.getStampId());
                     stampBean.setLatLng(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()));
+                    stampBean.setPictPath(stamp.getPicture());
                     stampList.add(stampBean);
                 }
                 adapter.notifyDataSetChanged(); //リストの更新
