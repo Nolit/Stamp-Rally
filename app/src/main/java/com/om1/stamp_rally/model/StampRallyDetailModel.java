@@ -22,15 +22,20 @@ public class StampRallyDetailModel {
         return instance;
     }
 
-    public void fetchJson(String loginUserId, String referenceUserId, String StampRallyId){
+    public void fetchJson(String loginUserId, String referenceUserId, String stampRallyId){
+
+        System.out.println("デバッグ"+loginUserId);
+        System.out.println("デバッグ"+referenceUserId);
+        System.out.println("デバッグ"+stampRallyId);
+
         RequestBody body = new FormEncodingBuilder()
                 .add("loginUserId", loginUserId)
                 .add("referenceUserId", referenceUserId)
-                .add("StampRallyId", StampRallyId)
+                .add("StampRallyId", stampRallyId)
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/StampRallyDetail")
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/StampRallyDetail?loginUserId="+loginUserId+"&referenceUserId="+referenceUserId+"&stampRallyId="+stampRallyId)
                 .post(body)
                 .build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {

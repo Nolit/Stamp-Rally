@@ -35,7 +35,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/DetailCreatorName"
+                        android:id="@+id/CreatorName"
                         android:text="名前1"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:id="@+id/DetailCompleterName"
+                    android:id="@+id/DetailReferenceName"
                     android:text="名前2"/>
                 <TextView
                     android:layout_width="wrap_content"
