@@ -45,8 +45,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     EditText id;
     EditText pass;
 
-    //スタンプ管理タブ
-    Button stampRallyDetailIntentButton;
+    //テスト用ボタン - スタンプ管理タブ
+    Button stampRallyDetailIntentButton;    //スタンプラリー詳細ページ
+    Button intentButtonMyStampList;
+    Button intentButtonMyStampRallyList;
 
     SharedPreferences mainPref;
 
@@ -135,13 +137,31 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        //スタンプラリー詳細ページへのテスト用ボタン
+        //テスト用ボタン - スタンプラリー詳細ページ
         stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
         stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
                 intent.putExtra("referenceUserId", "5");
                 intent.putExtra("StampRallyId", "5");
+                startActivity(intent);
+            }
+        });
+        //テスト用ボタン - マイスタンプ帳
+        intentButtonMyStampList = (Button) findViewById(R.id.IntentButton_MyStampRallyList);
+        intentButtonMyStampList.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+                intent.putExtra("referenceUserId", "4");
+                startActivity(intent);
+            }
+        });
+        //テスト用ボタン - 自作スタンプラリー一覧
+        intentButtonMyStampRallyList = (Button) findViewById(R.id.IntentButton_MyStampRallyList);
+        intentButtonMyStampRallyList.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+                intent.putExtra("referenceUserId", "4");
                 startActivity(intent);
             }
         });
@@ -203,7 +223,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // マイページタブ
             spec = tabHost.newTabSpec("MyPage")
-                    .setIndicator("マイページ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.Home);
             tabHost.addTab(spec);
 
@@ -215,7 +235,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // スタンプラリータブ
             spec = tabHost.newTabSpec("PLAY")
-                    .setIndicator("PLAY", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("Play", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
 

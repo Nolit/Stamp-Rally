@@ -6,12 +6,37 @@
     android:layout_centerHorizontal="true"
     android:background="#ADD8E6">
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_gravity="bottom|right"
-        android:id="@+id/StampRallyDetailIntentButton"
-        android:text="テスト用"/>
+        android:orientation="vertical">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:id="@+id/StampRallyDetailIntentButton"
+            android:text="TEST(詳細ページ)"
+            android:textSize="8dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:id="@+id/IntentButton_MyStampList"
+            android:text="TEST(マイスタンプ帳)"
+            android:textSize="8dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/IntentButton_MyStampRallyList"
+            android:text="TEST(マイスタンプラリー)"
+            android:textSize="8dp"/>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
