@@ -49,7 +49,7 @@
             android:label="@string/title_activity_new_member"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.SearchActivity"
+            android:name=".controller.ResultSearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

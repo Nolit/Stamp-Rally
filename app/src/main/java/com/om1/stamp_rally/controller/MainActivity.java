@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -182,7 +181,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 search = (EditText) findViewById(R.id.SearchEdit);
 
                 //検索結果一覧ページへ
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
+                intent.putExtra("searchKeyword", search.getText().toString());
                 startActivity(intent);
             }
         });
