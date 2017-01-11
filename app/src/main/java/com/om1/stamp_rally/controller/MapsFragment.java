@@ -358,6 +358,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                     stampBean.setStampId(stamp.getStampId());
                     stampBean.setLatLng(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()));
                     stampBean.setPictPath(stamp.getPicture());
+                    stampBean.setStampComment(stamp.getStampComment());
                     stampList.add(stampBean);
                 }
                 adapter.notifyDataSetChanged(); //リストの更新
