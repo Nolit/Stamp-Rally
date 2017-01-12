@@ -2,6 +2,7 @@ package com.om1.stamp_rally.controller;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
@@ -15,11 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Surface;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,7 +29,6 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -41,10 +37,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.om1.stamp_rally.R;
-import com.om1.stamp_rally.model.StampRallyModel;
+import com.om1.stamp_rally.model.MapModel;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.bean.StampListAdapter;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,8 +55,11 @@ import butterknife.OnClick;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MapsFragment extends Fragment implements LocationListener,OnMapReadyCallback ,NavigationView.OnNavigationItemSelectedListener {
     private final EventBus eventBus = EventBus.getDefault();
+    SharedPreferences mainPref;
     private final LatLng START_POSITION = new LatLng(34.715602789654625,135.5946671962738);  //ビューカメラの初期化
     private static final int CAN_STAMP_METER= 100;
     private StampRallys stampRally; //データベース
@@ -91,8 +89,11 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         eventBus.register(this);
+
+        //データベース通信
+        mainPref = getContext().getSharedPreferences("main", MODE_PRIVATE);
+        MapModel.getInstance().fetchJson(mainPref.getString("playingStampRally", null));
     }
 
     @Override
@@ -118,18 +119,15 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         adapter.setStampList(stampList);
         listView.setAdapter(adapter);
 
-    //ListViewのイベントハンドラ
-    listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-        public void onItemClick (AdapterView < ? > parent, View view,int pos, long id) {
-            ListView listView = (ListView) parent;
-            StampBean stampListItem = (StampBean) listView.getItemAtPosition(pos);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(stampListItem.getStampLatLng())); //選択したスタンプタイトルのマーカーに移動
-            drawer.closeDrawer(GravityCompat.START);
-        }
-    });
-
-
-
+        //ListViewのイベントハンドラ
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick (AdapterView < ? > parent, View view,int pos, long id) {
+                ListView listView = (ListView) parent;
+                StampBean stampListItem = (StampBean) listView.getItemAtPosition(pos);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(stampListItem.getStampLatLng())); //選択したスタンプタイトルのマーカーに移動
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
 
         cameraIcon.setVisibility(View.INVISIBLE);
 //        navigationView.setNavigationItemSelectedListener(this);
@@ -177,8 +175,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
         setUpLocationManager();
         setMapListeners();
-
-        StampRallyModel.getInstance().fetchJson(); //データベースと通信
     }
 
     @Override   //位置座標を取得したら引数に渡して呼び出される
@@ -333,13 +329,13 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fetchedJson(FetchStampRallyEvent event) {
         if (!event.isSuccess()) {
-            Log.d("デバッグ","データベースとの通信に失敗");
+            Log.d("デバッグ:MapsFragment","データベースとの通信に失敗");
             return;
         }
         try {
             //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
-            Log.d("デバッグ","データベースとの通信に成功");
+            Log.d("デバッグ:MapsFragment","データベースとの通信に成功");
             stampList.clear();
 
             //マーカーの配置・格納

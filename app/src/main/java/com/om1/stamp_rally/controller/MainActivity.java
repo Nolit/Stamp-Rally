@@ -179,7 +179,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         //テスト用にmainPrefいじる
         SharedPreferences.Editor mainEdit = mainPref.edit();
         mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
-        mainEdit.putString("playStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
+        mainEdit.putString("playingStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
         mainEdit.commit();                              //ログアウト時には両方Removeでok
         //テスト用ここまで
 

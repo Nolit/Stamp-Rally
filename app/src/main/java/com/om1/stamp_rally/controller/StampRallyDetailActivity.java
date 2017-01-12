@@ -81,13 +81,13 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fetchedJson(FetchJsonEvent event) {
         if (!event.isSuccess()) {
-            Log.d("デバッグ","データベースとの通信に失敗");
+            Log.d("デバッグ:StampRallyDetail","データベースとの通信に失敗");
             return;
         }
         try {
             //Jsonをオブジェクトに変換
             stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
-            Log.d("デバッグ","データベースとの通信に成功");
+            Log.d("デバッグ:StampRallyDetail","データベースとの通信に成功");
             for(Stamps stamps:stampRally.getStampList()){
                 System.out.println("デバッグ:詳細ページ:" + stamps.getStampName());
             }

@@ -81,10 +81,6 @@
             android:label="@string/title_activity_favorite_rally"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.RallyDetailActivity"
-            android:label="@string/title_activity_rally_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".controller.TakeStampActivity"
             android:label="@string/title_activity_camera"
             android:theme="@style/AppTheme.NoActionBar"/>
