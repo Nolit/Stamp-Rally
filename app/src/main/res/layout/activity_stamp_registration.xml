@@ -16,16 +16,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:id="@+id/StampRallyDetailIntentButton"
-            android:text="TEST(詳細ページ)"
+            android:id="@+id/IntentButton_StampDetail"
+            android:text="TEST(スタンプ詳細)"
             android:textSize="8dp"/>
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:id="@+id/IntentButton_MyStampBook"
             android:text="TEST(マイスタンプ帳)"
+            android:textSize="8dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:id="@+id/StampRallyDetailIntentButton"
+            android:text="TEST(詳細ページ)"
             android:textSize="8dp"/>
 
     </LinearLayout>
