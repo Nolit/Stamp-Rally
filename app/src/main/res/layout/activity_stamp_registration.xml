@@ -24,15 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:id="@+id/IntentButton_MyStampList"
+            android:id="@+id/IntentButton_MyStampBook"
             android:text="TEST(マイスタンプ帳)"
-            android:textSize="8dp"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/IntentButton_MyStampRallyList"
-            android:text="TEST(マイスタンプラリー)"
             android:textSize="8dp"/>
 
     </LinearLayout>

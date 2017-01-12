@@ -1,6 +1,5 @@
 package com.om1.stamp_rally.controller;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -105,7 +104,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             //サムネイルを横スクロールで表示
             LinearLayout layout = (LinearLayout) findViewById(R.id.DetailLinearLayoutAddThumbnail);
             for (Stamps stamps:stampRally.getStampList()) {
-                View view = getLayoutInflater().inflate(R.layout.sub_stmaprally_detail_thumbnail, null);
+                View view = getLayoutInflater().inflate(R.layout.list_stmaprally_detail_thumbnail, null);
                 layout.addView(view);
 
                 //スタンプ画像

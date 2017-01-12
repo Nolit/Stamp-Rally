@@ -65,7 +65,7 @@
             android:label="@string/title_activity_follower"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.MyStampActivity"
+            android:name=".controller.MyStampBookActivity"
             android:label="@string/title_activity_mystamp"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

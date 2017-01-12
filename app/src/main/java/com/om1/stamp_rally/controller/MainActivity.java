@@ -148,19 +148,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
         //テスト用ボタン - マイスタンプ帳
-        intentButtonMyStampList = (Button) findViewById(R.id.IntentButton_MyStampRallyList);
+        intentButtonMyStampList = (Button) findViewById(R.id.IntentButton_MyStampBook);
         intentButtonMyStampList.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
-                intent.putExtra("referenceUserId", "4");
-                startActivity(intent);
-            }
-        });
-        //テスト用ボタン - 自作スタンプラリー一覧
-        intentButtonMyStampRallyList = (Button) findViewById(R.id.IntentButton_MyStampRallyList);
-        intentButtonMyStampRallyList.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
                 intent.putExtra("referenceUserId", "4");
                 startActivity(intent);
             }
