@@ -4,18 +4,21 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class StampBean {
     long id;
+    private String markerId;
     private int stampId;
     private String stampPadId;
     private String userId;
-    private String pictPath;
     private String stampTitle;
     private String stampComment;
     private String stampDate;
     private LatLng stampLatLng;
 
+    private byte[] pictPath;
+
     public StampBean(){}
 
-    public StampBean(int stampId, String stampPadId, String userId, String pictPath, String stampTitle, String stampComment, String stampDate) {
+    public StampBean(String markerId, int stampId, String stampPadId, String userId, byte[] pictPath, String stampTitle, String stampComment, String stampDate) {
+        this.markerId = markerId;
         this.stampId = stampId;
         this.stampPadId = stampPadId;
         this.userId = userId;
@@ -28,6 +31,10 @@ public class StampBean {
     public long getId(){
         return id;
     }
+
+    public String getMarkerId() {return markerId; }
+
+    public void setMarkerId(String markerId) { this.markerId = markerId; }
 
     public int getStampId() {
         return stampId;
@@ -53,11 +60,11 @@ public class StampBean {
         this.userId = userId;
     }
 
-    public String getPictPath() {
+    public byte[] getPictPath() {
         return pictPath;
     }
 
-    public void setPictPath(String pictPath) {
+    public void setPictPath(byte[] pictPath) {
         this.pictPath = pictPath;
     }
 

@@ -11,8 +11,8 @@ public final class Url {
 //    public static final String HOST = "10.0.2.2";         //エミュレータ
     public static final String HOST = "192.168.2.101";  //水薮PC
     //ポート番号
-//    public static final Integer PORT = 80;              //実機
-    public static final Integer PORT = 8080;              //エミュレータ
+//    public static final Integer PORT = 80;
+    public static final Integer PORT = 8080;
 
     private Url(){}
 }

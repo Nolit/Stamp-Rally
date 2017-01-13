@@ -46,9 +46,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     EditText id;
     EditText pass;
 
-    //スタンプ管理タブ
-    Button stampEditButton;
-    Button stampRallyDetailIntentButton;
+    //テスト用ボタン - スタンプ管理タブ
+    Button stampRallyDetailIntentButton;    //スタンプラリー詳細ページ
+    Button intentButtonMyStampList;         //マイスタンプ帳ページ
+    Button intentButtonStampDetail;         //スタンプ詳細ページ
 
     SharedPreferences mainPref;
 
@@ -137,11 +138,31 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        //スタンプラリー詳細ページへのテスト用ボタン
+        //テスト用ボタン - スタンプラリー詳細ページ
         stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
         stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+                intent.putExtra("referenceUserId", "5");
+                intent.putExtra("StampRallyId", "5");
+                startActivity(intent);
+            }
+        });
+        //テスト用ボタン - マイスタンプ帳
+        intentButtonMyStampList = (Button) findViewById(R.id.IntentButton_MyStampBook);
+        intentButtonMyStampList.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
+                intent.putExtra("referenceUserId", "4");
+                startActivity(intent);
+            }
+        });
+        //テスト用ボタン - スタンプ詳細ページ
+        intentButtonStampDetail = (Button) findViewById(R.id.IntentButton_StampDetail);
+        intentButtonStampDetail.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StampDetailActivity.class);
+                intent.putExtra("stampId", "108");
                 startActivity(intent);
             }
         });
@@ -156,8 +177,15 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
+        //テスト用にmainPrefいじる
+        SharedPreferences.Editor mainEdit = mainPref.edit();
+        mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
+        mainEdit.putString("playingStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
+        mainEdit.commit();                              //ログアウト時には両方Removeでok
+        //テスト用ここまで
 
-        String useId = mainPref.getString("mailAddress", null);
+//        String useId = mainPref.getString("mailAddress", null);
+        String useId = "login"; //テスト用でログイン状態にしてる
 
         //ログイン時とゲスト時のtabHost
         if (useId != null) {
@@ -174,7 +202,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 search = (EditText) findViewById(R.id.SearchEdit);
 
                 //検索結果一覧ページへ
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
+                intent.putExtra("searchKeyword", search.getText().toString());
                 startActivity(intent);
             }
         });
@@ -195,7 +224,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
             // マイページタブ
             spec = tabHost.newTabSpec("MyPage")
-                    .setIndicator("マイページ", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
+                    .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.Home);
             tabHost.addTab(spec);
 
@@ -314,7 +343,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
             else{
                 Toast.makeText(this, "ログインに失敗しました", Toast.LENGTH_LONG).show();
-
             }
         } catch (IOException e) {
             e.printStackTrace();

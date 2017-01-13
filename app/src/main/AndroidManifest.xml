@@ -49,7 +49,7 @@
             android:label="@string/title_activity_new_member"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.SearchActivity"
+            android:name=".controller.ResultSearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -65,11 +65,15 @@
             android:label="@string/title_activity_follower"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.MyStampActivity"
+            android:name=".controller.MyStampBookActivity"
             android:label="@string/title_activity_mystamp"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.StampRallyDetailActivity"
+            android:label="@string/title_activity_stamprally_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.StampDetailActivity"
             android:label="@string/title_activity_stamp_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -79,10 +83,6 @@
         <activity
             android:name=".controller.FavoriteRallyActivity"
             android:label="@string/title_activity_favorite_rally"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".controller.RallyDetailActivity"
-            android:label="@string/title_activity_rally_detail"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.TakeStampActivity"

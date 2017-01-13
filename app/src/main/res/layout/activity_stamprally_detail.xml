@@ -12,74 +12,142 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/StampRallyDetailHeader">
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/DetailCreaterName"
-                android:text="作成者名"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/DetailCompleterName"
-                android:text="コンプリート者名"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="評価"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="評価数" />
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/DetailStampTitle"
-            android:text="スタンプラリー名"
-            android:layout_gravity="center"
-            />
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <!--作成者-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="horizontal"
-                android:id="@+id/DetailLinearLayoutAddThumbnail">
+                android:gravity="center"
+                android:id="@+id/StampRallyDetailHeader">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/CreatorName"
+                        android:text="名前1"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="さんの作成したスタンプラリー"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="評価"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ReviewPoint"
+                        android:text="値" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="15dp"
+                            android:background="@null"
+                            android:scaleType="fitXY"
+                            android:adjustViewBounds="true"
+                            android:id="@+id/EvaluationIcon"
+                            android:src="@mipmap/ic_evaluation_star_off"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </HorizontalScrollView>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!--アルバム-->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="概要"
-            android:layout_gravity="center"/>
+            android:layout_weight="8"
+            android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/DetailStampTitle"
+                android:text="スタンプラリー名"
+                android:layout_gravity="center"
+                />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/DetailLinearLayoutAddThumbnail">
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:id="@+id/DetailReferenceName"
+                    android:text="名前2"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="さんのアルバムを表示"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!--概要-->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="遊ぶ"
-            android:textSize="15dp"/>
+            android:layout_weight="5"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="概要"
+                android:layout_gravity="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="説明文"
+                android:layout_gravity="center"
+                android:id="@+id/DescriptionText"/>
+        </LinearLayout>
+    </LinearLayout>
 
-
-
-
-
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="bottom|center"
+        android:text="遊ぶ"
+        android:textSize="15dp"
+        android:id="@+id/PlayButton"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

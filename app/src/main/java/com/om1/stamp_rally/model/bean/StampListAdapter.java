@@ -1,10 +1,12 @@
 package com.om1.stamp_rally.model.bean;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.om1.stamp_rally.R;
@@ -46,7 +48,14 @@ public class StampListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = layoutInflater.inflate(R.layout.list_row_stamp,parent,false);
 
+        ((ImageView)convertView.findViewById(R.id.stampThumbnail))
+                .setImageBitmap(BitmapFactory.decodeByteArray(
+                        stampList.get(position).getPictPath(),
+                        0,
+                        stampList.get(position).getPictPath().length));
         ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stampList.get(position).getStampTitle());
+        ((TextView)convertView.findViewById(R.id.stampRallyTitle)).setText(stampList.get(position).getStampComment());
+
 
         return convertView;
     }
