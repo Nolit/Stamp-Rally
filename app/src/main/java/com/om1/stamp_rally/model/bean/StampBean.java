@@ -15,6 +15,7 @@ public class StampBean {
     private String stampComment;
     private String stampDate;
     private LatLng stampLatLng;
+    private String stampRallyName;
 
     private byte[] pictPath;
 
@@ -102,5 +103,9 @@ public class StampBean {
     public Bitmap getPictureBitmap(){
         return BitmapFactory.decodeByteArray(pictPath, 0, pictPath.length);
     }
-    
+
+    public void setStampRallyName(String stampRallyName) { this.stampRallyName = stampRallyName; }
+    public String getStampRallyName() {
+        return stampRallyName;
+    }
 }

@@ -11,34 +11,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.om1.stamp_rally.R;
+import com.om1.stamp_rally.model.bean.StampBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
 
-public class MyStampListAdapter extends ArrayAdapter<Stamps> {
+public class MyStampListAdapter extends ArrayAdapter<StampBean> {
     private LayoutInflater layoutInflater;
 
-    public MyStampListAdapter(Context context, int resource, List<Stamps> objects) {
+    public MyStampListAdapter(Context context, int resource, ArrayList<StampBean> objects) {
         super(context, resource, objects);
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Stamps stamp = getItem(position);
+        StampBean stamp = getItem(position);
         if (null == convertView) {
             convertView = layoutInflater.inflate(R.layout.list_row_stamp, parent, false);
         }
 
-        byte[] pictureByte = stamp.getPicture();
+        byte[] pictureByte = stamp.getPictPath();
         Bitmap picture = BitmapFactory.decodeByteArray(pictureByte, 0, pictureByte.length);
         ((ImageView)convertView.findViewById(R.id.stampThumbnail)).setImageBitmap(picture);
-        ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stamp.getStampName());
-        StampRallys stampRallys = stamp.getStampRallysList().get(0);
-        ((TextView)convertView.findViewById(R.id.getStampDate)).setText(stampRallys.getStamprallyName());
+        ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stamp.getStampTitle());
+        ((TextView)convertView.findViewById(R.id.stampRallyTitle)).setText(stamp.getStampRallyName());
 
         return convertView;
     }
