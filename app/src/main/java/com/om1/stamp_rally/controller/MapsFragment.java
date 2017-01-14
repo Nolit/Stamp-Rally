@@ -38,7 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MapModel;
 import com.om1.stamp_rally.model.bean.StampBean;
-import com.om1.stamp_rally.model.bean.StampListAdapter;
+import com.om1.stamp_rally.model.adapter.StampListAdapter;
 import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 
 import org.greenrobot.eventbus.EventBus;

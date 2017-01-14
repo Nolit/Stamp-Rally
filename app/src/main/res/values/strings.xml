@@ -22,11 +22,13 @@
     <string name="title_activity_configuration">ConfigurationActivity</string>
     <string name="title_activity_follow">FollowActivity</string>
     <string name="title_activity_follower">FollowerActivity</string>
-    <string name="title_activity_mystamp">MystampActivity</string>
+    <string name="title_activity_mystampbook">MyStampBookActivity</string>
     <string name="title_activity_stamp_detail">StampDetailActivity</string>
     <string name="title_activity_complete_rally">CompleteRallyActivity</string>
     <string name="title_activity_favorite_rally">FavoriteRallyActivity</string>
     <string name="title_activity_stamprally_detail">StampRallyDetailActivity</string>
+    <string name="title_activity_stamprally_create">StampRallyCreateActivity</string>
+    <string name="title_activity_stamprally_edit">StampRallyEditActivity</string>
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_stamp_preview">StampPreviewActivity</string>
 
