@@ -62,15 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:id="@+id/NewStampRally"
+            android:id="@+id/createStampRallyButton"
             android:text="スタンプラリー作成" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/EditStampRally"
-            android:text="スタンプラリー編集" />
 
         <Button
             android:layout_width="wrap_content"
