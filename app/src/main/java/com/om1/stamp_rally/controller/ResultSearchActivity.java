@@ -22,6 +22,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import database.entities.StampRallys;
 import database.entities.Stamps;
@@ -35,7 +37,7 @@ public class ResultSearchActivity extends AppCompatActivity {
     ResultSearchListAdapter adapter;
 
     private final EventBus eventBus = EventBus.getDefault();
-    private ArrayList<StampRallys> stampRallys;
+    private List<LinkedHashMap<String, Object>> stampRallys;
 
     private TextView searchKeyword;
     private TextView noHitResult;       //検索結果が0件の場合表示されるテキストビュー
@@ -99,16 +101,17 @@ public class ResultSearchActivity extends AppCompatActivity {
         }
         try {
             //Jsonをオブジェクトに変換
-            stampRallys = new ObjectMapper().readValue(event.getJson(), ArrayList.class);
+            stampRallys = new ObjectMapper().readValue(event.getJson(), List.class);
             Log.d("デバッグ", "データベースとの通信に成功");
 
             if(stampRallys.size() < 1){
                 noHitResult.setText("検索結果がありませんでした。");
             }else{
-                System.out.println(stampRallys.get(0).getStamprallyName());
-                for(StampRallys i:stampRallys){
+                System.out.println(stampRallys.get(0).toString());
+                System.out.println(stampRallys.get(0).get("stamprallyName"));
+                for(LinkedHashMap<String, Object> i:stampRallys){
 //                    stampRallyBean.setPictPath(i.getpci());
-                    stampRallyBean.setStampRallyTitle(i.getStamprallyName());
+                    stampRallyBean.setStampRallyTitle((String) i.get("stamprallyName"));
 //                stampBean.setStampDate(stamps.getStampDate());
                     stampRallyList.add(stampRallyBean);
                 }
