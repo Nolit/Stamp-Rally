@@ -3,6 +3,7 @@ package com.om1.stamp_rally.controller;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -96,7 +97,7 @@ public class MyStampBookActivity extends AppCompatActivity {
                 notHaveStamp.setText("スタンプを所持していません");
             }else{
                 for(Map<String, Object> stampData : haveStampList){
-//                    stampBean.setPictPath((byte[]) stampData.get("picture"));
+                    stampBean.setPictPath(Base64.decode((String) stampData.get("picture"),Base64.DEFAULT));
                     stampBean.setStampTitle((String) stampData.get("stampName"));
                     stampBean.setStampDate((String) stampData.get("stampDate"));
                     stampBean.setStampRallyName((String) stampData.get("stampRallyName"));
