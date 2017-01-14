@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.SearchStampRallyModel;
-import com.om1.stamp_rally.model.StampRallyDetailModel;
 import com.om1.stamp_rally.model.adapter.ResultSearchListAdapter;
 import com.om1.stamp_rally.model.bean.StampRallyBean;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
+
 public class ResultSearchActivity extends AppCompatActivity {
 
     ListView lv;
@@ -35,9 +35,10 @@ public class ResultSearchActivity extends AppCompatActivity {
     ResultSearchListAdapter adapter;
 
     private final EventBus eventBus = EventBus.getDefault();
-    private StampRallys stampRally;
+    private ArrayList<StampRallys> stampRallys;
 
     private TextView searchKeyword;
+    private TextView noHitResult;       //検索結果が0件の場合表示されるテキストビュー
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class ResultSearchActivity extends AppCompatActivity {
 
         searchKeyword = (TextView) findViewById(R.id.SearchKeyword);
         searchKeyword.setText(getIntent().getStringExtra("searchKeyword"));
+        noHitResult = (TextView) findViewById(R.id.NoHitResult);
 
         stampRallyBean = new StampRallyBean();
         stampRallyList = new ArrayList<StampRallyBean>();
@@ -92,15 +94,27 @@ public class ResultSearchActivity extends AppCompatActivity {
     public void fetchedJson(FetchJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ", "データベースとの通信に失敗");
+            noHitResult.setText("データベース接続に失敗しました");
             return;
         }
         try {
             //Jsonをオブジェクトに変換
-            stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
+            stampRallys = new ObjectMapper().readValue(event.getJson(), ArrayList.class);
             Log.d("デバッグ", "データベースとの通信に成功");
-            for (Stamps stamps : stampRally.getStampList()) {
-                System.out.println("デバッグ:詳細ページ:" + stamps.getStampName());
+
+            if(stampRallys.size() < 1){
+                noHitResult.setText("検索結果がありませんでした。");
+            }else{
+                System.out.println(stampRallys.get(0).getStamprallyName());
+                for(StampRallys i:stampRallys){
+//                    stampRallyBean.setPictPath(i.getpci());
+                    stampRallyBean.setStampRallyTitle(i.getStamprallyName());
+//                stampBean.setStampDate(stamps.getStampDate());
+                    stampRallyList.add(stampRallyBean);
+                }
+                adapter.notifyDataSetChanged();
             }
+
         }catch(IOException e){
                 e.printStackTrace();
         }
