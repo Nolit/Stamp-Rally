@@ -165,7 +165,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                 ImageView img = (ImageView) view.findViewById(R.id.info_image);
                 for(StampBean bean:stampList){
                     if(marker.getId().equals(bean.getMarkerId())){
-                        img.setImageBitmap(BitmapFactory.decodeByteArray(bean.getPictPath(), 0, bean.getPictPath().length));
+                        img.setImageBitmap(bean.getPicture());
                         break;
                     }
                 }

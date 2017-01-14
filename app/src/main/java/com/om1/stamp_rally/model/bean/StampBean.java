@@ -1,5 +1,8 @@
 package com.om1.stamp_rally.model.bean;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class StampBean {
@@ -95,5 +98,9 @@ public class StampBean {
     public LatLng getStampLatLng() { return stampLatLng; }
 
     public void setLatLng(LatLng latLng) { this.stampLatLng = latLng; }
+
+    public Bitmap getPicture(){
+        return BitmapFactory.decodeByteArray(pictPath, 0, pictPath.length);
+    }
     
 }
