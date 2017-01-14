@@ -1,5 +1,8 @@
 package com.om1.stamp_rally.model.bean;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 public class StampRallyBean {
     long id;
     private String stampRallyTitle;
@@ -44,5 +47,9 @@ public class StampRallyBean {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Bitmap getPictureBitmap() {
+        return BitmapFactory.decodeByteArray(pictPath, 0, pictPath.length);
     }
 }

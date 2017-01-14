@@ -152,7 +152,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         intentButtonMyStampList.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
-                intent.putExtra("referenceUserId", "4");
+                intent.putExtra("referenceUserId", "20");
                 startActivity(intent);
             }
         });

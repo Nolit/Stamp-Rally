@@ -34,6 +34,14 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="100dp"
+            android:textSize="20dp"
+            android:id="@+id/NoHitResult"/>
+
         <ListView android:id="@+id/ResultSearchList"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
