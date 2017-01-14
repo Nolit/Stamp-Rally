@@ -178,7 +178,6 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     private void saveStamp(){
-        byte[] picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
         new StampDbAdapter(this).createStamp(stampId, stampRallyId, title, note, picture, latitude, longitude);
     }
 
