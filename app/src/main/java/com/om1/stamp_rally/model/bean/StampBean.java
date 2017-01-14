@@ -99,7 +99,7 @@ public class StampBean {
 
     public void setLatLng(LatLng latLng) { this.stampLatLng = latLng; }
 
-    public Bitmap getPicture(){
+    public Bitmap getPictureBitmap(){
         return BitmapFactory.decodeByteArray(pictPath, 0, pictPath.length);
     }
     
