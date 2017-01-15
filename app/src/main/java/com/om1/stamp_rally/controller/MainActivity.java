@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -56,7 +55,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //スタンプ管理タブ
     @OnClick(R.id.createStampRallyButton)
     void clickCreateStampRallyButton(){
-        Intent intent = new Intent(MainActivity.this, StampRallyCreateActivity.class);
+        Intent intent = new Intent(MainActivity.this, StampRallyControlActivity.class);
         startActivity(intent);
     }
 

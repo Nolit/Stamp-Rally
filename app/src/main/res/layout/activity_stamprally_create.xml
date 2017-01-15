@@ -1,39 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
     android:orientation="vertical">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="新規作成"
+        android:textSize="30dp"
+        android:height="50dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="10dp"/>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="スタンプラリー作成"
-            android:textSize="30dp"
-            android:height="50dp"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginTop="10dp"/>
-
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="新規作成"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:id="@+id/stampRallyNewCreateButton"/>
+            android:layout_weight="4"
+            android:orientation="vertical">
 
-        <ListView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="タイトル"
+                android:textSize="25dp"
+                android:textColor="#ADD8E6"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textSize="20dp"
+                android:layout_gravity="center"
+                android:id="@+id/editStampRallyTitle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="概要"
+                android:textSize="25dp"
+                android:textColor="#ADD8E6"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_gravity="center"
+                android:id="@+id/editStampRallyComment"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/stampRallyCreateListView" />
+            android:layout_height="200dp"
+            android:layout_weight="1">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/stampRallyEditListView" />
+        </LinearLayout>
 
     </LinearLayout>
-</FrameLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:text="戻る"
+            android:textSize="20dp"
+            android:id="@+id/backButton"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:text="保存"
+            android:textSize="20dp"
+            android:id="@+id/saveStampRallyButton"/>
+    </LinearLayout>
+</LinearLayout>

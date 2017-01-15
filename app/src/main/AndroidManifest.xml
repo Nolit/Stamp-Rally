@@ -94,11 +94,11 @@
             android:label="@string/title_activity_stamp_preview"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".controller.StampRallyCreateActivity"
+            android:name=".controller.StampRallyControlActivity"
             android:label="@string/title_activity_stamprally_create"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.StampRallyEditActivity"
+            android:name=".controller.StampRallyCreateActivity"
             android:label="@string/title_activity_stamprally_edit"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
