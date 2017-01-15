@@ -21,9 +21,11 @@ import android.widget.Toast;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampUpload;
 import com.om1.stamp_rally.model.adapter.StampEditListAdapter;
+import com.om1.stamp_rally.model.adapter.StampRallyEditListAdapter;
 import com.om1.stamp_rally.model.event.StampUploadEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
+import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -58,9 +60,9 @@ public class StampRallyCreateActivity extends AppCompatActivity {
     EditText noteEdit;
 
     private int selectedItemIndex;
-    private List<Stamps> stampDataList;
-    private StampEditListAdapter adapter;
-    private List<Map<String, Object>> stampMapList;
+    private List<StampRallys> stampDataList;
+    private StampRallyEditListAdapter adapter;
+    private List<Map<String, Object>> stampRallyMapList;
 
 
     //ここから追加分（大脇）
@@ -83,7 +85,6 @@ public class StampRallyCreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamprally_create);
-        EventBusUtil.defaultBus.register(this);
 
         //ここから追加分（大脇）
         stampRallyNewCreateButton = (Button) findViewById(R.id.stampRallyNewCreateButton);
@@ -97,8 +98,8 @@ public class StampRallyCreateActivity extends AppCompatActivity {
         //ここまで追加分（大脇）
 
 
-        stampDataList = loadStampData();
-        adapter = new StampEditListAdapter(this, 0, stampDataList);
+        stampDataList = loadStampRallyData();
+        adapter = new StampRallyEditListAdapter(this, 0, stampDataList);
 
         ListView listView = (ListView)findViewById(R.id.stampRallyCreateListView);
         listView.setAdapter(adapter);
@@ -114,146 +115,36 @@ public class StampRallyCreateActivity extends AppCompatActivity {
                 final View layout = StampRallyCreateActivity.this.getLayoutInflater().inflate(R.layout.stamp_info,
                         (ViewGroup)findViewById(R.id.layout_root));
 
-                initDialogViews(layout, stamp);
                 selectedItemIndex = position;
-                showEditStampDialog(layout, stamp);
             }
         });
     }
 
-    private List<Stamps> loadStampData(){
-        stampMapList = new StampDbAdapter(this).getAllAsList();
-        List<Stamps> stampList = new ArrayList<>();
-        for(Map<String, Object> stampMap : stampMapList){
-            Stamps stampData = convertMapToStamp(stampMap);
-            stampList.add(stampData);
+    private List<StampRallys> loadStampRallyData(){
+        stampRallyMapList = new StampRallyDbAdapter(this).getAllAsList();
+        List<StampRallys> stampRallyList = new ArrayList<>();
+        for(Map<String, Object> stampRallyMap : stampRallyMapList){
+            stampRallyList.add(convertMapToStampRally(stampRallyMap));
         }
 
-        return stampList;
+        return stampRallyList;
     }
 
-    private Stamps convertMapToStamp(Map<String, Object> stampMap){
-        Integer id = (Integer) stampMap.get("stampId");
-        String title = (String) stampMap.get("title");
-        String memo = (String) stampMap.get("memo");
-        String stampRallyName = (String) stampMap.get("stampRallyName");
+    private StampRallys convertMapToStampRally(Map<String, Object> stampRallyMap){
+        Integer id = (Integer) stampRallyMap.get("stampRallyId");
+        String name = (String) stampRallyMap.get("name");
+        String summary = (String) stampRallyMap.get("summary");
 
-        byte[] picture = (byte[]) stampMap.get("picture");
-
-        Integer stampRallyId = (Integer)stampMap.get("stampRallyId");
         StampRallys stampRally = new StampRallys();
-        stampRally.setStamprallyId(stampRallyId);
-        stampRally.setStamprallyName(stampRallyName);
+        stampRally.setStamprallyId(id);
+        stampRally.setStamprallyName(name);
+        stampRally.setStamrallyComment(summary);
 
-        StampPads pad = new StampPads();
-        pad.setLatitude((Double)stampMap.get("latitude"));
-        pad.setLongitude((Double)stampMap.get("longitude"));
-
-        Stamps stamp = new Stamps();
-        stamp.setStampId(id);
-        stamp.setStampName(title);
-        stamp.setStampComment(memo);
-        stamp.setPicture(picture);
-        stamp.setStampDate(new Date(((Long)stampMap.get("create_time"))));
-        stamp.getStampRallysList().add(stampRally);
-        stamp.setStampPads(pad);
-
-        return stamp;
-    }
-
-    private void initDialogViews(View layout, Stamps stamp){
-        titleEdit = findById(layout, R.id.stampTitleEdit);
-        titleEdit.setText(stamp.getStampName());
-        noteEdit = findById(layout, R.id.stampNoteEdit);
-        noteEdit.setText(stamp.getStampComment());
-        stampTitleError = findById(layout, R.id.stampTitleError);
-    }
-
-    private void showEditStampDialog(final View layout, final Stamps stamp){
-        new AlertDialog.Builder(this)
-            .setTitle(DIALOG_TITLE)
-            .setView(layout)
-            .setPositiveButton(OK_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    String title = titleEdit.getText().toString();
-                    if(title.equals("")){
-                        stampTitleError.setText(ERROR_MESSAGE);
-                        return;
-                    }
-                    applyDialogEditField();
-                    uploadStamp(stamp);
-                }
-            })
-            .setNegativeButton(NO_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            })
-            .setCancelable(false)
-            .create().show();
-    }
-
-    private void applyDialogEditField(){
-        title = titleEdit.getText().toString();
-        note = noteEdit.getText().toString();
-    }
-
-    private void showOverlay(){
-        FrameLayout overlayLayout = findById(this, R.id.uploading_overlay);
-        overlayLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        overlayLayout.setAlpha(OVERLAY_ALPHA);
-    }
-
-    private void hideOverlay(){
-        FrameLayout overlayLayout = findById(this, R.id.uploading_overlay);
-        overlayLayout.setOnTouchListener(null);
-        overlayLayout.setAlpha(0);
-    }
-
-    private void uploadStamp(Stamps stamp){
-        showOverlay();
-
-        Integer id = stamp.getStampId();
-        Integer stampRallyId = stamp.getStampRallysList().get(0).getStamprallyId();
-        double latitude = stamp.getStampPads().getLatitude();
-        double longitude = stamp.getStampPads().getLongitude();
-        byte[] picture = stamp.getPicture();
-        long createTime = stamp.getStampDate().getTime();
-
-        SharedPreferences pref = getSharedPreferences("stamp-rally", MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE);
-        String mailAddress = pref.getString("mailAddress", "tarou2");
-        String password = pref.getString("password", "tarou2");
-
-        StampUpload.getInstance().uploadStamp(id, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void uploadedStamp(StampUploadEvent event) {
-        String message;
-        if(event.isSuccess()){
-            int id = (int)stampMapList.get(selectedItemIndex).get("id");
-            Log.d("スタンプラリー", ""+id);
-            new StampDbAdapter(this).deleteById(id);
-            message = event.isClear() ? RALLY_COMPLETE_MESSAGE : UPLOAD_SUCCESS_MESSAGE;
-        }else{
-            message =UPLOAD_FAILE_MESSAGE;
-        }
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
-        stampDataList.remove(selectedItemIndex);
-        adapter.notifyDataSetChanged();
-        hideOverlay();
+        return stampRally;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EventBusUtil.defaultBus.unregister(this);
     }
 }
