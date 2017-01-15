@@ -18,38 +18,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ClearActivity extends AppCompatActivity {
-    private final EventBus eventBus = EventBus.getDefault();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clear);
         ButterKnife.inject(this);
-        eventBus.register(this);
     }
-
-    @Override
-    public void onStop() {
-        //EventBusライブラリによる自身の登録解除
-        eventBus.unregister(this);
-        super.onPause();
-    }
-
-    @OnClick(R.id.laterButton)
-    void laterUpload(){
-
-    }
-
-    @OnClick(R.id.uploadButton)
-    void upload(){
-//        int id = (Integer) new StampRallyDbAdapter(this).getTryingStampRally().get(StampRallyDbAdapter.ID);
-//        List<Map<String, Object>> stampList =  new StampDbAdapter(this).getListByStampRallyId(id);
-//        try {
-//            StampRallyClear.getInstance().upload(stampList);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-    }
-
-
 }

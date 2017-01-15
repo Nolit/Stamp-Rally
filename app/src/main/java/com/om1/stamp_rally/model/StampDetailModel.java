@@ -15,6 +15,7 @@ import com.squareup.okhttp.Response;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class StampDetailModel {
     private final EventBus eventBus = EventBus.getDefault();
@@ -34,9 +35,12 @@ public class StampDetailModel {
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/StampDetail?stampid="+stampId)
                 .post(body)
                 .build();
-        new OkHttpClient().newCall(request).enqueue(new Callback() {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(25, TimeUnit.SECONDS);
+        client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
                 eventBus.post(new FetchStampRallyEvent(false,null));
             }
 
