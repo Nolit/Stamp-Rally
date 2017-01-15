@@ -36,15 +36,29 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
-
-    //ログイン
+    //tabHost
+    @InjectView(R.id.tabHost)
+    TabHost th;
+    //ゲスト
     Button loginButton;
-    Button SearchButton;
-    Button LogoutButton;
-    TextView newloginText;
-    EditText search;
     EditText id;
     EditText pass;
+    TextView newloginText;
+    //トップ
+    Button searchButton;
+    EditText search;
+    //ホーム
+    Button LogoutButton;
+    //タイムライン
+
+    //マップ
+    FragmentManager mapFragmentManager;
+    //スタンプ管理タブ
+    @OnClick(R.id.createStampRallyButton)
+    void clickCreateStampRallyButton(){
+        Intent intent = new Intent(MainActivity.this, StampRallyCreateActivity.class);
+        startActivity(intent);
+    }
 
     //テスト用ボタン - スタンプ管理タブ
     Button stampRallyDetailIntentButton;    //スタンプラリー詳細ページ
@@ -52,17 +66,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     Button intentButtonStampDetail;         //スタンプ詳細ページ
 
     SharedPreferences mainPref;
-
-    //tabHost
-    @InjectView(R.id.tabHost)
-    TabHost th;
-
-    //リロード
     Bundle savedInstanceState;
-
     private final EventBus eventBus = EventBus.getDefault();
-
-    FragmentManager mapFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +80,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
         //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
-
-        search = (EditText) findViewById(R.id.SearchEdit);
-        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                // EditTextのフォーカスが外れた場合
-                if (hasFocus == false) {
-                    // ソフトキーボードを非表示にする
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
-        });
-
 
         //ログイン
         loginButton = (Button) findViewById(R.id.LoginBt);
@@ -104,8 +94,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
             }
         });
-
-
         //ログアウト
         LogoutButton = (Button) findViewById(R.id.LogoutBt);
         LogoutButton.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +115,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 builder.show();
             }
         });
-
-
         //新規会員登録ページへ
         newloginText = (TextView) findViewById(R.id.newmember);
         newloginText.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +123,21 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+
+        search = (EditText) findViewById(R.id.SearchEdit);
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // EditTextのフォーカスが外れた場合
+                if (hasFocus == false) {
+                    // ソフトキーボードを非表示にする
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
+
 
         //テスト用ボタン - スタンプラリー詳細ページ
         stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
@@ -153,7 +154,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         intentButtonMyStampList.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
-                intent.putExtra("referenceUserId", "4");
+                intent.putExtra("referenceUserId", "20");
                 startActivity(intent);
             }
         });
@@ -166,6 +167,15 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+        //テスト用にmainPrefいじる
+        SharedPreferences.Editor mainEdit = mainPref.edit();
+        mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
+        mainEdit.putString("playingStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
+        mainEdit.commit();                              //ログアウト時には両方Removeでok
+        //テスト用ここまで
+
+//        String useId = mainPref.getString("mailAddress", null);
+        String useId = "login"; //テスト用でログイン状態にしてる
 
         //スタンプラリーページを選択時のフラグメント起動
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -177,15 +187,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        //テスト用にmainPrefいじる
-        SharedPreferences.Editor mainEdit = mainPref.edit();
-        mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
-        mainEdit.putString("playingStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
-        mainEdit.commit();                              //ログアウト時には両方Removeでok
-        //テスト用ここまで
-
-//        String useId = mainPref.getString("mailAddress", null);
-        String useId = "login"; //テスト用でログイン状態にしてる
 
         //ログイン時とゲスト時のtabHost
         if (useId != null) {
@@ -196,8 +197,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
         //検索
-        SearchButton = (Button) findViewById(R.id.SearchBt);
-        SearchButton.setOnClickListener(new View.OnClickListener() {
+        searchButton = (Button) findViewById(R.id.SearchBt);
+        searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 search = (EditText) findViewById(R.id.SearchEdit);
 

@@ -19,7 +19,8 @@
         android:icon="@mipmap/ic_stampshare_theme"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:largeHeap="true">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDl2NuhWnB6BJwfkRZX-CU9amjAcM6wQ7g" />
@@ -66,7 +67,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.MyStampBookActivity"
-            android:label="@string/title_activity_mystamp"
+            android:label="@string/title_activity_mystampbook"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.StampRallyDetailActivity"
@@ -92,6 +93,14 @@
             android:name=".controller.StampPreviewActivity"
             android:label="@string/title_activity_stamp_preview"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".controller.StampRallyCreateActivity"
+            android:label="@string/title_activity_stamprally_create"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.StampRallyEditActivity"
+            android:label="@string/title_activity_stamprally_edit"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.StampEditListActivity"
             android:label="StampEditListActivity"

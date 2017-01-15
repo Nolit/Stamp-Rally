@@ -3,15 +3,17 @@ package com.om1.stamp_rally.controller;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyStampBookModel;
 import com.om1.stamp_rally.model.adapter.MyStampListAdapter;
-import com.om1.stamp_rally.model.adapter.ResultSearchListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 
@@ -21,6 +23,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import database.entities.StampRallys;
 import database.entities.Stamps;
@@ -28,14 +34,16 @@ import database.entities.Stamps;
 public class MyStampBookActivity extends AppCompatActivity {
     SharedPreferences mainPref;
     private final EventBus eventBus = EventBus.getDefault();
+    private Map<String, Object> myStampBook;
     private StampRallys stampRally;
 
     ListView lv;
-    StampBean stampBean;
-    ArrayList<StampBean> mayStampList = new ArrayList<>();
+    StampBean stampBean = new StampBean();
+    ArrayList<StampBean> myStampList = new ArrayList<>();
     MyStampListAdapter adapter;
 
     private TextView userName;
+    private TextView notHaveStamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +54,13 @@ public class MyStampBookActivity extends AppCompatActivity {
         MyStampBookModel model = MyStampBookModel.getInstance();
 
         if(getIntent().getStringExtra("referenceUserId") != null){
-            model.fetchJson(getIntent().getStringExtra("referenceUserId"));    //通信開始
+            model.fetchJson(getIntent().getStringExtra("referenceUserId"));
         }else{
             System.out.println("デバッグ:MyStampBook:getStringExtraが"+getIntent().getStringExtra("referenceUserId")+"です。");
         }
 
         userName = (TextView) findViewById(R.id.UserName);
-//        userName.setText();
+        notHaveStamp = (TextView) findViewById(R.id.NotHaveStamp);  //所持スタンプ数が0の場合に表示されるテキスト
 
     }
 
@@ -61,14 +69,43 @@ public class MyStampBookActivity extends AppCompatActivity {
     public void fetchedJson(FetchJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:MyStampBook", "データベースとの通信に失敗");
+            notHaveStamp.setText("データベース接続に失敗しました");
             return;
         }
         try {
-            stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
+            ObjectMapper mapper = new ObjectMapper();
+            myStampBook = mapper.readValue(event.getJson(), Map.class);
             Log.d("デバッグ:MyStampBook", "データベースとの通信に成功");
 
-            /* 処理を追加する　*/
+            userName.setText((String) myStampBook.get("userName"));
 
+            List<Map<String, Object>> haveStampList = (List<Map<String, Object>>) myStampBook.get("Stamps");
+
+            if(haveStampList.size() < 1){
+                System.out.println("俺はもうダメだ");
+            }else{
+//                System.out.println("水薮助けて_______________"+haveStampList.get(0).toString());
+                Log.d("デバッグ", haveStampList.toString());
+
+                Map<String, Object> stampData = haveStampList.get(0);   //ここでエラー起きてるみたい
+                Log.d("デバッグ", (String) stampData.get("stampName"));
+            }
+
+
+            if(haveStampList.size() < 1){
+                System.out.println("デバッグ:MyStampBook:所持しているスタンプはありません。");
+                notHaveStamp.setText("スタンプを所持していません");
+            }else{
+                for(Map<String, Object> stampData : haveStampList){
+                    stampBean.setPictPath(Base64.decode((String) stampData.get("picture"),Base64.DEFAULT));
+                    stampBean.setStampTitle((String) stampData.get("stampName"));
+                    stampBean.setStampDate((String) stampData.get("stampDate"));
+                    stampBean.setStampRallyName((String) stampData.get("stampRallyName"));
+                    myStampList.add(stampBean);
+                }
+                adapter = new MyStampListAdapter(this, 0, myStampList);
+                adapter.notifyDataSetChanged();
+            }
 
         }catch(IOException e){
             e.printStackTrace();

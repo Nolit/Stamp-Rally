@@ -3,7 +3,6 @@ package com.om1.stamp_rally.controller;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -39,7 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MapModel;
 import com.om1.stamp_rally.model.bean.StampBean;
-import com.om1.stamp_rally.model.bean.StampListAdapter;
+import com.om1.stamp_rally.model.adapter.StampListAdapter;
 import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
@@ -166,7 +165,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                 ImageView img = (ImageView) view.findViewById(R.id.info_image);
                 for(StampBean bean:stampList){
                     if(marker.getId().equals(bean.getMarkerId())){
-                        img.setImageBitmap(BitmapFactory.decodeByteArray(bean.getPictPath(), 0, bean.getPictPath().length));
+                        img.setImageBitmap(bean.getPictureBitmap());
                         break;
                     }
                 }

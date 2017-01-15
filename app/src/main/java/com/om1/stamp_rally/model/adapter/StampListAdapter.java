@@ -1,4 +1,4 @@
-package com.om1.stamp_rally.model.bean;
+package com.om1.stamp_rally.model.adapter;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.om1.stamp_rally.R;
+import com.om1.stamp_rally.model.bean.StampBean;
 
 import java.util.ArrayList;
 
