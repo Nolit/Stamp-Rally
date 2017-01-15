@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 
 public class StampRallyBean {
     long id;
+    private Integer stampRallyId;
     private String stampRallyTitle;
     private String CreatorName;
     private byte[] pictPath;
@@ -17,13 +18,15 @@ public class StampRallyBean {
         this.stampRallyTitle = stampRallyId;
     }
 
+    public Integer getStampRallyId() { return stampRallyId; }
+
+    public void setStampRallyId(Integer stampRallyId) { this.stampRallyId = stampRallyId; }
+
     public String getStampRallyTitle() {
         return stampRallyTitle;
     }
 
-    public void setStampRallyTitle(String stampRallyTitle) {
-        this.stampRallyTitle = stampRallyTitle;
-    }
+    public void setStampRallyTitle(String stampRallyTitle) { this.stampRallyTitle = stampRallyTitle; }
 
     public String getCreatorName() {
         return CreatorName;

@@ -1,16 +1,13 @@
 package com.om1.stamp_rally.controller;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
@@ -25,17 +22,12 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import data.StampData;
-import database.entities.StampRallys;
 
 public class MyStampBookActivity extends AppCompatActivity {
-    SharedPreferences mainPref;
     private final EventBus eventBus = EventBus.getDefault();
     private StampData[] myStampBook;
-    private StampRallys stampRally;
 
     ListView lv;
     StampBean stampBean = new StampBean();
