@@ -1,14 +1,17 @@
 package com.om1.stamp_rally.controller;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -28,6 +31,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -35,12 +39,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MapModel;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.adapter.StampListAdapter;
-import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,6 +74,12 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private LatLng position = null;        //確認！！！→　cameraIconの表示処理(VISIBLE)の時に使う。onLocationChangedが呼ばれない限り初期化されてない、onLocationChangedが更新されるまで前の位置情報が入ったままになる
+
+    //位置情報詐称
+    private Location testLocation;
+    private final String providerName = LocationManager.GPS_PROVIDER;
+    private WebSocket mockLocationClient;
+
     //Marker
     BitmapDescriptor defaultMarker,nearMarker,completeMarker;
     public ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -86,13 +98,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     Integer selectedStampId = null;
     Integer tryingStampRallyId = null;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        eventBus.register(this);
 
-        //データベース通信
         mainPref = getContext().getSharedPreferences("main", MODE_PRIVATE);
     }
 
@@ -131,13 +140,32 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
         cameraIcon.setVisibility(View.INVISIBLE);
 //        navigationView.setNavigationItemSelectedListener(this);
-        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
         //状態別マーカーの設定
         defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
         nearMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
         completeMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        eventBus.register(this);
+
+        setUpTestProvider();
+        connectMockLocation();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        eventBus.unregister(this);
+
+        if(mockLocationClient != null){
+            mockLocationClient.sendClose();
+        }
+        mLocationManager.removeUpdates(this);    // 位置情報の更新を止める
     }
 
     @Override
@@ -173,17 +201,29 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
             }
         });
 
-        setUpLocationManager();
+//        setUpLocationManager();
         setMapListeners();
 
         MapModel.getInstance().fetchJson(mainPref.getString("playingStampRally", null));
     }
 
     @Override   //位置座標を取得したら引数に渡して呼び出される
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(final Location location) {
+        Log.d("デバッグ", "位置情報取得");
+        Log.d("デバッグ", "latitude : " + location.getLatitude() + ", longitude : " + location.getLongitude());
+
         //カメラを現在地に移動
         position = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        mMap.setLocationSource(new LocationSource() {
+            @Override
+            public void activate(OnLocationChangedListener onLocationChangedListener) {
+                onLocationChangedListener.onLocationChanged(location);
+            }
+            @Override
+            public void deactivate() {
+            }
+        });
 
         //現在地からの距離100m以内のマーカーを切り替える（メートルで計算・WGS84楕円体）
         float[] results_markerInitialization = new float[1];
@@ -271,13 +311,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mLocationManager.removeUpdates(this);    // 位置情報の更新を止める
-        eventBus.unregister(this);
-    }
-
     //カメラアイコン押下・カメラページへインテント
     @OnClick(R.id.cameraIcon_map)
     void pushCameraIcon(){
@@ -364,6 +397,76 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setUpTestProvider(){
+        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        if(mLocationManager.isProviderEnabled(providerName)){
+            mLocationManager.addTestProvider(providerName, true, true, true, true, true, true, true, Criteria.POWER_HIGH, Criteria.ACCURACY_HIGH);
+        }
+
+        testLocation = new Location(providerName);
+        testLocation.setAccuracy(Criteria.ACCURACY_HIGH);
+        testLocation.setTime(System.currentTimeMillis());
+        testLocation.setElapsedRealtimeNanos(System.currentTimeMillis());
+    }
+
+    private void connectMockLocation(){
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    mockLocationClient = new WebSocketFactory().createSocket("ws://35.160.83.150/stamp-rally/location", 5000)
+                            .connect()
+                            .addListener(new WebSocketAdapter() {
+                                @Override
+                                public void onTextMessage(WebSocket websocket, String message)
+                                        throws Exception {
+                                    String[] location = message.split(",", 0);
+                                    double latitude = Double.valueOf(location[0]);
+                                    double longitude = Double.valueOf(location[1]);
+                                    eventBus.post(new LocationEvent(latitude, longitude));
+                                }
+                            });
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } catch (WebSocketException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    void updateLocation(LocationEvent event){
+        testLocation.setLatitude(event.getLatitude());
+        testLocation.setLongitude(event.getLongitude());
+        mLocationManager.setTestProviderLocation(providerName, testLocation);
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mLocationManager.requestLocationUpdates(
+                providerName,
+                1000,
+                3,
+                this
+        );
+    }
+
+    private class LocationEvent{
+        private double latitude;
+        private double longitude;
+        public LocationEvent(double latitude, double longitude){
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+        public double getLatitude(){
+            return latitude;
+        }
+        public double getLongitude(){
+            return longitude;
         }
     }
 }
