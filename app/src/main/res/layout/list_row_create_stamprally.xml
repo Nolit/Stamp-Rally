@@ -52,7 +52,9 @@
                 android:text="削除"
                 android:textSize="10dp"
                 android:id="@+id/deleteButton"
-                android:padding="5dp"/>
+                android:padding="5dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
 
         </LinearLayout>
     </LinearLayout>

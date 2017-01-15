@@ -3,6 +3,7 @@ package com.om1.stamp_rally.controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,32 +27,13 @@ import database.entities.Stamps;
 import static butterknife.ButterKnife.findById;
 
 public class StampRallyControlActivity extends AppCompatActivity {
-    private final String DIALOG_TITLE = "アップロードしますか";
-    private final String OK_BUTTON_MESSAGE = "アップロード";
-    private final String NO_BUTTON_MESSAGE = "キャンセル";
-    private final String ERROR_MESSAGE = "名称を入力してください";
-    private final String UPLOAD_SUCCESS_MESSAGE = "アップロードしました";
-    private final String UPLOAD_FAILE_MESSAGE = "アップロードに失敗しました\n編集画面からもう一度お試しください";
-    private final String RALLY_COMPLETE_MESSAGE = "クリアしました！";
-    private final String ATTENTION_STAMP_SAVE_MESSAGE = "スタンプを保存してください！";
-    private final float OVERLAY_ALPHA = 0.7f;
-
-    private String title;
-    private String note;
-
-    EditText titleEdit;
-    TextView stampTitleError;
-    EditText noteEdit;
-
-    private int selectedItemIndex;
     private List<StampRallys> stampDataList;
     private StampRallyEditListAdapter adapter;
     private List<Map<String, Object>> stampRallyMapList;
-
+    private ListView listView;
 
     //ここから追加分（大脇）
     Button stampRallyNewCreateButton;
-    Button stampRallyDeleteButton;
 
     /*
         関連ソース
@@ -79,31 +61,25 @@ public class StampRallyControlActivity extends AppCompatActivity {
             }
         });
         //ここまで追加分（大脇）
+
+        listView = (ListView)findViewById(R.id.stampRallyCreatingListView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(StampRallyControlActivity.this, StampRallyCreateActivity.class);
+                i.putExtra("stampRallyId", stampDataList.get(position).getStamprallyId());
+                startActivity(i);
+            }
+        });
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
         stampDataList = loadStampRallyData();
         adapter = new StampRallyEditListAdapter(this, 0, stampDataList);
-
-        ListView listView = (ListView)findViewById(R.id.stampRallyCreatingListView);
         listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListView listView = (ListView) parent;
-                StampRallys stampRally = (StampRallys) listView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), stampRally.getStamprallyName() + " clicked",
-                        Toast.LENGTH_LONG).show();
-
-                final View layout = StampRallyControlActivity.this.getLayoutInflater().inflate(R.layout.stamp_info,
-                        (ViewGroup)findViewById(R.id.layout_root));
-
-                selectedItemIndex = position;
-            }
-        });
     }
 
     private List<StampRallys> loadStampRallyData(){

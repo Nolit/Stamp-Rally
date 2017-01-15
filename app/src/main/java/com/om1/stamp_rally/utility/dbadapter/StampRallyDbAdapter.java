@@ -104,4 +104,16 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
         db.delete(tableName, ID + "=" + id, null);
         close();
     }
+
+    public void update(Map<String, Object> data){
+        open();
+
+        ContentValues cv = new ContentValues();
+        cv.put(NAME, (String) data.get(NAME));
+        cv.put(SUMMARY, (String) data.get(SUMMARY));
+        Integer id = (Integer) data.get(ID);
+        db.update(tableName, cv, "id = " + id, null);
+
+        close();
+    }
 }
