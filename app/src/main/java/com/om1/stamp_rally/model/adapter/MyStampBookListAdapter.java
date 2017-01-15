@@ -3,6 +3,7 @@ package com.om1.stamp_rally.model.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class MyStampBookListAdapter extends ArrayAdapter<StampBean> {
         }
 
         byte[] pictureByte = stamp.getPictPath();
+        Log.d("スタンプラリー", ""+pictureByte);
         Bitmap picture = BitmapFactory.decodeByteArray(pictureByte, 0, pictureByte.length);
         ((ImageView)convertView.findViewById(R.id.stampBookThumbnail)).setImageBitmap(picture);
         ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stamp.getStampTitle());

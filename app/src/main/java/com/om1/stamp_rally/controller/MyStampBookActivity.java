@@ -24,12 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import data.StampData;
 import database.entities.StampRallys;
 
 public class MyStampBookActivity extends AppCompatActivity {
     SharedPreferences mainPref;
     private final EventBus eventBus = EventBus.getDefault();
-    private Map<String, Object> myStampBook;
+    private StampData[] myStampBook;
     private StampRallys stampRally;
 
     ListView lv;
@@ -68,23 +69,21 @@ public class MyStampBookActivity extends AppCompatActivity {
             return;
         }
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            myStampBook = mapper.readValue(event.getJson(), Map.class);
-            Log.d("デバッグ:MyStampBook", "データベースとの通信に成功");
+            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
 
-            userName.setText((String) myStampBook.get("userName"));
+            userName.setText(responseData[0]);
+            myStampBook = new ObjectMapper().readValue(responseData[1], StampData[].class);
 
-            List<Map<String, Object>> haveStampList = (List<Map<String, Object>>) myStampBook.get("Stamps");
 
-            if(haveStampList.size() < 1){
+            if(myStampBook.length < 1){
                 System.out.println("デバッグ:MyStampBook:所持しているスタンプはありません。");
                 notHaveStamp.setText("スタンプを所持していません");
             }else{
-                for(Map<String, Object> stampData : haveStampList){
+                for(StampData stampData : myStampBook){
                     stampBean = new StampBean();
-                    stampBean.setPictPath(Base64.decode((String) stampData.get("picture"),Base64.DEFAULT));
-                    stampBean.setStampTitle((String) stampData.get("stampName"));
-                    stampBean.setStampDate((String) stampData.get("stampDate"));
+                    stampBean.setPictPath(stampData.getPicture());
+                    stampBean.setStampTitle(stampData.getStampName());
+                    stampBean.setStampDate(stampData.getStampDate());
                     myStampList.add(stampBean);
                 }
                 adapter = new MyStampBookListAdapter(this, 0, myStampList);
