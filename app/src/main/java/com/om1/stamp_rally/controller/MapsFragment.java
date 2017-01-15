@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -207,13 +208,22 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     }
 
     @Override   //位置座標を取得したら引数に渡して呼び出される
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(final Location location) {
         Log.d("デバッグ", "位置情報取得");
         Log.d("デバッグ", "latitude : " + location.getLatitude() + ", longitude : " + location.getLongitude());
 
         //カメラを現在地に移動
         position = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        mMap.setLocationSource(new LocationSource() {
+            @Override
+            public void activate(OnLocationChangedListener onLocationChangedListener) {
+                onLocationChangedListener.onLocationChanged(location);
+            }
+            @Override
+            public void deactivate() {
+            }
+        });
 
         //現在地からの距離100m以内のマーカーを切り替える（メートルで計算・WGS84楕円体）
         float[] results_markerInitialization = new float[1];
