@@ -1,12 +1,16 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
@@ -58,6 +62,17 @@ public class MyStampBookActivity extends AppCompatActivity {
         userName = (TextView) findViewById(R.id.UserName);
         notHaveStamp = (TextView) findViewById(R.id.NotHaveStamp);  //所持スタンプ数が0の場合に表示されるテキスト
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                ListView listView = (ListView) parent;
+                StampBean stampBean = (StampBean) listView.getItemAtPosition(position);
+                Intent intent = new Intent(MyStampBookActivity.this, StampDetailActivity.class);
+                intent.putExtra("stampId", String.valueOf(stampBean.getStampId()));
+                startActivity(intent);
+            }
+        });
     }
 
     //データベース通信処理
@@ -69,11 +84,10 @@ public class MyStampBookActivity extends AppCompatActivity {
             return;
         }
         try {
+            Log.d("デバッグ:MyStampBook", "データベースとの通信に成功");
             String[] responseData = event.getJson().split(System.getProperty("line.separator"));
-
             userName.setText(responseData[0]);
             myStampBook = new ObjectMapper().readValue(responseData[1], StampData[].class);
-
 
             if(myStampBook.length < 1){
                 System.out.println("デバッグ:MyStampBook:所持しているスタンプはありません。");
@@ -81,6 +95,7 @@ public class MyStampBookActivity extends AppCompatActivity {
             }else{
                 for(StampData stampData : myStampBook){
                     stampBean = new StampBean();
+                    stampBean.setStampId(stampData.getStampId());
                     stampBean.setPictPath(stampData.getPicture());
                     stampBean.setStampTitle(stampData.getStampName());
                     stampBean.setStampDate(stampData.getStampDate());

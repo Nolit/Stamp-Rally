@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/oosakajo"
+                android:src="@mipmap/default_image_view"
                 android:id="@+id/stampThumbnail"/>
 
         </LinearLayout>
