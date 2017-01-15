@@ -8,12 +8,10 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyStampBookModel;
-import com.om1.stamp_rally.model.adapter.MyStampListAdapter;
+import com.om1.stamp_rally.model.adapter.MyStampBookListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 
@@ -23,13 +21,10 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import database.entities.StampRallys;
-import database.entities.Stamps;
 
 public class MyStampBookActivity extends AppCompatActivity {
     SharedPreferences mainPref;
@@ -40,7 +35,7 @@ public class MyStampBookActivity extends AppCompatActivity {
     ListView lv;
     StampBean stampBean = new StampBean();
     ArrayList<StampBean> myStampList = new ArrayList<>();
-    MyStampListAdapter adapter;
+    MyStampBookListAdapter adapter;
 
     private TextView userName;
     private TextView notHaveStamp;
@@ -82,29 +77,19 @@ public class MyStampBookActivity extends AppCompatActivity {
             List<Map<String, Object>> haveStampList = (List<Map<String, Object>>) myStampBook.get("Stamps");
 
             if(haveStampList.size() < 1){
-                System.out.println("俺はもうダメだ");
-            }else{
-//                System.out.println("水薮助けて_______________"+haveStampList.get(0).toString());
-                Log.d("デバッグ", haveStampList.toString());
-
-                Map<String, Object> stampData = haveStampList.get(0);   //ここでエラー起きてるみたい
-                Log.d("デバッグ", (String) stampData.get("stampName"));
-            }
-
-
-            if(haveStampList.size() < 1){
                 System.out.println("デバッグ:MyStampBook:所持しているスタンプはありません。");
                 notHaveStamp.setText("スタンプを所持していません");
             }else{
                 for(Map<String, Object> stampData : haveStampList){
+                    stampBean = new StampBean();
                     stampBean.setPictPath(Base64.decode((String) stampData.get("picture"),Base64.DEFAULT));
                     stampBean.setStampTitle((String) stampData.get("stampName"));
                     stampBean.setStampDate((String) stampData.get("stampDate"));
-                    stampBean.setStampRallyName((String) stampData.get("stampRallyName"));
                     myStampList.add(stampBean);
                 }
-                adapter = new MyStampListAdapter(this, 0, myStampList);
+                adapter = new MyStampBookListAdapter(this, 0, myStampList);
                 adapter.notifyDataSetChanged();
+                lv.setAdapter(adapter);
             }
 
         }catch(IOException e){
