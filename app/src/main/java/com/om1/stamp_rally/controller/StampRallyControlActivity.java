@@ -78,7 +78,6 @@ public class StampRallyControlActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        stampRallyDeleteButton = (Button) findViewById(R.id.deleteButton);
         //ここまで追加分（大脇）
     }
 
@@ -95,8 +94,8 @@ public class StampRallyControlActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListView listView = (ListView) parent;
-                Stamps stamp = (Stamps) listView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), stamp.getStampName() + " clicked",
+                StampRallys stampRally = (StampRallys) listView.getItemAtPosition(position);
+                Toast.makeText(getApplicationContext(), stampRally.getStamprallyName() + " clicked",
                         Toast.LENGTH_LONG).show();
 
                 final View layout = StampRallyControlActivity.this.getLayoutInflater().inflate(R.layout.stamp_info,
@@ -118,7 +117,7 @@ public class StampRallyControlActivity extends AppCompatActivity {
     }
 
     private StampRallys convertMapToStampRally(Map<String, Object> stampRallyMap){
-        Integer id = (Integer) stampRallyMap.get("stampRallyId");
+        Integer id = (Integer) stampRallyMap.get("id");
         String name = (String) stampRallyMap.get("name");
         String summary = (String) stampRallyMap.get("summary");
 

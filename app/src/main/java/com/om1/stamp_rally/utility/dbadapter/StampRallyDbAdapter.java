@@ -98,4 +98,10 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
 
         return stampRally;
     }
+
+    public void deleteById(int id){
+        open();
+        db.delete(tableName, ID + "=" + id, null);
+        close();
+    }
 }
