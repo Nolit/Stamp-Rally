@@ -19,6 +19,7 @@ public class StampDbAdapter extends BaseDbAdapter {
     static final String ID = "id";
     static final String STAMP_ID = "stampId";
     static final String STAMP_RALLY_ID = "stampRallyId";
+    static final String STAMP_RALLY_NAME = "stampRallyName";
     static final String TITLE = "title";
     static final String MEMO = "memo";
     static final String PICTURE = "picture";
@@ -33,6 +34,7 @@ public class StampDbAdapter extends BaseDbAdapter {
                 + ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + STAMP_ID + " INTEGER,"
                 + STAMP_RALLY_ID + " INTEGER,"
+                + STAMP_RALLY_NAME + " TEXT,"
                 + TITLE + " TEXT NOT NULL,"
                 + MEMO + " TEXT,"
                 + PICTURE + " BLOB NOT NULL,"
@@ -41,11 +43,12 @@ public class StampDbAdapter extends BaseDbAdapter {
                 + CREATE_TIME + " INTEGER NOT NULL);";
     }
 
-    public void createStamp(Integer stampId, Integer stampRallyId, String title, String memo, byte[] picture, Double latitude, Double longitude){
+    public void createStamp(Integer stampId, Integer stampRallyId, String stampRallyName, String title, String memo, byte[] picture, Double latitude, Double longitude){
         open();
         ContentValues values = new ContentValues();
         values.put(STAMP_ID, stampId);
         values.put(STAMP_RALLY_ID, stampRallyId);
+        values.put(STAMP_RALLY_NAME, stampRallyName);
         values.put(TITLE, title);
         values.put(MEMO, memo);
         values.put(PICTURE, picture);
@@ -83,6 +86,7 @@ public class StampDbAdapter extends BaseDbAdapter {
                 stamp.put(ID, c.getInt(c.getColumnIndex(ID)));
                 stamp.put(STAMP_ID, c.getInt(c.getColumnIndex(STAMP_ID)));
                 stamp.put(STAMP_RALLY_ID, c.getInt(c.getColumnIndex(STAMP_RALLY_ID)));
+                stamp.put(STAMP_RALLY_NAME, c.getString(c.getColumnIndex(STAMP_RALLY_NAME)));
                 stamp.put(TITLE, c.getString(c.getColumnIndex(TITLE)));
                 stamp.put(MEMO, c.getString(c.getColumnIndex(MEMO)));
                 stamp.put(PICTURE, c.getBlob(c.getColumnIndex(PICTURE)));

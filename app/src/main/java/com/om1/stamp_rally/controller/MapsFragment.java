@@ -96,7 +96,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     //intent
     String stampTitle = null;
     Integer selectedStampId = null;
-    Integer tryingStampRallyId = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -274,7 +273,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                         stampTitle = marker.getTitle();
                         String markerPosition = marker.getId().replaceAll("m", "");
                         selectedStampId = stampList.get(Integer.valueOf(markerPosition)).getStampId();
-                        tryingStampRallyId = stampRally.getStamprallyId();
                     }
                 }
                 return false;
@@ -317,7 +315,8 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         Intent intent = new Intent(getContext(), TakeStampActivity.class);
         intent.putExtra("stampRegisterFlag", false);
         intent.putExtra("stampId", selectedStampId);
-        intent.putExtra("stampRallyId", tryingStampRallyId);
+        intent.putExtra("stampRallyId", stampRally.getStamprallyId());
+        intent.putExtra("stampRallyName", stampRally.getStamprallyName());
         startActivity(intent);
     }
 

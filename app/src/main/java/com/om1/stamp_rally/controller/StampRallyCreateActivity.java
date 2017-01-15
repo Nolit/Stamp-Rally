@@ -24,7 +24,6 @@ import com.om1.stamp_rally.model.adapter.StampEditListAdapter;
 import com.om1.stamp_rally.model.event.StampUploadEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
-import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -137,16 +136,14 @@ public class StampRallyCreateActivity extends AppCompatActivity {
         Integer id = (Integer) stampMap.get("stampId");
         String title = (String) stampMap.get("title");
         String memo = (String) stampMap.get("memo");
+        String stampRallyName = (String) stampMap.get("stampRallyName");
 
         byte[] picture = (byte[]) stampMap.get("picture");
 
         Integer stampRallyId = (Integer)stampMap.get("stampRallyId");
         StampRallys stampRally = new StampRallys();
         stampRally.setStamprallyId(stampRallyId);
-        if(stampRallyId != 0){
-            String name = (String)new StampRallyDbAdapter(this).getById(stampRallyId).get("name");
-            stampRally.setStamprallyName(name);
-        }
+        stampRally.setStamprallyName(stampRallyName);
 
         StampPads pad = new StampPads();
         pad.setLatitude((Double)stampMap.get("latitude"));
