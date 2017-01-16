@@ -27,6 +27,7 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
                 + ID + " INTEGER PRIMARY KEY,"
                 + NAME + " TEXT NOT NULL,"
                 + SUMMARY + " TEXT);";
+        nonExistsIfCreate();
     }
 
     public List<Map<String, Object>> getAllAsList(){
@@ -114,6 +115,18 @@ public class StampRallyDbAdapter extends BaseDbAdapter {
         Integer id = (Integer) data.get(ID);
         db.update(tableName, cv, "id = " + id, null);
 
+        close();
+    }
+
+    public void nonExistsIfCreate(){
+        open();
+        String query = "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='" + tableName + "';";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int count = Integer.valueOf(c.getString(0));
+        if(count == 0){
+            db.execSQL(dll);
+        }
         close();
     }
 }

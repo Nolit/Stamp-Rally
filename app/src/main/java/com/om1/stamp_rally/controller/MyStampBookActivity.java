@@ -15,6 +15,7 @@ import com.om1.stamp_rally.model.MyStampBookModel;
 import com.om1.stamp_rally.model.adapter.MyStampBookListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -101,5 +102,4 @@ public class MyStampBookActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }

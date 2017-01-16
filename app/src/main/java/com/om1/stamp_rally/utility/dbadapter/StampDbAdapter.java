@@ -41,6 +41,7 @@ public class StampDbAdapter extends BaseDbAdapter {
                 + LATITUDE + " REAL,"
                 + LONGITUDE + " REAL,"
                 + CREATE_TIME + " INTEGER NOT NULL);";
+        nonExistsIfCreate();
     }
 
     public void createStamp(Integer stampId, Integer stampRallyId, String stampRallyName, String title, String memo, byte[] picture, Double latitude, Double longitude){
@@ -130,6 +131,18 @@ public class StampDbAdapter extends BaseDbAdapter {
             }while(c.moveToNext());
         }
         c.close();
+        close();
+    }
+
+    public void nonExistsIfCreate(){
+        open();
+        String query = "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='" + tableName + "';";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int count = Integer.valueOf(c.getString(0));
+        if(count == 0){
+            db.execSQL(dll);
+        }
         close();
     }
 }

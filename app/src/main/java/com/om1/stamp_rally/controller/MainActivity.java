@@ -168,7 +168,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         });
         //テスト用にmainPrefいじる
         SharedPreferences.Editor mainEdit = mainPref.edit();
-        mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
+        mainEdit.remove("loginUserId");
+//        mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
         mainEdit.putString("playingStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
         mainEdit.commit();                              //ログアウト時には両方Removeでok
         //テスト用ここまで
@@ -188,6 +189,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
 
         //ログイン時とゲスト時のtabHost
+//        if (false) {
         if (useId != null) {
             initLoginTabs();
         } else {
