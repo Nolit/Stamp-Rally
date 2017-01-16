@@ -34,4 +34,5 @@
 
     <!-- Navigation Drawer -->
     <string name="action_settings">Settings</string>
+    <string name="title_activity_specify_stamp_rally_structure">SpecifyStampRallyStructure</string>
 </resources>

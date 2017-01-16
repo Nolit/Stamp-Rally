@@ -64,7 +64,6 @@ public class MyStampBookActivity extends AppCompatActivity {
 
     }
 
-    //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fetchedJson(FetchJsonEvent event) {
         if (!event.isSuccess()) {
@@ -73,38 +72,26 @@ public class MyStampBookActivity extends AppCompatActivity {
             return;
         }
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            myStampBook = mapper.readValue(event.getJson(), Map.class);
             Log.d("デバッグ:MyStampBook", "データベースとの通信に成功");
+            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
+            userName.setText(responseData[0]);
+            myStampBook = new ObjectMapper().readValue(responseData[1], StampData[].class);
 
-            userName.setText((String) myStampBook.get("userName"));
-
-            List<Map<String, Object>> haveStampList = (List<Map<String, Object>>) myStampBook.get("Stamps");
-
-            if(haveStampList.size() < 1){
-                System.out.println("俺はもうダメだ");
-            }else{
-//                System.out.println("水薮助けて_______________"+haveStampList.get(0).toString());
-                Log.d("デバッグ", haveStampList.toString());
-
-                Map<String, Object> stampData = haveStampList.get(0);   //ここでエラー起きてるみたい
-                Log.d("デバッグ", (String) stampData.get("stampName"));
-            }
-
-
-            if(haveStampList.size() < 1){
+            if(myStampBook.length < 1){
                 System.out.println("デバッグ:MyStampBook:所持しているスタンプはありません。");
                 notHaveStamp.setText("スタンプを所持していません");
             }else{
-                for(Map<String, Object> stampData : haveStampList){
-                    stampBean.setPictPath(Base64.decode((String) stampData.get("picture"),Base64.DEFAULT));
-                    stampBean.setStampTitle((String) stampData.get("stampName"));
-                    stampBean.setStampDate((String) stampData.get("stampDate"));
-                    stampBean.setStampRallyName((String) stampData.get("stampRallyName"));
+                for(StampData stampData : myStampBook){
+                    stampBean = new StampBean();
+                    stampBean.setStampId(stampData.getStampId());
+                    stampBean.setPictPath(stampData.getPicture());
+                    stampBean.setStampTitle(stampData.getStampName());
+                    stampBean.setStampDate(stampData.getStampDate());
                     myStampList.add(stampBean);
                 }
-                adapter = new MyStampListAdapter(this, 0, myStampList);
+                adapter = new MyStampBookListAdapter(this, 0, myStampList);
                 adapter.notifyDataSetChanged();
+                lv.setAdapter(adapter);
             }
 
         }catch(IOException e){

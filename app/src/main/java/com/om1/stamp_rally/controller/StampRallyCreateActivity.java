@@ -1,5 +1,6 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
@@ -40,7 +41,9 @@ public class StampRallyCreateActivity extends AppCompatActivity {
 
     @OnClick(R.id.addStampButton)
     public void addStamp(){
-        finish();
+        Intent i = new Intent(StampRallyCreateActivity.this, SpecifyStampRallyStructure.class);
+        i.putExtra("stampRallyId", getIntent().getIntExtra("stampRallyId", -1));
+        startActivity(i);
     }
 
     @OnClick(R.id.backButton)

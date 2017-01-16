@@ -18,9 +18,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_stampshare_theme"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:largeHeap="true">
+        android:theme="@style/AppTheme.NoActionBar">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDl2NuhWnB6BJwfkRZX-CU9amjAcM6wQ7g" />
@@ -32,6 +32,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -88,11 +89,11 @@
         <activity
             android:name=".controller.TakeStampActivity"
             android:label="@string/title_activity_camera"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.StampPreviewActivity"
             android:label="@string/title_activity_stamp_preview"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.StampRallyControlActivity"
             android:label="@string/title_activity_stamprally_create"
@@ -104,10 +105,14 @@
         <activity
             android:name=".controller.StampEditListActivity"
             android:label="StampEditListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.ClearActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.SpecifyStampRallyStructure"
+            android:label="@string/title_activity_specify_stamp_rally_structure"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
