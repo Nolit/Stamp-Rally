@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyDetailModel;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.StampRallyDetailEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,6 +63,9 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         }else{
             /* mainPrefかIntentの値渡しが失敗してる時に分岐 */
             Log.d("デバッグ","fetchJsonの引数の値がnullです。");
+            System.out.println("loginUserId:" + loginUserId);
+            System.out.println("referenceUserId:" + referenceUserId);
+            System.out.println("stampRallyId:" + stampRallyId + "_________________");
         }
 
         //ビュー・レイアウト
@@ -75,7 +79,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
 
     //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(StampRallyDetailEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:StampRallyDetail","データベースとの通信に失敗");
             return;
