@@ -143,7 +143,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
-                intent.putExtra("referenceUserId", "5");
+                intent.putExtra("referenceUserId", "20");
                 intent.putExtra("stampRallyId", "5");
                 startActivity(intent);
             }

@@ -67,7 +67,7 @@
                             android:background="@null"
                             android:scaleType="fitXY"
                             android:adjustViewBounds="true"
-                            android:id="@+id/EvaluationIcon"
+                            android:id="@+id/EvaluationButton"
                             android:src="@mipmap/ic_evaluation_star_off"/>
                     </LinearLayout>
                 </LinearLayout>

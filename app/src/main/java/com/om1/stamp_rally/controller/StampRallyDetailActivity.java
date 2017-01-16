@@ -25,6 +25,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
+import data.StampData;
+import data.StampRallyDetailPageData;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
@@ -35,7 +37,6 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     private String stampRallyId;
 
     private final EventBus eventBus = EventBus.getDefault();
-    private StampRallys stampRally;
 
     private TextView creatorUserName;           //スタンプラリー作成名
     private TextView stampRallyTitle;           //参照しているスタンプラリー名
@@ -43,6 +44,8 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     private TextView stampTitle;                //スタンプ名
     private TextView referenceUserName;        //表示するスタンプのアルバム所有者
     private TextView stampRallyDescription;    //スタンプラリーの概要
+    private TextView stampRallyReviewAveragePoint;  //評価の平均値
+    private ImageButton stampEvaluationButton;  //評価ボタン
     private Button playButton;                  //遊ぶボタン
 
     @Override
@@ -73,6 +76,8 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         stampRallyTitle = (TextView) findViewById(R.id.DetailStampTitle);
         referenceUserName = (TextView) findViewById(R.id.DetailReferenceName);
         stampRallyDescription = (TextView) findViewById(R.id.DescriptionText);
+        stampRallyReviewAveragePoint = (TextView) findViewById(R.id.ReviewPoint);
+        stampEvaluationButton = (ImageButton) findViewById(R.id.EvaluationButton);
         playButton = (Button) findViewById(R.id.PlayButton);
 
     }
@@ -85,46 +90,42 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             return;
         }
         try {
-            //Jsonをオブジェクトに変換
-            stampRally = new ObjectMapper().readValue(event.getJson(), StampRallys.class);
             Log.d("デバッグ:StampRallyDetail","データベースとの通信に成功");
-            for(Stamps stamps:stampRally.getStampList()){
-                System.out.println("デバッグ:詳細ページ:" + stamps.getStampName());
-            }
+            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
+            StampRallyDetailPageData pageData = new ObjectMapper().readValue(responseData[0], StampRallyDetailPageData.class);
+            StampData[] stampData = new ObjectMapper().readValue(responseData[1], StampData[].class);
 
-            //スタンプラリー作成者
-            creatorUserName.setText(stampRally.getUsersList().get(0).getUserName());
+            //ページ全体 データ設定
+            System.out.println("作成者:"+ pageData.getStampRallyCreatorsUserName());
+            System.out.println("スタンプラリータイトル:"+ pageData.getStampRallyTitle());
+            System.out.println("参照ユーザー名:"+ pageData.getReferenceUserName());
+            System.out.println("コメント:"+ pageData.getStampRallyComment());
+            creatorUserName.setText(pageData.getReferenceUserName());
+            stampRallyTitle.setText(pageData.getStampRallyTitle());
+            referenceUserName.setText(pageData.getReferenceUserName());
+            stampRallyDescription.setText(pageData.getStampRallyComment());
+//            stampRallyReviewAveragePoint.setText(pageData.getStampRallyReviewPoint());
 
-            //スタンプラリーの評価値
-
-            //スタンプラリー評価ボタン
-
-            //スタンプラリー名
-            stampRallyTitle.setText(stampRally.getStamprallyName());
-
-            //サムネイルを横スクロールで表示
+            //スタンプサムネイルを一覧で横スクロール表示
             LinearLayout layout = (LinearLayout) findViewById(R.id.DetailLinearLayoutAddThumbnail);
-            for (Stamps stamps:stampRally.getStampList()) {
+            for (StampData index:stampData) {
                 View view = getLayoutInflater().inflate(R.layout.list_stmaprally_detail_thumbnail, null);
                 layout.addView(view);
 
                 //スタンプ画像
                 stampThumbnail = (ImageButton) view.findViewById(R.id.stampThumbnail);
-                Bitmap picture = BitmapFactory.decodeByteArray(stamps.getPicture(), 0, stamps.getPicture().length);
+                Bitmap picture = BitmapFactory.decodeByteArray(index.getPicture(), 0, index.getPicture().length);
                 stampThumbnail.setImageBitmap(picture);
-
                 //スタンプ名
                 stampTitle = (TextView) view.findViewById(R.id.stampTitle);
-                stampTitle.setText(stamps.getStampName());
+                stampTitle.setText(index.getStampName());
             }
 
-            //参照者の名前
-//            referenceUserName.setText();
 
-            //概要を設定
-            stampRallyDescription.setText(stampRally.getStamrallyComment());
 
-            //遊ぶボタンを設定
+            //評価ボタンの設定
+
+            //遊ぶボタンの設定設定
             playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
