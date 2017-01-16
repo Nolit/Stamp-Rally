@@ -3,6 +3,7 @@ package com.om1.stamp_rally.controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,17 +25,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ResultSearchActivity extends AppCompatActivity {
 
     ListView lv;
     StampRallyBean stampRallyBean;
-    ArrayList<StampRallyBean> stampRallyList = new ArrayList<StampRallyBean>();
+    ArrayList<StampRallyBean> stampRallyList = new ArrayList<>();
     ResultSearchListAdapter adapter;
 
     private final EventBus eventBus = EventBus.getDefault();
-    private List<LinkedHashMap<String, Object>> stampRallys;
 
     private TextView searchKeyword;
     private TextView noHitResult;       //検索結果が0件の場合表示されるテキストビュー
@@ -52,12 +53,6 @@ public class ResultSearchActivity extends AppCompatActivity {
         searchKeyword.setText(getIntent().getStringExtra("searchKeyword"));
         noHitResult = (TextView) findViewById(R.id.NoHitResult);
 
-        stampRallyBean = new StampRallyBean();
-        stampRallyList = new ArrayList<StampRallyBean>();
-        adapter = new ResultSearchListAdapter(getApplication());
-        adapter.setStampRallyList(stampRallyList);
-        lv.setAdapter(adapter);
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -65,6 +60,7 @@ public class ResultSearchActivity extends AppCompatActivity {
                 ListView listView = (ListView) parent;
                 StampRallyBean stampRallyBean = (StampRallyBean) listView.getItemAtPosition(position);
                 Intent intent = new Intent(ResultSearchActivity.this, StampRallyDetailActivity.class);
+                intent.putExtra("referenceUserId", String.valueOf(stampRallyBean.getCreatorUserId()));
                 intent.putExtra("stampRallyId", String.valueOf(stampRallyBean.getStampRallyId()));
                 startActivity(intent);
             }
@@ -79,29 +75,33 @@ public class ResultSearchActivity extends AppCompatActivity {
             noHitResult.setText("データベース接続に失敗しました");
             return;
         }
-//        try {
-//            Log.d("デバッグ:ResultSearch", "データベースとの通信に成功");
-//            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
-//
-//            if(stampRallys.size() < 1){
-//                noHitResult.setText("検索結果がありませんでした。");
-//            }else{
-//
-//                /* stampRallyBeanを作成していく処理を追加する */
-////                for(){
-////                    stampRallyBean = new StampRallyBean();
-////                    stampRallyBean.setStampRallyId();
-////                    stampRallyBean.setPictPath();
-////                    stampRallyBean.setStampRallyTitle();
-////                    stampRallyBean.setCreatorName();
-////                }
-//
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//        }catch(IOException e){
-//            e.printStackTrace();
-//        }
+        try {
+            Log.d("デバッグ:ResultSearch", "データベースとの通信に成功");
+            ArrayList<Map<String,Object>> searchData = new ObjectMapper().readValue(event.getJson(), ArrayList.class);
+
+            if(searchData.size() < 1){
+                noHitResult.setText("検索結果がありませんでした。");
+            }else{
+                stampRallyList = new ArrayList<StampRallyBean>();
+                adapter = new ResultSearchListAdapter(this, 0, stampRallyList);
+
+                for( Map<String,Object> index : searchData ){
+                    stampRallyBean = new StampRallyBean();
+                    stampRallyBean.setStampRallyId( (Integer) index.get("stampRallyId"));
+//                    stampRallyBean.setPictPath( Base64.decode((byte[]) index.get("stampRallyThumbnail"), Base64.DEFAULT) );   //こことResultSearchListAdapter
+                    stampRallyBean.setStampRallyTitle( (String) index.get("stampRallyTitle") );
+                    stampRallyBean.setCreatorUserName( (String) index.get("stampRallyCreatorUserName"));
+                    stampRallyBean.setCreatorUserId( (Integer) index.get("stampRallyCreatorUserId"));
+                    stampRallyList.add(stampRallyBean);
+                }
+                adapter.setStampRallyList(stampRallyList);
+                adapter.notifyDataSetChanged();
+                lv.setAdapter(adapter);
+            }
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
 }
