@@ -5,33 +5,41 @@ import android.graphics.BitmapFactory;
 
 public class StampRallyBean {
     long id;
+    private Integer stampRallyId;
     private String stampRallyTitle;
-    private String CreatorName;
+    private String creatorUserName;
+    private Integer creatorUserId;
     private byte[] pictPath;
 
     public StampRallyBean(){}
 
-    public StampRallyBean(byte[] pictPath, String creatorName, String stampRallyId) {
+    public StampRallyBean(byte[] pictPath, String creatorUserName, String stampRallyId) {
         this.pictPath = pictPath;
-        CreatorName = creatorName;
+        creatorUserName = creatorUserName;
         this.stampRallyTitle = stampRallyId;
     }
+
+    public Integer getStampRallyId() { return stampRallyId; }
+
+    public void setStampRallyId(Integer stampRallyId) { this.stampRallyId = stampRallyId; }
 
     public String getStampRallyTitle() {
         return stampRallyTitle;
     }
 
-    public void setStampRallyTitle(String stampRallyTitle) {
-        this.stampRallyTitle = stampRallyTitle;
+    public void setStampRallyTitle(String stampRallyTitle) { this.stampRallyTitle = stampRallyTitle; }
+
+    public String getCreatorUserName() {
+        return creatorUserName;
     }
 
-    public String getCreatorName() {
-        return CreatorName;
+    public void setCreatorUserName(String creatorUserName) {
+        this.creatorUserName = creatorUserName;
     }
 
-    public void setCreatorName(String creatorName) {
-        CreatorName = creatorName;
-    }
+    public Integer getCreatorUserId() { return creatorUserId; }
+
+    public void setCreatorUserId(Integer creatorUserId) { this.creatorUserId = creatorUserId; }
 
     public byte[] getPictPath() {
         return pictPath;

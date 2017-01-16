@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyDetailModel;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.StampRallyDetailEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,18 +54,18 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         //データベース通信
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
         loginUserId = mainPref.getString("loginUserId", null);             //ログイン中のUserId (Preferencesを使用)
-//        referenceUserId = getIntent().getStringExtra("referenceUserId");   //表示するスタンプのUserId (getIntentを使用)
-//        stampRallyId = getIntent().getStringExtra("StampRallyId");         //表示するスタンプラリーのId (getIntentを使用)
-        referenceUserId = "20";  //テスト用に値を指定
-        stampRallyId = "4";     //テスト用に値を指定
+        referenceUserId = getIntent().getStringExtra("referenceUserId");   //表示するスタンプのUserId (getIntentを使用)
+        stampRallyId = getIntent().getStringExtra("stampRallyId");         //表示するスタンプラリーのId (getIntentを使用)
 
         StampRallyDetailModel stampRallyDetailModel = StampRallyDetailModel.getInstance();
-
         if(loginUserId != null && referenceUserId != null && stampRallyId != null){
             stampRallyDetailModel.fetchJson(loginUserId, referenceUserId, stampRallyId);    //通信開始
         }else{
             /* mainPrefかIntentの値渡しが失敗してる時に分岐 */
             Log.d("デバッグ","fetchJsonの引数の値がnullです。");
+            System.out.println("loginUserId:" + loginUserId);
+            System.out.println("referenceUserId:" + referenceUserId);
+            System.out.println("stampRallyId:" + stampRallyId + "_________________");
         }
 
         //ビュー・レイアウト
@@ -78,7 +79,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
 
     //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(StampRallyDetailEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:StampRallyDetail","データベースとの通信に失敗");
             return;
@@ -116,6 +117,20 @@ public class StampRallyDetailActivity extends AppCompatActivity {
                 stampTitle = (TextView) view.findViewById(R.id.stampTitle);
                 stampTitle.setText(stamps.getStampName());
             }
+
+            //参照者の名前
+//            referenceUserName.setText();
+
+            //概要を設定
+            stampRallyDescription.setText(stampRally.getStamrallyComment());
+
+            //遊ぶボタンを設定
+            playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(StampRallyDetailActivity.this.getApplication(), "スタンプラリーのマーカーをマップにセットしました", Toast.LENGTH_LONG).show();
+                }
+            });
 
         } catch (IOException e) {
             e.printStackTrace();

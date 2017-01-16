@@ -1,19 +1,18 @@
 package com.om1.stamp_rally.controller;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyStampBookModel;
-import com.om1.stamp_rally.model.adapter.MyStampListAdapter;
+import com.om1.stamp_rally.model.adapter.MyStampBookListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 
@@ -23,24 +22,17 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
-import database.entities.StampRallys;
-import database.entities.Stamps;
+import data.StampData;
 
 public class MyStampBookActivity extends AppCompatActivity {
-    SharedPreferences mainPref;
     private final EventBus eventBus = EventBus.getDefault();
-    private Map<String, Object> myStampBook;
-    private StampRallys stampRally;
+    private StampData[] myStampBook;
 
     ListView lv;
     StampBean stampBean = new StampBean();
     ArrayList<StampBean> myStampList = new ArrayList<>();
-    MyStampListAdapter adapter;
+    MyStampBookListAdapter adapter;
 
     private TextView userName;
     private TextView notHaveStamp;
@@ -62,6 +54,17 @@ public class MyStampBookActivity extends AppCompatActivity {
         userName = (TextView) findViewById(R.id.UserName);
         notHaveStamp = (TextView) findViewById(R.id.NotHaveStamp);  //所持スタンプ数が0の場合に表示されるテキスト
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                ListView listView = (ListView) parent;
+                StampBean stampBean = (StampBean) listView.getItemAtPosition(position);
+                Intent intent = new Intent(MyStampBookActivity.this, StampDetailActivity.class);
+                intent.putExtra("stampId", String.valueOf(stampBean.getStampId()));
+                startActivity(intent);
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

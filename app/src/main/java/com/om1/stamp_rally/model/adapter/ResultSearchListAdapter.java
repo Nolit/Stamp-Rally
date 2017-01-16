@@ -17,14 +17,13 @@ import java.util.ArrayList;
 
 import static com.om1.stamp_rally.R.id.StampRally;
 
-
 public class ResultSearchListAdapter extends BaseAdapter {
 
     Context context;
     LayoutInflater layoutInflater = null;
     ArrayList<StampRallyBean> stampRallyList;
 
-    public ResultSearchListAdapter(Context context) {
+    public ResultSearchListAdapter(Context context, int i, ArrayList<StampRallyBean> stampRallyList) {
         this.context = context;
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -52,14 +51,10 @@ public class ResultSearchListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = layoutInflater.inflate(R.layout.list_row_stamprally,parent,false);
 
-        ((ImageView)convertView.findViewById(R.id.stampThumbnail))
-                .setImageBitmap(BitmapFactory.decodeByteArray(
-                        stampRallyList.get(position).getPictPath(),
-                        0,
-                        stampRallyList.get(position).getPictPath().length));
+//        ((ImageView)convertView.findViewById(R.id.stampThumbnail))
+//                .setImageBitmap(stampRallyList.get(position).getPictureBitmap());     //こことResultSearchActivity
         ((TextView)convertView.findViewById(R.id.stampRallyTitle)).setText(stampRallyList.get(position).getStampRallyTitle());
-        ((TextView)convertView.findViewById(R.id.CreatorName)).setText(stampRallyList.get(position).getCreatorName());
-
+        ((TextView)convertView.findViewById(R.id.CreatorName)).setText(stampRallyList.get(position).getCreatorUserName());
 
         return convertView;
     }
