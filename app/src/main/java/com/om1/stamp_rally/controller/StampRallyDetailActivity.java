@@ -122,14 +122,45 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             }
 
 
-
             //評価ボタンの設定
 
-            //遊ぶボタンの設定設定
+
+            //遊ぶボタンの設定
+            String playButtonStatus = "遊ぶ";
+            if(mainPref.getString("playingStampRally" ,null) != null) {
+                //プレイ中のスタンプラリーを閲覧
+                if (stampRallyId.equals(mainPref.getString("playingStampRally", null))) {
+                    playButtonStatus = "プレイ中";
+                    playButton.setEnabled(false);
+                }else{
+                    //現在プレイ中ではないスタンプラリーを閲覧
+                    if(pageData.getStampRallyCompleteDate() != null){
+                        //クリア済みのスタンプラリーを閲覧
+                        playButtonStatus = "コンプリート済み";
+                        playButton.setEnabled(false);
+                    }else if(pageData.getStampRallyChallengeDate() != null && pageData.getStampRallyCompleteDate() == null){
+                        //挑戦したことがあるスタンプラリーを閲覧
+                        playButtonStatus = "再開";
+                        playButton.setEnabled(true);
+                    }else{
+                        //挑戦したことのないスタンプラリーを閲覧
+                        playButtonStatus = "遊ぶ";
+                        playButton.setEnabled(true);
+                    }
+                }
+            }
+            playButton.setText(playButtonStatus);
+
             playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(StampRallyDetailActivity.this.getApplication(), "スタンプラリーのマーカーをマップにセットしました", Toast.LENGTH_LONG).show();
+                    playButton.setText("プレイ中");
+                    playButton.setEnabled(false);
+
+                    SharedPreferences.Editor mainEdit = mainPref.edit();
+                    mainEdit.putString("playingStampRally", stampRallyId);
+                    mainEdit.commit();
+                    Toast.makeText(StampRallyDetailActivity.this.getApplication(), "スタンプラリーをマップにセットしました", Toast.LENGTH_SHORT).show();
                 }
             });
 

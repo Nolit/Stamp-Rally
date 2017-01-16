@@ -64,7 +64,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     Button intentButtonMyStampList;         //マイスタンプ帳ページ
     Button intentButtonStampDetail;         //スタンプ詳細ページ
 
-    SharedPreferences mainPref;
+    SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
     Bundle savedInstanceState;
     private final EventBus eventBus = EventBus.getDefault();
 
@@ -168,9 +168,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         });
         //テスト用にmainPrefいじる
         SharedPreferences.Editor mainEdit = mainPref.edit();
-        mainEdit.putString("loginUserId", "20");        //端末でログインしてるユーザーのIDを保存
-        mainEdit.putString("playingStampRally", "4");      //ログインユーザーのプレイ中のスタンプラリーIDを保存
-        mainEdit.commit();                              //ログアウト時には両方Removeでok
+        mainEdit.putString("loginUserId", "21");        //端末でログインしてるユーザーのIDを保存
         //テスト用ここまで
 
 //        String useId = mainPref.getString("mailAddress", null);
