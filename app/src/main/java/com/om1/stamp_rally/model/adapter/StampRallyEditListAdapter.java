@@ -20,6 +20,7 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.controller.MainActivity;
 import com.om1.stamp_rally.controller.StampPreviewActivity;
 import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
+import com.om1.stamp_rally.utility.dbadapter.StructureStampDbAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,7 @@ public class StampRallyEditListAdapter extends ArrayAdapter<StampRallys> {
                 .setPositiveButton("はい", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         new StampRallyDbAdapter(getContext()).deleteById(stampRallyId);
+                        new StructureStampDbAdapter(getContext()).deleteBySrampRallyId(stampRallyId);
                         stampRallyList.remove(position);
                         notifyDataSetChanged();
                     }

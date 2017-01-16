@@ -80,6 +80,12 @@ public class StructureStampDbAdapter  extends BaseDbAdapter {
         close();
     }
 
+    public void deleteBySrampRallyId(int id){
+        open();
+        db.delete(tableName, STAMP_RALLY_ID + "=" + id, null);
+        close();
+    }
+
     public void log(){
         open();
         Cursor c = getAll();
