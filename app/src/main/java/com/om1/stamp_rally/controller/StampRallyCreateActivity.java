@@ -25,27 +25,22 @@ public class StampRallyCreateActivity extends AppCompatActivity {
 
         editTitle = (EditText) findViewById(R.id.editStampRallyTitle);
         editComment = (EditText) findViewById(R.id.editStampRallyComment);
-        if(!isNewCreate()){
-            stampRallyData = new StampRallyDbAdapter(this).getById(getIntent().getIntExtra("stampRallyId", -1));
-            editTitle.setText((String) stampRallyData.get("name"));
-            editComment.setText((String) stampRallyData.get("summary"));
-        }
+        stampRallyData = new StampRallyDbAdapter(this).getById(getIntent().getIntExtra("stampRallyId", -1));
+        editTitle.setText((String) stampRallyData.get("name"));
+        editComment.setText((String) stampRallyData.get("summary"));
     }
 
     @OnClick(R.id.saveStampRallyButton)
     public void saveStampRally(){
-        if(isNewCreate()){
-            new StampRallyDbAdapter(this).createStampRally(editTitle.getText().toString(), editComment.getText().toString());
-        }else{
-            stampRallyData.put("name", editTitle.getText().toString());
-            stampRallyData.put("summary", editComment.getText().toString());
-            new StampRallyDbAdapter(this).update(stampRallyData);
-        }
+        stampRallyData.put("name", editTitle.getText().toString());
+        stampRallyData.put("summary", editComment.getText().toString());
+        new StampRallyDbAdapter(this).update(stampRallyData);
         finish();
     }
 
-    private boolean isNewCreate(){
-        return getIntent().getIntExtra("stampRallyId", -1) == -1;
+    @OnClick(R.id.addStampButton)
+    public void addStamp(){
+        finish();
     }
 
     @OnClick(R.id.backButton)

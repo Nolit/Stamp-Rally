@@ -1,5 +1,7 @@
 package com.om1.stamp_rally.controller;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
@@ -31,6 +35,9 @@ public class StampRallyControlActivity extends AppCompatActivity {
     private StampRallyEditListAdapter adapter;
     private List<Map<String, Object>> stampRallyMapList;
     private ListView listView;
+
+    EditText titleEdit;
+    EditText summaryEdit;
 
     //ここから追加分（大脇）
     Button stampRallyNewCreateButton;
@@ -51,16 +58,7 @@ public class StampRallyControlActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamprally_control);
-
-        //ここから追加分（大脇）
-        stampRallyNewCreateButton = (Button) findViewById(R.id.stampRallyNewCreateButton);
-        stampRallyNewCreateButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(StampRallyControlActivity.this, StampRallyCreateActivity.class);
-                startActivity(intent);
-            }
-        });
-        //ここまで追加分（大脇）
+        ButterKnife.inject(this);
 
         listView = (ListView)findViewById(R.id.stampRallyCreatingListView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,6 +101,46 @@ public class StampRallyControlActivity extends AppCompatActivity {
         stampRally.setStamrallyComment(summary);
 
         return stampRally;
+    }
+
+    @OnClick(R.id.stampRallyNewCreateButton)
+    public void createStampRally(){
+        final View layout = getLayoutInflater().inflate(R.layout.stamp_rally_info,
+                (ViewGroup)findViewById(R.id.stamp_rally_dialog_content));
+
+        initDialogViews(layout);
+        showCreateStampRallyDialog(layout);
+    }
+
+    private void initDialogViews(View layout){
+        titleEdit = findById(layout, R.id.stampRallyTitleEdit);
+        summaryEdit = findById(layout, R.id.stampRallySummaryEdit);
+    }
+
+    private void showCreateStampRallyDialog(final View layout){
+        new AlertDialog.Builder(this)
+                .setTitle("スタンプラリー新規作成")
+                .setView(layout)
+                .setPositiveButton("作成", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String title = titleEdit.getText().toString();
+                        String summary = summaryEdit.getText().toString();
+                        new StampRallyDbAdapter(StampRallyControlActivity.this).createStampRally(title, summary);
+                        StampRallys rally = new StampRallys();
+                        rally.setStamprallyName(title);
+                        rally.setStamrallyComment(summary);
+                        stampDataList.add(rally);
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("取り消し", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
     }
 
     @Override
