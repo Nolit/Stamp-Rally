@@ -53,13 +53,10 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         //データベース通信
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
         loginUserId = mainPref.getString("loginUserId", null);             //ログイン中のUserId (Preferencesを使用)
-//        referenceUserId = getIntent().getStringExtra("referenceUserId");   //表示するスタンプのUserId (getIntentを使用)
-//        stampRallyId = getIntent().getStringExtra("StampRallyId");         //表示するスタンプラリーのId (getIntentを使用)
-        referenceUserId = "20";  //テスト用に値を指定
-        stampRallyId = "4";     //テスト用に値を指定
+        referenceUserId = getIntent().getStringExtra("referenceUserId");   //表示するスタンプのUserId (getIntentを使用)
+        stampRallyId = getIntent().getStringExtra("stampRallyId");         //表示するスタンプラリーのId (getIntentを使用)
 
         StampRallyDetailModel stampRallyDetailModel = StampRallyDetailModel.getInstance();
-
         if(loginUserId != null && referenceUserId != null && stampRallyId != null){
             stampRallyDetailModel.fetchJson(loginUserId, referenceUserId, stampRallyId);    //通信開始
         }else{
@@ -118,7 +115,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             }
 
             //参照者の名前
-//            referenceUserName.setText(stampRally.);
+//            referenceUserName.setText();
 
             //概要を設定
             stampRallyDescription.setText(stampRally.getStamrallyComment());
