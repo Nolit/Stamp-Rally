@@ -21,6 +21,7 @@ import com.om1.stamp_rally.controller.MainActivity;
 import com.om1.stamp_rally.controller.StampPreviewActivity;
 import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import database.entities.StampRallys;
@@ -32,7 +33,7 @@ import database.entities.Stamps;
 
 public class StampRallyEditListAdapter extends ArrayAdapter<StampRallys> {
     private LayoutInflater layoutInflater;
-    private List<StampRallys> stampRallyList;
+    private List<StampRallys> stampRallyList = new ArrayList<>();
 
     public StampRallyEditListAdapter(Context context, int resource, List<StampRallys> objects) {
         super(context, resource, objects);
@@ -47,9 +48,6 @@ public class StampRallyEditListAdapter extends ArrayAdapter<StampRallys> {
             convertView = layoutInflater.inflate(R.layout.list_row_create_stamprally, parent, false);
         }
 
-//        byte[] pictureByte = stamp.getPicture();
-//        Bitmap picture = BitmapFactory.decodeByteArray(pictureByte, 0, pictureByte.length);
-//        ((ImageView)convertView.findViewById(R.id.stampThumbnail)).setImageBitmap(picture);
         ((TextView)convertView.findViewById(R.id.stampRallyTitle)).setText(stampRally.getStamprallyName());
         Button deleteButton = (Button) convertView.findViewById(R.id.deleteButton);
         deleteButton.setOnClickListener(new View.OnClickListener() {

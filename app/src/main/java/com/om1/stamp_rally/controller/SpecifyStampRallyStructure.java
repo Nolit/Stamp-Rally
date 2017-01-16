@@ -1,35 +1,35 @@
 package com.om1.stamp_rally.controller;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyStampBookModel;
-import com.om1.stamp_rally.model.adapter.MyStampListAdapter;
+import com.om1.stamp_rally.model.adapter.MyStampBookListAdapter;
+import com.om1.stamp_rally.model.adapter.StructureStampListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.dbadapter.StructureStampDbAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import data.StampData;
 
 public class SpecifyStampRallyStructure extends AppCompatActivity {
-    private Map<String, Object> myStampBook;
+    private StampData[] myStampBook;
+    private StructureStampListAdapter adapter;
+    private Integer stampRallyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class SpecifyStampRallyStructure extends AppCompatActivity {
         ButterKnife.inject(this);
 
         MyStampBookModel.getInstance().fetchJson(getSharedPreferences("main", MODE_PRIVATE).getString("loginUserId", "20"));
+        stampRallyId = getIntent().getIntExtra("stampRallyId", -1);
     }
 
     @Override
@@ -59,27 +60,38 @@ public class SpecifyStampRallyStructure extends AppCompatActivity {
             return;
         }
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            myStampBook = mapper.readValue(event.getJson(), Map.class);
-
-            List<Map<String, Object>> haveStampList = (List<Map<String, Object>>) myStampBook.get("Stamps");
+            Log.d("デバッグ:MyStampBook", "データベースとの通信に成功");
+            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
+            myStampBook = new ObjectMapper().readValue(responseData[1], StampData[].class);
             ArrayList<StampBean> myStampList = new ArrayList<>();
-
-            for(Map<String, Object> stampData : haveStampList){
+            for(StampData stampData : myStampBook){
                 StampBean stampBean = new StampBean();
-                stampBean.setPictPath(Base64.decode((String) stampData.get("picture"), Base64.DEFAULT));
-                stampBean.setStampTitle((String) stampData.get("stampName"));
-                stampBean.setStampDate((String) stampData.get("stampDate"));
-                stampBean.setStampRallyName((String) stampData.get("stampRallyName"));
+                stampBean.setStampId(stampData.getStampId());
+                stampBean.setPictPath(stampData.getPicture());
+                stampBean.setStampTitle(stampData.getStampName());
+                stampBean.setStampDate(stampData.getStampDate());
                 myStampList.add(stampBean);
             }
-            MyStampListAdapter adapter = new MyStampListAdapter(this, 0, myStampList);
-            //TODO ここは使用しているレイアウトによって変わる
-            ListView lv = (ListView) findViewById(R.id.structireStampList);
+            adapter = new StructureStampListAdapter(this, 0, myStampList);
+            adapter.setSelectedStampIds(new StructureStampDbAdapter(this).getByStampRallyIdAsList(stampRallyId));
+            ListView lv = (ListView) findViewById(R.id.structureStampList);
             lv.setAdapter(adapter);
+
         }catch(IOException e){
             e.printStackTrace();
-
         }
+    }
+
+    @OnClick(R.id.saveStructureStampButton)
+    public void saveStructureStamp(){
+        StructureStampDbAdapter dbAdapter = new StructureStampDbAdapter(this);
+        dbAdapter.truncate();
+
+        for(Integer stampId : adapter.getSelectedStampId()){
+            dbAdapter.createRelation(stampId, stampRallyId);
+        }
+        dbAdapter.log();
+        Toast.makeText(this, "スタンプを登録しました", Toast.LENGTH_SHORT);
+        finish();
     }
 }

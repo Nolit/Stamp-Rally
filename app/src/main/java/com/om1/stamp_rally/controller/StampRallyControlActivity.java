@@ -39,21 +39,6 @@ public class StampRallyControlActivity extends AppCompatActivity {
     EditText titleEdit;
     EditText summaryEdit;
 
-    //ここから追加分（大脇）
-    Button stampRallyNewCreateButton;
-
-    /*
-        関連ソース
-        ・activity_stamprally_control.xmll
-        ・list_row_create_stamprally.xml
-        ・CreateStampRallyBean.java
-        ・CreateStampRallyListAdapter.java
-
-        xmlとButtonのfindView関連付けだけ修正済み
-        それ以外はStampEditListActivityをコピーしてそのまま残してる
-     */
-    //ここまで追加分（大脇）
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,11 +111,10 @@ public class StampRallyControlActivity extends AppCompatActivity {
                         String title = titleEdit.getText().toString();
                         String summary = summaryEdit.getText().toString();
                         new StampRallyDbAdapter(StampRallyControlActivity.this).createStampRally(title, summary);
-                        StampRallys rally = new StampRallys();
-                        rally.setStamprallyName(title);
-                        rally.setStamrallyComment(summary);
-                        stampDataList.add(rally);
-                        adapter.notifyDataSetChanged();
+                        Intent intent=new Intent();
+                        intent.setClass(StampRallyControlActivity.this, StampRallyControlActivity.this.getClass());
+                        startActivity(intent);
+                        finish();
                     }
                 })
                 .setNegativeButton("取り消し", new DialogInterface.OnClickListener() {
