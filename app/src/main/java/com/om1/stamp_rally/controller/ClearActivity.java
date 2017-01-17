@@ -1,11 +1,13 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.om1.stamp_rally.R;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ClearActivity extends AppCompatActivity {
     @Override
@@ -13,5 +15,10 @@ public class ClearActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clear);
         ButterKnife.inject(this);
+    }
+
+    @OnClick(R.id.returnTopButton)
+    public void returnBack(){
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

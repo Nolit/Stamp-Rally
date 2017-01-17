@@ -31,40 +31,16 @@
             android:layout_marginBottom="50dp"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="bottom|center">
-            <TextView
+            <Button
+                android:id="@+id/returnTopButton"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="アップロードしますか？"
-                android:textSize="30dp"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="アップロード後、クリアデータが反映されます"
-                android:textSize="15dp"
-                android:textColor="@color/common_plus_signin_btn_text_light_default"/>
+                android:layout_height="wrap_content"
+                android:text="TOPへ"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:gravity="bottom|center">
-            <Button
-                android:id="@+id/laterButton"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="後で"/>
-            <Button
-                android:id="@+id/uploadButton"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="アップロード"/>
-        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>
