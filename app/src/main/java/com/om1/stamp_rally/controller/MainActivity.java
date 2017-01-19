@@ -35,6 +35,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
+    private static final String LOGOUT_SENTENCE = "ログアウトしました";
     //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
@@ -49,15 +50,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //ホーム
     Button LogoutButton;
     //タイムライン
-
     //マップ
     FragmentManager mapFragmentManager;
-    //スタンプ管理タブ
-    @OnClick(R.id.createStampRallyButton)
-    void clickCreateStampRallyButton(){
-        Intent intent = new Intent(MainActivity.this, StampRallyCreateActivity.class);
-        startActivity(intent);
-    }
 
     //テスト用ボタン - スタンプ管理タブ
     Button stampRallyDetailIntentButton;    //スタンプラリー詳細ページ
@@ -72,71 +66,34 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainPref = getSharedPreferences("main", MODE_PRIVATE);
+
+        //ログイン確認
+        if(mainPref.getString("mailAddress",null) != null && mainPref.getString("password", null) != null){
+            generateTabs();
+        }else{
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        }
+
         ButterKnife.inject(this);
         eventBus.register(this);
-        mainPref = getSharedPreferences("main", MODE_PRIVATE);
         mapFragmentManager = getSupportFragmentManager();
-
-        //インスタンスの保存
         this.savedInstanceState = savedInstanceState;
 
-        //ログイン
-        loginButton = (Button) findViewById(R.id.LoginBt);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                id = (EditText) findViewById(R.id.emailAddress);
-                pass = (EditText) findViewById(R.id.password);
-                SharedPreferences.Editor mainEdit = mainPref.edit();
-                mainEdit.putString("mailAddress", id.getText().toString());
-                mainEdit.putString("password", pass.getText().toString());
-                mainEdit.commit();
-                LoginModel.getInstance().login(id.getText().toString(), pass.getText().toString());
-            }
-        });
-        //ログアウト
-        LogoutButton = (Button) findViewById(R.id.LogoutBt);
-        LogoutButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setMessage("ログアウトしてよろしいですか？")
-                        .setPositiveButton("ログアウト", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                SharedPreferences.Editor mainEdit = mainPref.edit();
-                                mainEdit.remove("mailAddress");
-                                mainEdit.commit();
-                                //Toast.makeText(MainActivity.this, mainPref.getString("mailAddress","からだよ"), Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent();
-                                intent.setClass(MainActivity.this, MainActivity.this.getClass());
-                                startActivity(intent);
-                                finish();
-                            }
-                        });
-                builder.show();
-            }
-        });
-        //新規会員登録ページへ
-        newloginText = (TextView) findViewById(R.id.newmember);
-        newloginText.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewMemberActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        //キーボード非表示
         search = (EditText) findViewById(R.id.SearchEdit);
         search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                // EditTextのフォーカスが外れた場合
                 if (hasFocus == false) {
-                    // ソフトキーボードを非表示にする
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });
-
 
         //テスト用ボタン - スタンプラリー詳細ページ
         stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
@@ -184,15 +141,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-
-        //ログイン時とゲスト時のtabHost
-        if (useId != null) {
-            initLoginTabs();
-        } else {
-            initGuestTabs();
-        }
-
-
         //検索
         searchButton = (Button) findViewById(R.id.SearchBt);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -207,49 +155,37 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         });
     }
 
-    //ログイン時のtabHost
-    protected void initLoginTabs() {
+    //タブホスト生成
+    protected void generateTabs() {
         try {
             TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
             tabHost.setup();
             TabHost.TabSpec spec;
-
             // TOPページタブ
             spec = tabHost.newTabSpec("TOP")
                     .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
-
             // マイページタブ
             spec = tabHost.newTabSpec("MyPage")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.Home);
             tabHost.addTab(spec);
-
             // タイムラインタブ
             spec = tabHost.newTabSpec("タイムライン")
                     .setIndicator("TIME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.TimeLine);
             tabHost.addTab(spec);
-
             // スタンプラリータブ
             spec = tabHost.newTabSpec("PLAY")
                     .setIndicator("Play", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRally);
             tabHost.addTab(spec);
-
             // スタンプ登録タブ
             spec = tabHost.newTabSpec("スタンプ")
                     .setIndicator("STAMP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.StampRegistration);
             tabHost.addTab(spec);
-
-            //ログインタブ
-            spec = tabHost.newTabSpec("Login")
-                    .setIndicator("ログイン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.Login);
-            //tabHost.addTab(spec);
-
             tabHost.setCurrentTab(0);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -257,66 +193,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
     }
-
-
-    //ゲスト時のtabHost
-    protected void initGuestTabs() {
-        try {
-            TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
-            tabHost.setup();
-            TabHost.TabSpec spec;
-
-            // TOPページタブ
-            spec = tabHost.newTabSpec("TOP")
-                    .setIndicator("TOP", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.TOP);
-            tabHost.addTab(spec);
-
-            // マイページタブ
-            spec = tabHost.newTabSpec("HOME")
-                    .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.Home);
-            //tabHost.addTab(spec);
-
-            // タイムラインタブ
-            spec = tabHost.newTabSpec("TimeLine")
-                    .setIndicator("タイムライン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.TimeLine);
-            //tabHost.addTab(spec);
-
-            // スタンプラリータブ
-            spec = tabHost.newTabSpec("StampRally")
-                    .setIndicator("スタンプラリー", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.StampRally);
-            //tabHost.addTab(spec);
-
-            // スタンプ登録タブ
-            spec = tabHost.newTabSpec("StampRegistration")
-                    .setIndicator("スタンプ登録", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.StampRegistration);
-            //tabHost.addTab(spec);
-
-            //ログインタブ
-            spec = tabHost.newTabSpec("Login")
-                    .setIndicator("ログイン", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.Login);
-            tabHost.addTab(spec);
-            tabHost.setCurrentTab(0);
-
-            //タブ切り替え時にアクディビディ再読み込み
-//            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
-//                @Override
-//                public void onTabChanged(String tabId) {
-//                    MainActivity.this.onStart();
-//                }
-//            });
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -355,16 +231,42 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         super.onPause();
     }
 
+    //マイページ
+    //ログアウトボタン
+    @OnClick(R.id.LogoutBt)
+    void clickLogoutBt(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("ログアウトしますか？")
+                .setPositiveButton("ログアウト", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        SharedPreferences.Editor mainEdit = mainPref.edit();
+                        mainEdit.clear();
+                        mainEdit.commit();
+                        Toast.makeText(MainActivity.this, LOGOUT_SENTENCE, Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                });
+        builder.show();
+    }
+
+    //スタンプ管理タブ
+    //スタンプラリー作成ボタン
+    @OnClick(R.id.createStampRallyButton)
+    void clickCreateStampRallyButton(){
+        Intent intent = new Intent(MainActivity.this, StampRallyCreateActivity.class);
+        startActivity(intent); }
+    //スタンプ編集ボタン
+    @OnClick(R.id.editStamp)
+    void clickEditStamp(){
+        Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
+        startActivity(intent); }
+    //カメラボタン
     @OnClick(R.id.stampRegistrationButton)
     void clickStampRagistrationButton(){
         Intent intent = new Intent(this, TakeStampActivity.class);
         intent.putExtra("stampRegisterFlag", true);
-        startActivity(intent);
-    }
+        startActivity(intent); }
 
-    @OnClick(R.id.editStamp)
-    void clickEditStamp(){
-        Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
-        startActivity(intent);
-    }
+
 }

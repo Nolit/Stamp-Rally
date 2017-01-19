@@ -57,7 +57,11 @@
                                 android:src="@mipmap/oosakajo"
                                 android:id="@+id/OfficialImage"
                                 android:layout_height="200dp"
-                                android:layout_marginTop="10dp"/>
+                                android:layout_marginTop="10dp"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true">
+                                <requestFocus />
+                            </ImageView>
 
                             <FrameLayout
                                 android:layout_width="match_parent"
@@ -372,112 +376,6 @@
 
                         </LinearLayout>
                     </ScrollView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/Login"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:weightSum="1">
-
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp" />
-
-                    <ImageView
-                        android:layout_width="133dp"
-                        android:layout_height="129dp"
-                        android:src="@drawable/s256_f_object_151_0bg"
-                        app:srcCompat="@mipmap/ic_launcher"
-                        android:layout_gravity="center_vertical|center_horizontal"
-                        android:background="@color/common_google_signin_btn_text_light_disabled"
-                        android:id="@+id/LoginThemeImage"
-                        android:layout_weight="0.09" />
-
-                    <ScrollView
-                        android:id="@+id/login_form"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:id="@+id/email_login_form"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <EditText
-                                    android:id="@+id/emailAddress"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="@string/prompt_email"
-                                    android:ems="10"
-                                    android:inputType="textEmailAddress"
-                                    android:maxLines="1"
-                                    android:singleLine="true" />
-
-                            </android.support.design.widget.TextInputLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <EditText
-                                    android:id="@+id/password"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Password"
-                                    android:ems="10"
-                                    android:imeActionId="@+id/login"
-                                    android:inputType="textPassword"
-                                    android:maxLines="1"
-                                    android:singleLine="true" />
-
-                            </android.support.design.widget.TextInputLayout>
-
-                            <Button
-                                android:id="@+id/LoginBt"
-                                style="?android:textAppearanceSmall"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:text="Login"
-                                android:textStyle="bold"
-                                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                                android:textSize="14sp" />
-
-                        </LinearLayout>
-                    </ScrollView>
-
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp" />
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="43dp">
-
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="4.50" />
-
-                        <TextView
-                            android:text="新規会員登録"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:id="@+id/newmember"
-                            android:layout_weight="0.31"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="18sp" />
-
-                    </LinearLayout>
 
                 </LinearLayout>
 

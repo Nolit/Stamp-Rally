@@ -8,90 +8,93 @@
     tools:context="com.om1.stamp_rally.controller.LoginActivity"
     android:background="#ADD8E6">
 
-<LinearLayout
-    android:id="@+id/login"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
-
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:src="@mipmap/ic_stampshare_theme"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:background="@null"
-        android:id="@+id/loginThemeImage"
-        android:layout_weight="0.5" />
-
-    <ScrollView
-        android:id="@+id/login_form"
+    <LinearLayout
+        android:id="@+id/login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@mipmap/ic_stampshare_theme"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:background="@null"
+            android:id="@+id/loginThemeImage"
+            android:layout_weight="0.5"                                android:focusable="true"
+            android:focusableInTouchMode="true">
+            <requestFocus />
+        </ImageView>
+
+        <ScrollView
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/mailAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:ems="10"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:ems="10"
-                    android:imeActionId="@+id/login"
-                    android:inputType="textPassword"
-                    android:maxLines="1"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-            <Button
-                android:id="@+id/loginButton"
-                style="?android:textAppearanceSmall"
+            <LinearLayout
+                android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="ログイン"
-                android:textStyle="bold"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="14dp" />
+                android:orientation="vertical">
 
-            <Button
-                android:text="新規会員登録"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:id="@+id/createAccountIntentButton"
-                android:layout_gravity="right"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18dp"
-                android:background="@null"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+                    <EditText
+                        android:id="@+id/mailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_email"
+                        android:ems="10"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:ems="10"
+                        android:imeActionId="@+id/login"
+                        android:inputType="textPassword"
+                        android:maxLines="1"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/loginButton"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="ログイン"
+                    android:textStyle="bold"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:textSize="14dp" />
+
+                <Button
+                    android:text="新規会員登録"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/createAccountIntentButton"
+                    android:layout_gravity="right"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18dp"
+                    android:background="@null"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
