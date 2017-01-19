@@ -81,7 +81,6 @@ public class ResultSearchActivity extends AppCompatActivity {
             Log.d("デバッグ:ResultSearch", "データベースとの通信に成功");
             String[] responseData = event.getJson().split(System.getProperty("line.separator"));
             searchData = new ObjectMapper().readValue(responseData[0], StampRallyData[].class);
-
             if(searchData.length < 1){
                 noHitResult.setText("検索結果がありませんでした。");
             }else{
@@ -94,6 +93,7 @@ public class ResultSearchActivity extends AppCompatActivity {
                     stampRallyBean.setPictPath( stampRally.getPicture() );
                     stampRallyBean.setStampRallyTitle( stampRally.getStampRallyTitle() );
                     stampRallyBean.setCreatorUserName( stampRally.getStampRallyCreatorName() );
+                    stampRallyBean.setCreatorUserId( stampRally.getStampRallyCreatorUserId() );
                     stampRallyList.add(stampRallyBean);
                 }
                 adapter.setStampRallyList(stampRallyList);
