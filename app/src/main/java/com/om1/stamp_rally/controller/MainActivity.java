@@ -39,16 +39,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
-    //ゲスト
-    Button loginButton;
-    EditText id;
-    EditText pass;
-    TextView newloginText;
     //トップ
     Button searchButton;
     EditText search;
-    //ホーム
-    Button LogoutButton;
     //タイムライン
     //マップ
     FragmentManager mapFragmentManager;
@@ -66,7 +59,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
 
         //ログイン確認
@@ -82,20 +74,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         mapFragmentManager = getSupportFragmentManager();
         this.savedInstanceState = savedInstanceState;
 
-        //キーボード非表示
-        search = (EditText) findViewById(R.id.SearchEdit);
-        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus == false) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
-        });
-
-        //テスト用ボタン - スタンプラリー詳細ページ
+        //テスト用___________________
         stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
         stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -123,13 +102,22 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
-        //テスト用にmainPrefいじる
         SharedPreferences.Editor mainEdit = mainPref.edit();
         mainEdit.putString("loginUserId", "21");        //端末でログインしてるユーザーのIDを保存
-        //テスト用ここまで
+        //テスト用ここまで___________________
 
-//        String useId = mainPref.getString("mailAddress", null);
-        String useId = "login"; //テスト用でログイン状態にしてる
+        //キーボード非表示
+        search = (EditText) findViewById(R.id.SearchEdit);
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus == false) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
 
         //スタンプラリーページを選択時のフラグメント起動
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -169,7 +157,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             // マイページタブ
             spec = tabHost.newTabSpec("MyPage")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.Home);
+                    .setContent(R.id.MyPage);
             tabHost.addTab(spec);
             // タイムラインタブ
             spec = tabHost.newTabSpec("タイムライン")
@@ -263,7 +251,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         startActivity(intent); }
     //カメラボタン
     @OnClick(R.id.stampRegistrationButton)
-    void clickStampRagistrationButton(){
+    void clickStampRegistrationButton(){
         Intent intent = new Intent(this, TakeStampActivity.class);
         intent.putExtra("stampRegisterFlag", true);
         startActivity(intent); }

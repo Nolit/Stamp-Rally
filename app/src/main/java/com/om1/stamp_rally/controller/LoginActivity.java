@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, SUCCESS_LOGIN, Toast.LENGTH_SHORT).show();
                         mainEdit.putString("mailAddress", challengeMailAddress);
                         mainEdit.putString("password", challengePassword);
+//                        mainEdit.putString("loginUserId", loginUserId);
                         mainEdit.commit();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
