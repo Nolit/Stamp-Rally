@@ -15,20 +15,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TabHost;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.om1.stamp_rally.R;
-import com.om1.stamp_rally.model.LoginModel;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,7 +44,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
     SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
     Bundle savedInstanceState;
-    private final EventBus eventBus = EventBus.getDefault();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +60,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         }
 
         ButterKnife.inject(this);
-        eventBus.register(this);
         mapFragmentManager = getSupportFragmentManager();
         this.savedInstanceState = savedInstanceState;
 
@@ -190,33 +179,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onStart(){
         super.onStart();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void LoginAuthentication(String loginText) {
-        try {
-            Boolean isLogin = new ObjectMapper().readValue(loginText, Boolean.class);
-            if(isLogin == true){
-                Toast.makeText(this, "ログインに成功しました", Toast.LENGTH_LONG).show();
-                Intent intent=new Intent();
-                intent.setClass(this, this.getClass());
-                startActivity(intent);
-                finish();
-            }
-            else{
-                Toast.makeText(this, "ログインに失敗しました", Toast.LENGTH_LONG).show();
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        //EventBusライブラリによる自身の登録解除
-        eventBus.unregister(this);
-        super.onPause();
     }
 
     //マイページ
