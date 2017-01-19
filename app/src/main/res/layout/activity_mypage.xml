@@ -3,227 +3,86 @@
     android:id="@+id/content_mypage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_centerHorizontal="true">
-    <!--android:background="#ADD8E6"-->
-
-<LinearLayout
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:weightSum="1">
-
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="0.27">
+    android:layout_centerHorizontal="true"
+    android:background="#ADD8E6">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:padding="15dp"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="380dp"
-            android:layout_height="30dp">
-
-            <TextView
-                android:text="OIC太郎さんのマイページ"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView3"
-                android:layout_weight="1"
-                android:layout_width="300dp"
-                android:gravity="center_vertical|fill_horizontal|center"
-                android:textSize="18sp" />
-
-            <Button
-                android:text="ログアウト"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:id="@+id/LogoutBt"
-                android:layout_weight="1"
-                android:textSize="10sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="380dp"
-            android:weightSum="1"
-            android:layout_height="150dp">
-
-            <ImageView
-                android:layout_height="150dp"
-                android:src="@mipmap/default_image_view"
-                android:id="@+id/imageView"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:background="@color/common_google_signin_btn_text_dark_disabled"
-                android:layout_width="150dp" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_height="150dp"
-                android:layout_weight="0.95"
-                android:weightSum="1"
-                android:layout_width="230dp">
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:weightSum="1"
-                    android:layout_height="35dp">
-
-                    <TextView
-                        android:text="OIC太郎"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/NameTxt"
-                        android:textSize="24sp"
-                        android:layout_weight="0.86"
-                        android:textColor="@android:color/black" />
-
-                    <Button
-                        android:text="設定"
-                        android:layout_width="58dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/ConfigurationBt"
-                        android:textSize="14sp"
-                        android:textColor="@android:color/black"
-                        android:textStyle="normal|bold"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <TextView
-                    android:text="　　ID:12345678"
-                    android:layout_width="match_parent"
-                    android:id="@+id/IdTxt"
-                    android:textAlignment="textStart"
-                    android:textSize="12sp"
-                    android:layout_height="15dp" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-
-                <TextView
-                    android:text="オススメスタンプラリー"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:id="@+id/FavoriteTxt"
-                    android:textSize="18sp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/holo_green_light" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-
-                <TextView
-                    android:text="マイスタンプラリー（22）"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:id="@+id/MyStampTxt"
-                    android:textSize="18sp"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/holo_orange_light" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp">
-
-                    <TextView
-                        android:text="フォロー:12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/FollowTxt"
-                        android:layout_weight="36.70"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:text="フォロワー:10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/FollowerTxt"
-                        android:layout_weight="45.27"
-                        android:textSize="12sp" />
-
-
-
-                </LinearLayout>
-
-                <TextView
-                    android:text="　友達を探す"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:id="@+id/FriendSearch"
-                    android:textSize="16sp"
-                    android:textAlignment="inherit"
-                    android:textColor="@android:color/holo_blue_light" />
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:text="紹介文"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.27"
-            android:id="@+id/IntroductionTxt" />
+            android:layout_weight="0.3"
+            android:orientation="horizontal"
+            android:id="@+id/myPage_header">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="100dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:src="@mipmap/default_image_view"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="vertical" >
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:text="よろしくお願いします。"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:id="@+id/ContentsTxt"
-                    android:textSize="14sp"
-                    android:layout_height="100dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:id="@+id/userName"
+                        android:text="ユーザー名"
+                        android:textSize="15dp"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:id="@+id/LogoutBt"
+                        android:text="ログアウト"
+                        android:textSize="10dp"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/myStampBookIntentButton"
+                    android:text="マイスタンプ帳"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/completeStampRallyIntentButton"
+                    android:text="クリアスタンプラリー"/>
+
+
             </LinearLayout>
-        </ScrollView>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="5dp" />
 
-        <TextView
-            android:text="OIC太郎さんのタイムライン"
-            android:layout_width="match_parent"
-            android:id="@+id/TimeLineTxt"
-            android:textColor="?attr/actionModeSplitBackground"
-            android:textSize="18sp"
-            android:layout_height="20dp" />
+        </LinearLayout>
 
-        <ListView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/TimeLineLV" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="3">
+
+
+        </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
-
-</LinearLayout>
-
 </FrameLayout>

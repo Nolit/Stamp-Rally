@@ -39,8 +39,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
 
     //テスト用ボタン - スタンプ管理タブ
     Button stampRallyDetailIntentButton;    //スタンプラリー詳細ページ
-    Button intentButtonMyStampList;         //マイスタンプ帳ページ
-    Button intentButtonStampDetail;         //スタンプ詳細ページ
 
     SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
     Bundle savedInstanceState;
@@ -73,27 +71,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
-        //テスト用ボタン - マイスタンプ帳
-        intentButtonMyStampList = (Button) findViewById(R.id.IntentButton_MyStampBook);
-        intentButtonMyStampList.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
-                intent.putExtra("referenceUserId", "20");
-                startActivity(intent);
-            }
-        });
-        //テスト用ボタン - スタンプ詳細ページ
-        intentButtonStampDetail = (Button) findViewById(R.id.IntentButton_StampDetail);
-        intentButtonStampDetail.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StampDetailActivity.class);
-                intent.putExtra("stampId", "108");
-                startActivity(intent);
-            }
-        });
-        SharedPreferences.Editor mainEdit = mainPref.edit();
-        mainEdit.putString("loginUserId", "21");        //端末でログインしてるユーザーのIDを保存
-        //テスト用ここまで___________________
 
         //キーボード非表示
         search = (EditText) findViewById(R.id.SearchEdit);
@@ -198,6 +175,13 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                     }
                 });
         builder.show();
+    }
+    //マイスタンプ帳
+    @OnClick(R.id.myStampBookIntentButton)
+    void clickMyStampBookIntentButton(){
+        Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
+        intent.putExtra("referenceUserId", mainPref.getString("loginUserId", null));
+        startActivity(intent);
     }
 
     //スタンプ管理タブ

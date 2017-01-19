@@ -46,6 +46,7 @@ public class MyStampBookActivity extends AppCompatActivity {
         MyStampBookModel model = MyStampBookModel.getInstance();
 
         if(getIntent().getStringExtra("referenceUserId") != null){
+            System.out.println("デバッグ:"+getIntent().getStringExtra("referenceUserId"));
             model.fetchJson(getIntent().getStringExtra("referenceUserId"));
         }else{
             System.out.println("デバッグ:MyStampBook:getStringExtraが"+getIntent().getStringExtra("referenceUserId")+"です。");
