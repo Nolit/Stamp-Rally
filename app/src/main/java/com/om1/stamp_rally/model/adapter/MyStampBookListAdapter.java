@@ -32,7 +32,6 @@ public class MyStampBookListAdapter extends ArrayAdapter<StampBean> {
         }
 
         byte[] pictureByte = stamp.getPictPath();
-        Log.d("スタンプラリー", ""+pictureByte);
         Bitmap picture = BitmapFactory.decodeByteArray(pictureByte, 0, pictureByte.length);
         ((ImageView)convertView.findViewById(R.id.stampBookThumbnail)).setImageBitmap(picture);
         ((TextView)convertView.findViewById(R.id.stampTitle)).setText(stamp.getStampTitle());

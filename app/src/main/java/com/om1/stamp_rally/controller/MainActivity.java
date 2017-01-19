@@ -37,9 +37,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //マップ
     FragmentManager mapFragmentManager;
 
-    //テスト用ボタン - スタンプ管理タブ
-    Button stampRallyDetailIntentButton;    //スタンプラリー詳細ページ
-
     SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
     Bundle savedInstanceState;
 
@@ -60,17 +57,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         ButterKnife.inject(this);
         mapFragmentManager = getSupportFragmentManager();
         this.savedInstanceState = savedInstanceState;
-
-        //テスト用___________________
-        stampRallyDetailIntentButton = (Button) findViewById(R.id.StampRallyDetailIntentButton);
-        stampRallyDetailIntentButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
-                intent.putExtra("referenceUserId", "20");
-                intent.putExtra("stampRallyId", "5");
-                startActivity(intent);
-            }
-        });
 
         //キーボード非表示
         search = (EditText) findViewById(R.id.SearchEdit);

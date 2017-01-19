@@ -27,15 +27,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import data.StampRallyData;
+
 
 public class ResultSearchActivity extends AppCompatActivity {
+    private final EventBus eventBus = EventBus.getDefault();
+    private StampRallyData[] searchData;
 
     ListView lv;
     StampRallyBean stampRallyBean;
     ArrayList<StampRallyBean> stampRallyList = new ArrayList<>();
     ResultSearchListAdapter adapter;
-
-    private final EventBus eventBus = EventBus.getDefault();
 
     private TextView searchKeyword;
     private TextView noHitResult;       //検索結果が0件の場合表示されるテキストビュー
@@ -77,21 +79,21 @@ public class ResultSearchActivity extends AppCompatActivity {
         }
         try {
             Log.d("デバッグ:ResultSearch", "データベースとの通信に成功");
-            ArrayList<Map<String,Object>> searchData = new ObjectMapper().readValue(event.getJson(), ArrayList.class);
+            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
+            searchData = new ObjectMapper().readValue(responseData[0], StampRallyData[].class);
 
-            if(searchData.size() < 1){
+            if(searchData.length < 1){
                 noHitResult.setText("検索結果がありませんでした。");
             }else{
                 stampRallyList = new ArrayList<StampRallyBean>();
                 adapter = new ResultSearchListAdapter(this, 0, stampRallyList);
 
-                for( Map<String,Object> index : searchData ){
+                for( StampRallyData stampRally : searchData ){
                     stampRallyBean = new StampRallyBean();
-                    stampRallyBean.setStampRallyId( (Integer) index.get("stampRallyId"));
-//                    stampRallyBean.setPictPath( Base64.decode((byte[]) index.get("stampRallyThumbnail"), Base64.DEFAULT) );   //こことResultSearchListAdapter
-                    stampRallyBean.setStampRallyTitle( (String) index.get("stampRallyTitle") );
-                    stampRallyBean.setCreatorUserName( (String) index.get("stampRallyCreatorUserName"));
-                    stampRallyBean.setCreatorUserId( (Integer) index.get("stampRallyCreatorUserId"));
+                    stampRallyBean.setStampRallyId( stampRally.getStampRallyId() );
+                    stampRallyBean.setPictPath( stampRally.getPicture() );
+                    stampRallyBean.setStampRallyTitle( stampRally.getStampRallyTitle() );
+                    stampRallyBean.setCreatorUserName( stampRally.getStampRallyCreatorName() );
                     stampRallyList.add(stampRallyBean);
                 }
                 adapter.setStampRallyList(stampRallyList);

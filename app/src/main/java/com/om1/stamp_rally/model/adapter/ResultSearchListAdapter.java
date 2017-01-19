@@ -1,6 +1,7 @@
 package com.om1.stamp_rally.model.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +52,7 @@ public class ResultSearchListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = layoutInflater.inflate(R.layout.list_row_stamprally,parent,false);
 
-//        ((ImageView)convertView.findViewById(R.id.stampThumbnail))
-//                .setImageBitmap(stampRallyList.get(position).getPictureBitmap());     //こことResultSearchActivity
+        ((ImageView)convertView.findViewById(R.id.stampThumbnail)).setImageBitmap(stampRallyList.get(position).getPictureBitmap());
         ((TextView)convertView.findViewById(R.id.stampRallyTitle)).setText(stampRallyList.get(position).getStampRallyTitle());
         ((TextView)convertView.findViewById(R.id.CreatorName)).setText(stampRallyList.get(position).getCreatorUserName());
 
