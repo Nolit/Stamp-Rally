@@ -1,5 +1,6 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,8 @@ public class CompleteRallyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_rally);
 
+        SharedPreferences pref = getSharedPreferences("main", MODE_PRIVATE);
+        pref.edit().remove("playingStampRally").commit();
     }
 
 }
