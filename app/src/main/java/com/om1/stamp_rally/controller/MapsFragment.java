@@ -211,6 +211,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     public void onLocationChanged(final Location location) {
         Log.d("デバッグ", "位置情報取得");
         Log.d("デバッグ", "latitude : " + location.getLatitude() + ", longitude : " + location.getLongitude());
+        Toast.makeText(getContext(), "位置情報取得", Toast.LENGTH_SHORT);
 
         //カメラを現在地に移動
         position = new LatLng(location.getLatitude(), location.getLongitude());

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -24,6 +25,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Url;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -104,7 +106,7 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
             @Override
             public void run(){
                 try {
-                    mockLocationClient = new WebSocketFactory().createSocket("ws://35.160.83.150/stamp-rally/location", 5000)
+                    mockLocationClient = new WebSocketFactory().createSocket("ws://"+ Url.HOST + ":" + Url.PORT + "/stamp-rally/location", 5000)
                             .connect()
                             .addListener(new WebSocketAdapter() {
                                 @Override
@@ -146,6 +148,7 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
     public void onLocationChanged(Location location) {
         Log.d("デバッグ", "位置情報取得");
         Log.d("デバッグ", "latitude : " + location.getLatitude() + ", longitude : " + location.getLongitude());
+        Toast.makeText(this, "位置情報取得", Toast.LENGTH_SHORT);
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
