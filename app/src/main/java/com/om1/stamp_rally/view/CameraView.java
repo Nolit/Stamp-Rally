@@ -61,11 +61,11 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     void takePicture(final Intent intent) {
-//        Camera.ShutterCallback shutterListener = new Camera.ShutterCallback() {
-//            public void onShutter() {
-//            }
-//        };
-        Camera.ShutterCallback shutterListener = null;
+        Camera.ShutterCallback shutterListener = new Camera.ShutterCallback() {
+            public void onShutter() {
+            }
+        };
+//        Camera.ShutterCallback shutterListener = null;
         intent.setClassName(getContext(), StampPreviewActivity.class.getName());
         camera.takePicture(shutterListener, null,new Camera.PictureCallback() {
             public void onPictureTaken(byte[] data,Camera camera) {
