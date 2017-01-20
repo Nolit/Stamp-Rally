@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -29,10 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.om1.stamp_rally.model.event.StampUploadEvent;
-import com.om1.stamp_rally.utility.ByteConverter;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
-import com.om1.stamp_rally.utility.dbadapter.StampRallyDbAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -50,21 +46,22 @@ public class StampEditListActivity extends AppCompatActivity {
     private final String ERROR_MESSAGE = "名称を入力してください";
     private final String UPLOAD_SUCCESS_MESSAGE = "アップロードしました";
     private final String UPLOAD_FAILE_MESSAGE = "アップロードに失敗しました\n編集画面からもう一度お試しください";
-    private final String RALLY_COMPLETE_MESSAGE = "クリアしました！";
-    private final String ATTENTION_STAMP_SAVE_MESSAGE = "スタンプを保存してください！";
+    private final String ATTENTION_STAMP_UPLOAD_MESSAGE = "少々お待ちください";
     private final float OVERLAY_ALPHA = 0.7f;
-
-    private String title;
-    private String note;
 
     EditText titleEdit;
     TextView stampTitleError;
     EditText noteEdit;
 
+    private boolean canBackPressed = true;
+
     private int selectedItemIndex;
     private List<Stamps> stampDataList;
     private StampEditListAdapter adapter;
     private List<Map<String, Object>> stampMapList;
+    private Integer stampRallyId;
+    private String title;
+    private String note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +78,13 @@ public class StampEditListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedItemIndex = position;
                 ListView listView = (ListView) parent;
                 Stamps stamp = (Stamps) listView.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), stamp.getStampName() + " clicked",
-                        Toast.LENGTH_LONG).show();
-
                 final View layout = StampEditListActivity.this.getLayoutInflater().inflate(R.layout.stamp_info,
                         (ViewGroup)findViewById(R.id.layout_root));
 
                 initDialogViews(layout, stamp);
-                selectedItemIndex = position;
                 showEditStampDialog(layout, stamp);
             }
         });
@@ -111,16 +105,14 @@ public class StampEditListActivity extends AppCompatActivity {
         Integer id = (Integer) stampMap.get("stampId");
         String title = (String) stampMap.get("title");
         String memo = (String) stampMap.get("memo");
+        String stampRallyName = (String) stampMap.get("stampRallyName");
 
         byte[] picture = (byte[]) stampMap.get("picture");
 
         Integer stampRallyId = (Integer)stampMap.get("stampRallyId");
         StampRallys stampRally = new StampRallys();
         stampRally.setStamprallyId(stampRallyId);
-        if(stampRallyId != 0){
-            String name = (String)new StampRallyDbAdapter(this).getById(stampRallyId).get("name");
-            stampRally.setStamprallyName(name);
-        }
+        stampRally.setStamprallyName(stampRallyName);
 
         StampPads pad = new StampPads();
         pad.setLatitude((Double)stampMap.get("latitude"));
@@ -177,6 +169,7 @@ public class StampEditListActivity extends AppCompatActivity {
     }
 
     private void showOverlay(){
+        canBackPressed = false;
         FrameLayout overlayLayout = findById(this, R.id.uploading_overlay);
         overlayLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -188,6 +181,7 @@ public class StampEditListActivity extends AppCompatActivity {
     }
 
     private void hideOverlay(){
+        canBackPressed = true;
         FrameLayout overlayLayout = findById(this, R.id.uploading_overlay);
         overlayLayout.setOnTouchListener(null);
         overlayLayout.setAlpha(0);
@@ -197,7 +191,7 @@ public class StampEditListActivity extends AppCompatActivity {
         showOverlay();
 
         Integer id = stamp.getStampId();
-        Integer stampRallyId = stamp.getStampRallysList().get(0).getStamprallyId();
+        stampRallyId = stamp.getStampRallysList().get(0).getStamprallyId();
         double latitude = stamp.getStampPads().getLatitude();
         double longitude = stamp.getStampPads().getLongitude();
         byte[] picture = stamp.getPicture();
@@ -215,9 +209,14 @@ public class StampEditListActivity extends AppCompatActivity {
         String message;
         if(event.isSuccess()){
             int id = (int)stampMapList.get(selectedItemIndex).get("id");
-            Log.d("スタンプラリー", ""+id);
             new StampDbAdapter(this).deleteById(id);
-            message = event.isClear() ? RALLY_COMPLETE_MESSAGE : UPLOAD_SUCCESS_MESSAGE;
+
+            if(event.isClear()){
+                Intent intent = new Intent(this, ClearActivity.class);
+                intent.putExtra("stampRallyId", stampRallyId);
+                startActivity(new Intent(this, ClearActivity.class));
+            }
+            message = UPLOAD_SUCCESS_MESSAGE;
         }else{
             message =UPLOAD_FAILE_MESSAGE;
         }
@@ -232,5 +231,14 @@ public class StampEditListActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         EventBusUtil.defaultBus.unregister(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!canBackPressed){
+            Toast.makeText(this, ATTENTION_STAMP_UPLOAD_MESSAGE, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        super.onBackPressed();
     }
 }

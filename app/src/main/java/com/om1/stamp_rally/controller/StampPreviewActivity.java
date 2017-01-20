@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -56,6 +57,7 @@ public class StampPreviewActivity extends AppCompatActivity {
 
     private int stampId;
     private int stampRallyId;
+    private String stampRallyName;
     private double latitude;
     private double longitude;
     private String title;
@@ -75,6 +77,7 @@ public class StampPreviewActivity extends AppCompatActivity {
 
         stampId = getIntent().getIntExtra("stampId", 0);
         stampRallyId = getIntent().getIntExtra("stampRallyId", 0);
+        stampRallyName = getIntent().getStringExtra("stampRallyName");
         latitude = getIntent().getDoubleExtra("latitude", 0);
         longitude = getIntent().getDoubleExtra("longitude", 0);
 
@@ -167,6 +170,12 @@ public class StampPreviewActivity extends AppCompatActivity {
     public void uploadedStamp(StampUploadEvent event) {
         String message;
         if(event.isSuccess()){
+            if(event.isClear()){
+                Intent intent = new Intent(this, ClearActivity.class);
+                intent.putExtra("stampRallyId", stampRallyId);
+                startActivity(intent);
+                return;
+            }
             message = event.isClear() ? RALLY_COMPLETE_MESSAGE : UPLOAD_SUCCESS_MESSAGE;
         }else{
             message =UPLOAD_FAILE_MESSAGE;
@@ -178,8 +187,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     private void saveStamp(){
-        byte[] picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
-        new StampDbAdapter(this).createStamp(stampId, stampRallyId, title, note, picture, latitude, longitude);
+        new StampDbAdapter(this).createStamp(stampId, stampRallyId, stampRallyName, title, note, picture, latitude, longitude);
     }
 
     private void showOverlay(){

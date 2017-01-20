@@ -174,7 +174,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //スタンプラリー作成ボタン
     @OnClick(R.id.createStampRallyButton)
     void clickCreateStampRallyButton(){
-        Intent intent = new Intent(MainActivity.this, StampRallyCreateActivity.class);
+        Intent intent = new Intent(MainActivity.this, StampRallyControlActivity.class);
         startActivity(intent); }
     //スタンプ編集ボタン
     @OnClick(R.id.editStamp)

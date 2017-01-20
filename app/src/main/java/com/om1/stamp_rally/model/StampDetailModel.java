@@ -1,6 +1,9 @@
 package com.om1.stamp_rally.model;
 
+import android.util.Log;
+
 import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -12,6 +15,7 @@ import com.squareup.okhttp.Response;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class StampDetailModel {
     private final EventBus eventBus = EventBus.getDefault();
@@ -31,15 +35,18 @@ public class StampDetailModel {
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/StampDetail?stampid="+stampId)
                 .post(body)
                 .build();
-        new OkHttpClient().newCall(request).enqueue(new Callback() {
+        OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(25, TimeUnit.SECONDS);
+        client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new FetchJsonEvent(false,null));
+                e.printStackTrace();
+                eventBus.post(new FetchStampRallyEvent(false,null));
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new FetchJsonEvent(response.isSuccessful(), response.body().string()));
+                eventBus.post(new FetchStampRallyEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }
