@@ -160,7 +160,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     private void uploadStamp(){
         showOverlay();
         long createTime = System.currentTimeMillis();
-        SharedPreferences pref = getSharedPreferences("stamp-rally", MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE);
+        SharedPreferences pref = getSharedPreferences("main", MODE_PRIVATE);
         String mailAddress = pref.getString("mailAddress", "tarou2");
         String password = pref.getString("password", "tarou2");
         StampUpload.getInstance().uploadStamp(stampId, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
