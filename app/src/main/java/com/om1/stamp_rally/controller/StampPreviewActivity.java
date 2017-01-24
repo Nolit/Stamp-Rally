@@ -67,7 +67,7 @@ public class StampPreviewActivity extends AppCompatActivity {
 
     //trueの時、戻るボタンを無効化にする
     private boolean decidePictureFlag = false;
-    private static int PICTURE_MAX_SIZE = 100;
+    private static int PICTURE_MAX_SIZE = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +95,7 @@ public class StampPreviewActivity extends AppCompatActivity {
 
     private void setupCropImageView(){
         cropImageView.setOutputMaxSize(PICTURE_MAX_SIZE, PICTURE_MAX_SIZE);
+        cropImageView.setCompressFormat(Bitmap.CompressFormat.JPEG);
         Bitmap pictureImage = changeDisplayOrientation(getIntent().getByteArrayExtra("pictureImage"));
         cropImageView.setImageBitmap(pictureImage);
     }
