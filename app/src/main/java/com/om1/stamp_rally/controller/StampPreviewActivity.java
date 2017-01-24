@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.isseiaoki.simplecropview.CropImageView;
+import com.isseiaoki.simplecropview.callback.CropCallback;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampUpload;
 import com.om1.stamp_rally.model.event.StampUploadEvent;
@@ -66,6 +67,7 @@ public class StampPreviewActivity extends AppCompatActivity {
 
     //trueの時、戻るボタンを無効化にする
     private boolean decidePictureFlag = false;
+    private static int PICTURE_MAX_SIZE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +83,7 @@ public class StampPreviewActivity extends AppCompatActivity {
         latitude = getIntent().getDoubleExtra("latitude", 0);
         longitude = getIntent().getDoubleExtra("longitude", 0);
 
-        Bitmap pictureImage = changeDisplayOrientation(getIntent().getByteArrayExtra("pictureImage"));
-        cropImageView.setImageBitmap(pictureImage);
+        setupCropImageView();
     }
 
     @Override
@@ -90,6 +91,12 @@ public class StampPreviewActivity extends AppCompatActivity {
         //EventBusライブラリによる自身の登録解除
         EventBusUtil.defaultBus.unregister(this);
         super.onStop();
+    }
+
+    private void setupCropImageView(){
+        cropImageView.setOutputMaxSize(PICTURE_MAX_SIZE, PICTURE_MAX_SIZE);
+        Bitmap pictureImage = changeDisplayOrientation(getIntent().getByteArrayExtra("pictureImage"));
+        cropImageView.setImageBitmap(pictureImage);
     }
 
     private Bitmap changeDisplayOrientation(byte[] image){
@@ -109,7 +116,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     @OnClick(R.id.decideButton)
     void decidePicture(){
         decidePictureFlag = true;
-        picture = ByteConverter.convert(cropImageView.getCroppedBitmap());
+        cropPicture();
         LayoutInflater inflater = (LayoutInflater)this.getSystemService(
                 LAYOUT_INFLATER_SERVICE);
         final View layout = inflater.inflate(R.layout.stamp_info,
@@ -117,6 +124,17 @@ public class StampPreviewActivity extends AppCompatActivity {
 
         initDialogViews(layout);
         showEditStampDialog(layout);
+    }
+
+    private void cropPicture(){
+        cropImageView.startCrop(null, new CropCallback() {
+            @Override
+            public void onSuccess(Bitmap cropped) {
+                picture = ByteConverter.convert(cropped);
+            }
+            @Override
+            public void onError() {}
+        }, null);
     }
 
     private void initDialogViews(View layout){
