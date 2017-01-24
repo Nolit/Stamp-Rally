@@ -9,10 +9,9 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyStampBookModel;
-import com.om1.stamp_rally.model.adapter.MyStampBookListAdapter;
 import com.om1.stamp_rally.model.adapter.StructureStampListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StructureStampDbAdapter;
 
@@ -48,13 +47,13 @@ public class SpecifyStampRallyStructure extends AppCompatActivity {
     }
 
     @Override
-    public void onStop(){
-        super.onStop();
+    public void onPause(){
+        super.onPause();
         EventBusUtil.defaultBus.unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:MyStampBook", "データベースとの通信に失敗");
             return;

@@ -10,7 +10,8 @@ import android.widget.TextView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampDetailModel;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
+import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,7 +34,6 @@ public class StampDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamp_detail);
-        eventBus.register(this);
 
         //データベース通信
         StampDetailModel stampDetailModel = StampDetailModel.getInstance();
@@ -49,12 +49,22 @@ public class StampDetailActivity extends AppCompatActivity {
         stampThumbnail = (ImageView) findViewById(R.id.stampThumbnail);
         stampUserName = (TextView) findViewById(R.id.stampUserName);
         stampComment = (TextView) findViewById(R.id.stampComment);
-
     }
 
-    //データベース通信処理
+    @Override
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        EventBusUtil.defaultBus.unregister(this);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:StampDetail","データベースとの通信に失敗");
             return;

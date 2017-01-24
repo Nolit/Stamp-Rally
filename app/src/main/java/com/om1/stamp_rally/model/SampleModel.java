@@ -1,15 +1,10 @@
 package com.om1.stamp_rally.model;
 
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,7 +43,7 @@ public class SampleModel {
             public void onFailure(Request request, IOException e) {
                 //イベントバスによるアクティビティへの通知
                 //通信に失敗した時の適切なイベントオブジェクトを渡す
-                eventBus.post(new FetchJsonEvent(false,null));
+                eventBus.post(new FetchedJsonEvent(false,null));
             }
 
             @Override
@@ -56,7 +51,7 @@ public class SampleModel {
             public void onResponse(Response response) throws IOException {
                 //イベントバスによるアクティビティへの通知
                 //取得したデータを持ったイベントオブジェクトを渡す
-                eventBus.post(new FetchJsonEvent(response.isSuccessful(), response.body().string()));
+                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }

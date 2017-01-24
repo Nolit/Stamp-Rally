@@ -1,8 +1,6 @@
 package com.om1.stamp_rally.model;
 
-import android.util.Log;
-
-import com.om1.stamp_rally.model.event.LoginEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -14,8 +12,6 @@ import com.squareup.okhttp.Response;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LoginModel {
     private final EventBus eventBus = EventBus.getDefault();
@@ -40,12 +36,12 @@ public class LoginModel {
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new LoginEvent(false,null));
+                eventBus.post(new FetchedJsonEvent(false,null));
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new LoginEvent(response.isSuccessful(), response.body().string()));
+                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }

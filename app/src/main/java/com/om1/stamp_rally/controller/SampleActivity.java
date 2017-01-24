@@ -11,10 +11,9 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.SampleModel;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -23,7 +22,6 @@ import java.io.IOException;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import database.entities.Sample;
 import database.entities.Stamps;
 
 /**
@@ -63,7 +61,7 @@ public class SampleActivity extends AppCompatActivity {
     //EventBusライブラリによるイベントの登録
     //FetchJsonEventオブジェクトを引数にpostメソッドを呼ぶと、このメソッドが呼ばれる
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Toast.makeText(this, "通信に失敗しました。", Toast.LENGTH_SHORT).show();
             return;

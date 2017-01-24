@@ -61,7 +61,6 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
     @Override
     protected void onResume(){
         super.onResume();
-        Log.d("デバッグ", "onResume");
         eventBus.register(this);
 
         //スタンプ獲得時ではなく、スタンプ登録時には位置情報を取得する

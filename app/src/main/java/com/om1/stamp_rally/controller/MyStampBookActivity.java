@@ -14,7 +14,7 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyStampBookModel;
 import com.om1.stamp_rally.model.adapter.MyStampBookListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,7 +42,6 @@ public class MyStampBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mystamp_book);
-        eventBus.register(this);
         lv = (ListView) findViewById(R.id.MyStampList);
         MyStampBookModel model = MyStampBookModel.getInstance();
 
@@ -70,7 +69,7 @@ public class MyStampBookActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(FetchJsonEvent event) {
+    public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:MyStampBook", "データベースとの通信に失敗");
             notHaveStamp.setText("データベース接続に失敗しました");
@@ -102,5 +101,17 @@ public class MyStampBookActivity extends AppCompatActivity {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        EventBusUtil.defaultBus.unregister(this);
     }
 }

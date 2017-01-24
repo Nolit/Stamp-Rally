@@ -9,8 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +23,7 @@ import com.isseiaoki.simplecropview.CropImageView;
 import com.isseiaoki.simplecropview.callback.CropCallback;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampUpload;
-import com.om1.stamp_rally.model.event.StampUploadEvent;
+import com.om1.stamp_rally.model.event.UploadedStampEvent;
 import com.om1.stamp_rally.utility.ByteConverter;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
@@ -75,7 +72,6 @@ public class StampPreviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stamp_preview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         ButterKnife.inject(this);
-        EventBusUtil.defaultBus.register(this);
 
         stampId = getIntent().getIntExtra("stampId", 0);
         stampRallyId = getIntent().getIntExtra("stampRallyId", 0);
@@ -87,10 +83,15 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop() {
-        //EventBusライブラリによる自身の登録解除
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
         EventBusUtil.defaultBus.unregister(this);
-        super.onStop();
     }
 
     private void setupCropImageView(){
@@ -186,7 +187,7 @@ public class StampPreviewActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void uploadedStamp(StampUploadEvent event) {
+    public void uploadedStamp(UploadedStampEvent event) {
         String message;
         if(event.isSuccess()){
             if(event.isClear()){

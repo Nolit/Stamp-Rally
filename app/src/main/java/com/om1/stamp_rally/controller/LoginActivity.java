@@ -13,7 +13,8 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.LoginModel;
-import com.om1.stamp_rally.model.event.LoginEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
+import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,7 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        eventBus.register(this);
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
         mainEdit = mainPref.edit();
 
@@ -75,9 +75,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
     public void onPause(){
         super.onPause();
-        eventBus.unregister(this);
+        EventBusUtil.defaultBus.unregister(this);
     }
 
     private void challengeLogin(String challengeMailAddress, String challengePassword){
@@ -90,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void LoginAuthentication(LoginEvent event) {
+    public void LoginAuthentication(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:LoginActivity","データベースとの通信に失敗");
             Toast.makeText(LoginActivity.this, "データベースとの通信に失敗しました", Toast.LENGTH_SHORT).show();

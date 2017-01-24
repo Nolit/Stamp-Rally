@@ -1,6 +1,6 @@
 package com.om1.stamp_rally.model;
 
-import com.om1.stamp_rally.model.event.FetchStampRallyEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.Url;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
@@ -39,12 +39,12 @@ public class MapModel {
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new FetchStampRallyEvent(false,null));
+                eventBus.post(new FetchedJsonEvent(false,null));
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new FetchStampRallyEvent(response.isSuccessful(), response.body().string()));
+                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }

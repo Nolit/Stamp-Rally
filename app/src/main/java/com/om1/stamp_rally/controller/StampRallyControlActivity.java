@@ -126,9 +126,4 @@ public class StampRallyControlActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .create().show();
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 }

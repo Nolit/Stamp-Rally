@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyDetailModel;
-import com.om1.stamp_rally.model.event.FetchJsonEvent;
-import com.om1.stamp_rally.model.event.StampRallyDetailEvent;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
+import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,8 +27,6 @@ import java.io.IOException;
 
 import data.StampData;
 import data.StampRallyDetailPageData;
-import database.entities.StampRallys;
-import database.entities.Stamps;
 
 public class StampRallyDetailActivity extends AppCompatActivity {
     SharedPreferences mainPref;
@@ -52,7 +50,6 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamprally_detail);
-        eventBus.register(this);
 
         //データベース通信
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
@@ -84,7 +81,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
 
     //データベース通信処理
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fetchedJson(StampRallyDetailEvent event) {
+    public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:StampRallyDetail","データベースとの通信に失敗");
             return;
@@ -166,4 +163,15 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        EventBusUtil.defaultBus.unregister(this);
+    }
 }

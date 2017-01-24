@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.om1.stamp_rally.model.event.StampUploadEvent;
+import com.om1.stamp_rally.model.event.UploadedStampEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
 
@@ -67,7 +66,6 @@ public class StampEditListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamp_edit_list);
-        EventBusUtil.defaultBus.register(this);
 
         stampDataList = loadStampData();
         adapter = new StampEditListAdapter(this, 0, stampDataList);
@@ -205,7 +203,7 @@ public class StampEditListActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void uploadedStamp(StampUploadEvent event) {
+    public void uploadedStamp(UploadedStampEvent event) {
         String message;
         if(event.isSuccess()){
             int id = (int)stampMapList.get(selectedItemIndex).get("id");
@@ -228,8 +226,14 @@ public class StampEditListActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
         EventBusUtil.defaultBus.unregister(this);
     }
 
