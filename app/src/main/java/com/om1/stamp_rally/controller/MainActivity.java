@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +51,12 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     @InjectView(R.id.SearchEdit)
     EditText search;
     //--マイページ
-
+    @InjectView(R.id.profileThumbnail)
+    ImageView profileThumbnail;
+    @InjectView(R.id.userName)
+    TextView userName;
+    @InjectView(R.id.profile)
+    TextView profile;
     //--マップ
     FragmentManager mapFragmentManager;
 
@@ -226,6 +233,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         try {
             Log.d("デバッグ:MainActivity","データベースとの通信に成功");
             Users loginUser = new ObjectMapper().readValue(event.getJson(), Users.class);
+//            profileThumbnail.setImageBitmap(loginUser.getThumbnail());        //プロフィール画像
+            userName.setText(loginUser.getUserName());
+            profile.setText(loginUser.getProfile());
         } catch (IOException e) {
             e.printStackTrace();
         }
