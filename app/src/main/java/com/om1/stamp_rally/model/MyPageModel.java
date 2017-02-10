@@ -30,7 +30,7 @@ public class MyPageModel {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/myPage?mailAddress="+email+"&password="+password)
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/myPage")
                 .post(body)
                 .build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {
