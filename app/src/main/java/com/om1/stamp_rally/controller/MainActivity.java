@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyPageModel;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
+import com.om1.stamp_rally.utility.ByteConverter;
 import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -233,7 +236,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         try {
             Log.d("デバッグ:MainActivity","データベースとの通信に成功");
             Users loginUser = new ObjectMapper().readValue(event.getJson(), Users.class);
-//            profileThumbnail.setImageBitmap(loginUser.getThumbnail());        //プロフィール画像
+            byte[] notDecodedThumbnail = loginUser.getThumbnailData();
+            Bitmap thumbnail = BitmapFactory.decodeByteArray(notDecodedThumbnail, 0, notDecodedThumbnail.length);
+            profileThumbnail.setImageBitmap(thumbnail);        //プロフィール画像
             userName.setText(loginUser.getUserName());
             profile.setText(loginUser.getProfile());
         } catch (IOException e) {
