@@ -21,23 +21,30 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.om1.stamp_rally.R;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
     private static final String LOGOUT_SENTENCE = "ログアウトしました";
+
+    private final EventBus eventBus = EventBus.getDefault();
+    SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
+    Bundle savedInstanceState;
+
     //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
-    //トップ
-    Button searchButton;
+    //--トップ
+    @InjectView(R.id.SearchEdit)
     EditText search;
-    //マップ
+    //--マイページ
+
+    //--マップ
     FragmentManager mapFragmentManager;
 
-    SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
-    Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +64,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         mapFragmentManager = getSupportFragmentManager();
         this.savedInstanceState = savedInstanceState;
 
-        //キーボード非表示
-        search = (EditText) findViewById(R.id.SearchEdit);
+        //検索バーによるキーボード表示を無効化
         search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus == false) {
@@ -80,18 +85,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        //検索
-        searchButton = (Button) findViewById(R.id.SearchBt);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                search = (EditText) findViewById(R.id.SearchEdit);
-
-                //検索結果一覧ページへ
-                Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
-                intent.putExtra("searchKeyword", search.getText().toString());
-                startActivity(intent);
-            }
-        });
     }
 
     //タブホスト生成
@@ -136,6 +129,17 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onStart(){
         super.onStart();
+    }
+
+
+    //トップ
+    //検索ボタン
+    @OnClick(R.id.SearchBt)
+    void search() {
+        //検索結果一覧ページへ
+        Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
+        intent.putExtra("searchKeyword", search.getText().toString());
+        startActivity(intent);
     }
 
     //マイページ
