@@ -33,7 +33,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     //トップ
     Button searchButton;
     EditText search;
-    //タイムライン
     //マップ
     FragmentManager mapFragmentManager;
 
@@ -110,11 +109,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             spec = tabHost.newTabSpec("MyPage")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.MyPage);
-            tabHost.addTab(spec);
-            // タイムラインタブ
-            spec = tabHost.newTabSpec("タイムライン")
-                    .setIndicator("TIME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.TimeLine);
             tabHost.addTab(spec);
             // スタンプラリータブ
             spec = tabHost.newTabSpec("PLAY")
