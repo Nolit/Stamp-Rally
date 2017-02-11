@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,6 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
 
 import java.util.List;
-import java.util.Map;
-
 import database.entities.StampRallys;
 import database.entities.Stamps;
 
@@ -27,11 +24,13 @@ import database.entities.Stamps;
 public class StampEditListAdapter extends ArrayAdapter<Stamps> {
     private LayoutInflater layoutInflater;
     private List<Stamps> stampList;
+    private StampDbAdapter dbAdapter;
 
     public StampEditListAdapter(Context context, int resource, List<Stamps> objects) {
         super(context, resource, objects);
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         stampList = objects;
+        dbAdapter = new StampDbAdapter(context);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class StampEditListAdapter extends ArrayAdapter<Stamps> {
                 .setTitle("本当に削除しますか？")
                 .setPositiveButton("はい", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        new StampDbAdapter(getContext()).deleteByStampId(stampId);
+                        dbAdapter.deleteByStampId(stampId);
                         stampList.remove(position);
                         notifyDataSetChanged();
                     }
