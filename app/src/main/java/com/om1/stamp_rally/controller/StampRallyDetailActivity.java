@@ -1,5 +1,6 @@
 package com.om1.stamp_rally.controller;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import data.StampData;
 import data.StampRallyDetailPageData;
 
@@ -33,23 +37,34 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     private String loginUserId;
     private String referenceUserId;
     private String stampRallyId;
+    private Integer reviewPoint;
 
     private final EventBus eventBus = EventBus.getDefault();
 
-    private TextView creatorUserName;           //スタンプラリー作成名
-    private TextView stampRallyTitle;           //参照しているスタンプラリー名
+    //レイアウト・ビュー
+    @InjectView(R.id.CreatorName)
+    TextView creatorUserName;               //スタンプラリー作成名
+    @InjectView(R.id.DetailStampTitle)
+    TextView stampRallyTitle;               //参照しているスタンプラリー名
+    @InjectView(R.id.DescriptionText)
+    TextView stampRallyDescription;         //スタンプラリーの概要
+    @InjectView(R.id.DetailReferenceName)
+    TextView referenceUserName;             //表示するスタンプのアルバム所有者
+    @InjectView(R.id.ReviewPoint)
+    TextView stampRallyReviewAveragePoint;  //評価の平均値
+    @InjectView(R.id.EvaluationButton)
+    ImageButton stampEvaluationButton;      //評価ボタン
+    @InjectView(R.id.PlayButton)
+    Button playButton;                      //遊ぶボタン
+
     private ImageButton stampThumbnail;         //スタンプの画像
     private TextView stampTitle;                //スタンプ名
-    private TextView referenceUserName;        //表示するスタンプのアルバム所有者
-    private TextView stampRallyDescription;    //スタンプラリーの概要
-    private TextView stampRallyReviewAveragePoint;  //評価の平均値
-    private ImageButton stampEvaluationButton;  //評価ボタン
-    private Button playButton;                  //遊ぶボタン
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamprally_detail);
+        ButterKnife.inject(this);
 
         //データベース通信
         mainPref = getSharedPreferences("main", MODE_PRIVATE);
@@ -68,15 +83,18 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             System.out.println("stampRallyId:" + stampRallyId + "_________________");
         }
 
-        //ビュー・レイアウト
-        creatorUserName = (TextView) findViewById(R.id.CreatorName);
-        stampRallyTitle = (TextView) findViewById(R.id.DetailStampTitle);
-        referenceUserName = (TextView) findViewById(R.id.DetailReferenceName);
-        stampRallyDescription = (TextView) findViewById(R.id.DescriptionText);
-        stampRallyReviewAveragePoint = (TextView) findViewById(R.id.ReviewPoint);
-        stampEvaluationButton = (ImageButton) findViewById(R.id.EvaluationButton);
-        playButton = (Button) findViewById(R.id.PlayButton);
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        EventBusUtil.defaultBus.unregister(this);
     }
 
     //データベース通信処理
@@ -101,7 +119,11 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             stampRallyTitle.setText(pageData.getStampRallyTitle());
             referenceUserName.setText(pageData.getReferenceUserName());
             stampRallyDescription.setText(pageData.getStampRallyComment());
-//            stampRallyReviewAveragePoint.setText(pageData.getStampRallyReviewPoint());
+            if(pageData.getStampRallyReviewAveragePoint() != null){
+                stampRallyReviewAveragePoint.setText(pageData.getStampRallyReviewAveragePoint());
+            }else{
+                stampRallyReviewAveragePoint.setText("0");
+            }
 
             //スタンプサムネイルを一覧で横スクロール表示
             LinearLayout layout = (LinearLayout) findViewById(R.id.DetailLinearLayoutAddThumbnail);
@@ -119,7 +141,15 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             }
 
             //評価ボタンの設定
-
+            if(pageData.getStampRallyCompleteDate() != null){
+                stampEvaluationButton.setEnabled(true);
+                if(pageData.getStampRallyReviewPoint() != null){
+                    reviewPoint = pageData.getStampRallyReviewPoint();
+                    stampEvaluationButton.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.ic_evaluation_star_on));
+                }
+            }else{
+                stampEvaluationButton.setEnabled(false);
+            }
 
             //遊ぶボタンの設定
             String playButtonStatus = "遊ぶ";
@@ -163,15 +193,10 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        EventBusUtil.defaultBus.register(this);
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        EventBusUtil.defaultBus.unregister(this);
+    @OnClick(R.id.EvaluationButton)
+    void clickEvaluationButton(){
+        Intent intent = new Intent(StampRallyDetailActivity.this, OverlayEvaluationActivity.class);
+        intent.putExtra("defaultPoint", reviewPoint);
+        startActivity(intent);
     }
 }

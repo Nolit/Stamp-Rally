@@ -112,7 +112,10 @@
         <activity
             android:name=".controller.SpecifyStampRallyStructure"
             android:label="@string/title_activity_specify_stamp_rally_structure"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.OverlayEvaluationActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>
