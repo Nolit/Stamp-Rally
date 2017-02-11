@@ -38,6 +38,32 @@ public class StampRallyDetailModel {
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/StampRallyDetail?loginUserId="+loginUserId+"&referenceUserId="+referenceUserId+"&stampRallyId="+stampRallyId)
                 .post(body)
                 .build();
+
+        new OkHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                eventBus.post(new FetchedJsonEvent(false,null));
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
+            }
+        });
+    }
+
+    public void evaluation(float point){
+        System.out.println("デバッグ:評価ポイント:"+point);
+
+        RequestBody body = new FormEncodingBuilder()
+                .add("point", String.valueOf(point))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/evaluation")
+                .post(body)
+                .build();
+
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {

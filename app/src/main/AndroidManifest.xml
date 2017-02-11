@@ -47,7 +47,7 @@
             android:label="@string/title_activity_gps"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.NewMemberActivity"
+            android:name=".controller.CreateAccountActivity"
             android:label="@string/title_activity_new_member"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -112,7 +112,10 @@
         <activity
             android:name=".controller.SpecifyStampRallyStructure"
             android:label="@string/title_activity_specify_stamp_rally_structure"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.OverlayEvaluationActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

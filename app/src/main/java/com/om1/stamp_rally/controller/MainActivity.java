@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,33 +14,55 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.om1.stamp_rally.R;
+import com.om1.stamp_rally.model.MyPageModel;
+import com.om1.stamp_rally.model.event.FetchedJsonEvent;
+import com.om1.stamp_rally.utility.ByteConverter;
+import com.om1.stamp_rally.utility.EventBusUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import database.entities.Users;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
     private static final String LOGOUT_SENTENCE = "ログアウトしました";
+
+    private final EventBus eventBus = EventBus.getDefault();
+    SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
+    Bundle savedInstanceState;
+
     //tabHost
     @InjectView(R.id.tabHost)
     TabHost th;
-    //トップ
-    Button searchButton;
+    //--トップ
+    @InjectView(R.id.SearchEdit)
     EditText search;
-    //タイムライン
-    //マップ
+    //--マイページ
+    @InjectView(R.id.profileThumbnail)
+    ImageView profileThumbnail;
+    @InjectView(R.id.userName)
+    TextView userName;
+    @InjectView(R.id.profile)
+    TextView profile;
+    //--マップ
     FragmentManager mapFragmentManager;
 
-    SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
-    Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +82,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         mapFragmentManager = getSupportFragmentManager();
         this.savedInstanceState = savedInstanceState;
 
-        //キーボード非表示
-        search = (EditText) findViewById(R.id.SearchEdit);
+        //検索バーによるキーボード表示を無効化
         search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus == false) {
@@ -71,28 +93,22 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        //スタンプラリーページを選択時のフラグメント起動
+        //タブのリスナー
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
                 if(tabId.equals("PLAY") && mapFragmentManager.findFragmentById(R.id.StampRally) == null){
+                    //スタンプラリーページを選択時のフラグメント起動
                     mapFragmentManager.beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
+
+                }else if(tabId.equals("HOME")){
+                    //マイページタブ選択時にユーザー情報を取得する
+                    MyPageModel myPageModel = MyPageModel.getInstance();
+                    myPageModel.fetchJson(mainPref.getString("mailAddress",null), mainPref.getString("password", null));
                 }
             }
         });
 
-        //検索
-        searchButton = (Button) findViewById(R.id.SearchBt);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                search = (EditText) findViewById(R.id.SearchEdit);
-
-                //検索結果一覧ページへ
-                Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
-                intent.putExtra("searchKeyword", search.getText().toString());
-                startActivity(intent);
-            }
-        });
     }
 
     //タブホスト生成
@@ -107,14 +123,9 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                     .setContent(R.id.TOP);
             tabHost.addTab(spec);
             // マイページタブ
-            spec = tabHost.newTabSpec("MyPage")
+            spec = tabHost.newTabSpec("HOME")
                     .setIndicator("HOME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
                     .setContent(R.id.MyPage);
-            tabHost.addTab(spec);
-            // タイムラインタブ
-            spec = tabHost.newTabSpec("タイムライン")
-                    .setIndicator("TIME", ContextCompat.getDrawable(this, R.drawable.abc_menu_hardkey_panel_mtrl_mult))
-                    .setContent(R.id.TimeLine);
             tabHost.addTab(spec);
             // スタンプラリータブ
             spec = tabHost.newTabSpec("PLAY")
@@ -144,8 +155,30 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         super.onStart();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        EventBusUtil.defaultBus.register(this);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        EventBusUtil.defaultBus.unregister(this);
+    }
+
+    //トップ
+    //--検索ボタン
+    @OnClick(R.id.SearchBt)
+    void search() {
+        //検索結果一覧ページへ
+        Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
+        intent.putExtra("searchKeyword", search.getText().toString());
+        startActivity(intent);
+    }
+
     //マイページ
-    //ログアウトボタン
+    //--ログアウトボタン
     @OnClick(R.id.LogoutBt)
     void clickLogoutBt(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -162,7 +195,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 });
         builder.show();
     }
-    //マイスタンプ帳
+    //--マイスタンプ帳
     @OnClick(R.id.myStampBookIntentButton)
     void clickMyStampBookIntentButton(){
         Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
@@ -171,22 +204,40 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     }
 
     //スタンプ管理タブ
-    //スタンプラリー作成ボタン
+    //--スタンプラリー作成ボタン
     @OnClick(R.id.createStampRallyButton)
     void clickCreateStampRallyButton(){
         Intent intent = new Intent(MainActivity.this, StampRallyControlActivity.class);
         startActivity(intent); }
-    //スタンプ編集ボタン
+    //--スタンプ編集ボタン
     @OnClick(R.id.editStamp)
     void clickEditStamp(){
         Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
         startActivity(intent); }
-    //カメラボタン
+    //--カメラボタン
     @OnClick(R.id.stampRegistrationButton)
     void clickStampRegistrationButton(){
         Intent intent = new Intent(this, TakeStampActivity.class);
         intent.putExtra("stampRegisterFlag", true);
         startActivity(intent); }
 
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void fetchedJson(FetchedJsonEvent event) {
+        if (!event.isSuccess()) {
+            Log.d("デバッグ:MainActivity","データベースとの通信に失敗");
+            Toast.makeText(MainActivity.this, "データベースとの通信に失敗しました", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            Log.d("デバッグ:MainActivity","データベースとの通信に成功");
+            Users loginUser = new ObjectMapper().readValue(event.getJson(), Users.class);
+            byte[] notDecodedThumbnail = loginUser.getThumbnailData();
+            Bitmap thumbnail = BitmapFactory.decodeByteArray(notDecodedThumbnail, 0, notDecodedThumbnail.length);
+            profileThumbnail.setImageBitmap(thumbnail);        //プロフィール画像
+            userName.setText(loginUser.getUserName());
+            profile.setText(loginUser.getProfile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

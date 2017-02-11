@@ -71,7 +71,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/ReviewPoint"
                             android:textSize="15dp"
-                            android:text="4.7"
+                            android:text="0"
                             android:layout_gravity="bottom"/>
                     </LinearLayout>
                 </LinearLayout>
