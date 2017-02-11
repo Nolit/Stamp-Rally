@@ -58,7 +58,15 @@ public class StampDbAdapter extends BaseDbAdapter {
         values.put(CREATE_TIME, System.currentTimeMillis());
         db.insertOrThrow(tableName, null, values);
         close();
-        log();
+    }
+
+    public void update(int stampId, String title, String memo){
+        open();
+        ContentValues values = new ContentValues();
+        values.put(TITLE, title);
+        values.put(MEMO, memo);
+        db.update(tableName, values, STAMP_ID + "=" + stampId, null);
+        close();
     }
 
     public List<Map<String, Object>> getAllAsList(){

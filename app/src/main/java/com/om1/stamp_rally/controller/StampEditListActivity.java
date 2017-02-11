@@ -41,7 +41,7 @@ import static butterknife.ButterKnife.findById;
 public class StampEditListActivity extends AppCompatActivity {
     private final String DIALOG_TITLE = "アップロードしますか";
     private final String OK_BUTTON_MESSAGE = "アップロード";
-    private final String NO_BUTTON_MESSAGE = "キャンセル";
+    private final String NO_BUTTON_MESSAGE = "保存";
     private final String ERROR_MESSAGE = "名称を入力してください";
     private final String UPLOAD_SUCCESS_MESSAGE = "アップロードしました";
     private final String UPLOAD_FAILE_MESSAGE = "アップロードに失敗しました\n編集画面からもう一度お試しください";
@@ -142,11 +142,6 @@ public class StampEditListActivity extends AppCompatActivity {
             .setView(layout)
             .setPositiveButton(OK_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    String title = titleEdit.getText().toString();
-                    if(title.equals("")){
-                        stampTitleError.setText(ERROR_MESSAGE);
-                        return;
-                    }
                     applyDialogEditField();
                     uploadStamp(stamp);
                 }
@@ -154,10 +149,11 @@ public class StampEditListActivity extends AppCompatActivity {
             .setNegativeButton(NO_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    applyDialogEditField();
+                    updateStamp(stamp);
                     dialog.cancel();
                 }
             })
-            .setCancelable(false)
             .create().show();
     }
 
@@ -200,6 +196,14 @@ public class StampEditListActivity extends AppCompatActivity {
         String password = pref.getString("password", "tarou2");
 
         StampUpload.getInstance().uploadStamp(id, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
+    }
+
+    private void updateStamp(Stamps stamp){
+        new StampDbAdapter(getApplicationContext()).update(stamp.getStampId(), title, note);
+        Intent intent=new Intent();
+        intent.setClass(this, getClass());
+        startActivity(intent);
+        finish();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
