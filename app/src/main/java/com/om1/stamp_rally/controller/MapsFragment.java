@@ -77,6 +77,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     private LatLng position = null;        //確認！！！→　cameraIconの表示処理(VISIBLE)の時に使う。onLocationChangedが呼ばれない限り初期化されてない、onLocationChangedが更新されるまで前の位置情報が入ったままになる
 
     //位置情報詐称
+    private boolean isMockLocationEnabled = false;
     private Location testLocation;
     private final String providerName = LocationManager.GPS_PROVIDER;
     private WebSocket mockLocationClient;
@@ -153,8 +154,13 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         super.onResume();
         eventBus.register(this);
 
-        setUpTestProvider();
-        connectMockLocation();
+        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        if(isMockLocationEnabled){
+            setUpTestProvider();
+            connectMockLocation();
+        }else{
+            setUpLocationManager();
+        }
     }
 
     @Override
@@ -162,7 +168,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         super.onPause();
         eventBus.unregister(this);
 
-        if(mockLocationClient != null){
+        if(!isMockLocationEnabled && mockLocationClient != null){
             mockLocationClient.sendClose();
         }
         mLocationManager.removeUpdates(this);    // 位置情報の更新を止める
@@ -201,7 +207,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
             }
         });
 
-//        setUpLocationManager();
         setMapListeners();
 
         MapModel.getInstance().fetchJson(mainPref.getString("playingStampRally", null));
@@ -402,7 +407,6 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
     }
 
     private void setUpTestProvider(){
-        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if(mLocationManager.isProviderEnabled(providerName)){
             mLocationManager.addTestProvider(providerName, true, true, true, true, true, true, true, Criteria.POWER_HIGH, Criteria.ACCURACY_HIGH);
         }
