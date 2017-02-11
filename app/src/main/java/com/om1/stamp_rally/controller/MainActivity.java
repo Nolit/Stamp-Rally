@@ -93,21 +93,16 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             }
         });
 
-        //スタンプラリーページを選択時のフラグメント起動
+        //タブのリスナー
         th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
                 if(tabId.equals("PLAY") && mapFragmentManager.findFragmentById(R.id.StampRally) == null){
+                    //スタンプラリーページを選択時のフラグメント起動
                     mapFragmentManager.beginTransaction().add(R.id.StampRally, new MapsFragment()).commit();
-                }
-            }
-        });
 
-        //マイページタブ選択時にユーザー情報を取得する
-        th.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                if(tabId.equals("HOME")){
+                }else if(tabId.equals("HOME")){
+                    //マイページタブ選択時にユーザー情報を取得する
                     MyPageModel myPageModel = MyPageModel.getInstance();
                     myPageModel.fetchJson(mainPref.getString("mailAddress",null), mainPref.getString("password", null));
                 }
