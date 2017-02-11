@@ -108,6 +108,12 @@ public class StampDbAdapter extends BaseDbAdapter {
         close();
     }
 
+    public void deleteByStampId(int stampId){
+        open();
+        db.delete(tableName, STAMP_ID + "=" + stampId, null);
+        close();
+    }
+
     public void dropTable(){
         open();
         db.execSQL("drop table stamp;");

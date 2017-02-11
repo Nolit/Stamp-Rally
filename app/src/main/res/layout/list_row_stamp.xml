@@ -23,7 +23,8 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
             android:layout_height="60dp">
             <TextView
                 android:layout_width="match_parent"
@@ -40,5 +41,15 @@
                 android:textSize="15dp"
                 android:id="@+id/stampRallyTitle" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right"
+            android:visibility="invisible"
+            android:text="削除"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
     </LinearLayout>
 </RelativeLayout>
