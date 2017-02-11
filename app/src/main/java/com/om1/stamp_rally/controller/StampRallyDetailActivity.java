@@ -33,10 +33,14 @@ import data.StampData;
 import data.StampRallyDetailPageData;
 
 public class StampRallyDetailActivity extends AppCompatActivity {
+    private static final String SET_PLAY_STAMP_RALLY = "スタンプラリーをマップにセットしました";
+    private static final String SET_FAVORITE_STAMP_RALLY = "お気に入りしました";
+
     SharedPreferences mainPref;
     private String loginUserId;
     private String referenceUserId;
     private String stampRallyId;
+    private boolean isFavorite;
     private Integer reviewPoint;
 
     private final EventBus eventBus = EventBus.getDefault();
@@ -50,6 +54,8 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     TextView stampRallyDescription;         //スタンプラリーの概要
     @InjectView(R.id.DetailReferenceName)
     TextView referenceUserName;             //表示するスタンプのアルバム所有者
+    @InjectView(R.id.FavoriteButton)
+    ImageButton favoriteButton;             //お気に入りボタン
     @InjectView(R.id.ReviewPoint)
     TextView stampRallyReviewAveragePoint;  //評価の平均値
     @InjectView(R.id.EvaluationButton)
@@ -140,6 +146,14 @@ public class StampRallyDetailActivity extends AppCompatActivity {
                 stampTitle.setText(index.getStampName());
             }
 
+            //お気に入りボタン
+            isFavorite = pageData.isFavorite();
+            if(isFavorite){
+                favoriteButton.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.ic_favorite_on));
+            }else{
+                favoriteButton.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.ic_favorite_off));
+            }
+
             //評価ボタンの設定
             if(pageData.getStampRallyCompleteDate() != null){
                 stampEvaluationButton.setEnabled(true);
@@ -184,7 +198,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
                     SharedPreferences.Editor mainEdit = mainPref.edit();
                     mainEdit.putString("playingStampRally", stampRallyId);
                     mainEdit.commit();
-                    Toast.makeText(StampRallyDetailActivity.this.getApplication(), "スタンプラリーをマップにセットしました", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StampRallyDetailActivity.this.getApplication(), SET_PLAY_STAMP_RALLY, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -198,5 +212,22 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(StampRallyDetailActivity.this, OverlayEvaluationActivity.class);
         intent.putExtra("defaultPoint", reviewPoint);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.FavoriteButton)
+    void clickFavoriteButton(){
+        //現在のfavoriteの状態をサーバーに送る（trueを送ればデータベースの値は　true → false になる）
+        if(isFavorite){
+            //お気に入り解除
+            favoriteButton.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.ic_favorite_off));
+            isFavorite = !isFavorite;
+            StampRallyDetailModel.getInstance().favorite(isFavorite);
+        }else{
+            //お気に入り登録
+            favoriteButton.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.ic_favorite_on));
+            Toast.makeText(StampRallyDetailActivity.this.getApplication(), SET_FAVORITE_STAMP_RALLY, Toast.LENGTH_SHORT).show();
+            isFavorite = !isFavorite;
+            StampRallyDetailModel.getInstance().favorite(isFavorite);
+        }
     }
 }
