@@ -35,15 +35,15 @@ public class OverlayEvaluationActivity extends Activity {
         //RatingBar設定
         overlayRatingBar = (RatingBar) findViewById(R.id.overlayRatingBar);
         overlayRatingBar.setRating(getIntent().getExtras().getInt("defaultPoint", 0));
-        overlayRatingBar.setStepSize((float) 0.5);
+        overlayRatingBar.setStepSize((int) 1);
         overlayRatingBar.setNumStars(5);
 
         overlayEvaluationButton = (Button) findViewById(R.id.overlayEvaluationButton);
         overlayEvaluationButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                StampRallyDetailModel.getInstance().evaluation(email,pass,stampRallyId,(float) overlayRatingBar.getRating());
-                System.out.println("デバッグ"+(float) overlayRatingBar.getRating());
+                StampRallyDetailModel.getInstance().evaluation(email,pass,stampRallyId,(int) overlayRatingBar.getRating());
+                System.out.println("デバッグ"+(int) overlayRatingBar.getRating());
                 finish();
             }
         });

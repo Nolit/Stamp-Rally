@@ -52,12 +52,12 @@ public class StampRallyDetailModel {
         });
     }
 
-    public void evaluation(String email, String pass, String stampRallyId, float point){
+    public void evaluation(String email, String pass, String stampRallyId, int point){
         System.out.println("デバッグ:評価ポイント:"+point);
 
         RequestBody body = new FormEncodingBuilder()
                 .add("email", email)
-                .add("pass", pass)
+                .add("password", pass)
                 .add("stampRallyId", stampRallyId)
                 .add("point", String.valueOf(point))
                 .build();
@@ -85,7 +85,7 @@ public class StampRallyDetailModel {
 
         RequestBody body = new FormEncodingBuilder()
                 .add("email", email)
-                .add("pass", pass)
+                .add("password", pass)
                 .add("stampRallyId", stampRallyId)
                 .add("favorite", String.valueOf(favorite))
                 .build();
