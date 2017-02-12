@@ -70,12 +70,9 @@ public class StampRallyDetailModel {
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new FetchedJsonEvent(false,null));
             }
-
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }
@@ -98,12 +95,9 @@ public class StampRallyDetailModel {
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new FetchedJsonEvent(false,null));
             }
-
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }
