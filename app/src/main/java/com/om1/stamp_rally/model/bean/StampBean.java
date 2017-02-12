@@ -16,6 +16,7 @@ public class StampBean {
     private String stampDate;
     private LatLng stampLatLng;
     private String stampRallyName;
+    private boolean isHaving;
 
     private byte[] pictPath;
 
@@ -107,5 +108,13 @@ public class StampBean {
     public void setStampRallyName(String stampRallyName) { this.stampRallyName = stampRallyName; }
     public String getStampRallyName() {
         return stampRallyName;
+    }
+
+    public void setIsHaving(boolean isHaving){
+        this.isHaving = isHaving;
+    }
+
+    public boolean isHaving(){
+        return isHaving;
     }
 }

@@ -22,7 +22,7 @@ public class MapModel {
         return instance;
     }
 
-    public void fetchJson(String playingStampRallyId){
+    public void fetchJson(String email, String password, String playingStampRallyId){
         if(playingStampRallyId == null){
             System.out.println("デバッグ:Mapプレイ中のスタンプラリーがありません。");
             return;
@@ -30,10 +30,12 @@ public class MapModel {
 
         RequestBody body = new FormEncodingBuilder()
                 .add("playingStampRallyId", playingStampRallyId)
+                .add("email", email)
+                .add("password", password)
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/map?playingStampRallyId="+playingStampRallyId)
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/map")
                 .post(body)
                 .build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {

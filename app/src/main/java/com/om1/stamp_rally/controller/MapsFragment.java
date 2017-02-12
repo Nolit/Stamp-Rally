@@ -209,7 +209,9 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
         setMapListeners();
 
-        MapModel.getInstance().fetchJson(mainPref.getString("playingStampRally", null));
+        String email = mainPref.getString("mailAddress", null);
+        String password = mainPref.getString("password", null);
+        MapModel.getInstance().fetchJson(email, password, mainPref.getString("playingStampRally", null));
     }
 
     @Override   //位置座標を取得したら引数に渡して呼び出される
@@ -239,8 +241,10 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                     , marker.getPosition().longitude
                     , results_markerInitialization);
             Log.d("デバッグ", "現在地から"+ marker.getTitle() +"までの距離" + results_markerInitialization[0] + "m");
-
-            if(results_markerInitialization[0] < CAN_STAMP_METER){
+            if(isHavingStampMarker(marker)) {
+                marker.setIcon(completeMarker);
+                Log.d("デバッグ",marker.getTitle()+"のマーカーをcompleteにセット");
+            }else if(results_markerInitialization[0] < CAN_STAMP_METER){
                 marker.setIcon(nearMarker);
                 Log.d("デバッグ",marker.getTitle()+"のマーカーをnearにセット");
             }else{
@@ -268,7 +272,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                 cameraIcon.setVisibility(View.INVISIBLE);
                 float[] results_cameraIconVisible = new float[1];
 
-                if(position != null){
+                if(position != null && ! isHavingStampMarker(marker)){
                     Location.distanceBetween(position.latitude, position.longitude
                             , marker.getPosition().latitude
                             , marker.getPosition().longitude
@@ -278,8 +282,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
 
                         //intent
                         stampTitle = marker.getTitle();
-                        String markerPosition = marker.getId().replaceAll("m", "");
-                        selectedStampId = stampList.get(Integer.valueOf(markerPosition)).getStampId();
+                        selectedStampId = stampList.get(Integer.valueOf(marker.getId().replaceAll("m", ""))).getStampId();
                     }
                 }
                 return false;
@@ -383,6 +386,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
             if(stampRally != null){
                 int counter = 0;
                 for(Stamps stamp:stampRally.getStampList()){
+                    Log.d("デバッグ:MapsFragment","マーカーセット！");
                     markers.add(mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()))
                             .title(stamp.getStampName())));
@@ -396,6 +400,7 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
                     stampBean.setLatLng(new LatLng(stamp.getStampPads().getLatitude(),stamp.getStampPads().getLongitude()));
                     stampBean.setPictPath(stamp.getPicture());
                     stampBean.setStampComment(stamp.getStampComment());
+                    stampBean.setIsHaving(stamp.isHaving);
                     stampList.add(stampBean);
                 }
                 adapter.notifyDataSetChanged(); //リストの更新
@@ -404,6 +409,12 @@ public class MapsFragment extends Fragment implements LocationListener,OnMapRead
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isHavingStampMarker(Marker marker){
+        String markerPosition = marker.getId().replaceAll("m", "");
+        StampBean stamp = stampList.get(Integer.valueOf(markerPosition));
+        return stamp.isHaving();
     }
 
     private void setUpTestProvider(){
