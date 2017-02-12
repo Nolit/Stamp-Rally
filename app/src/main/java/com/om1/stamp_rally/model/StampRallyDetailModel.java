@@ -57,7 +57,7 @@ public class StampRallyDetailModel {
 
         RequestBody body = new FormEncodingBuilder()
                 .add("email", email)
-                .add("pass", pass)
+                .add("password", pass)
                 .add("stampRallyId", stampRallyId)
                 .add("point", String.valueOf(point))
                 .build();
@@ -70,12 +70,9 @@ public class StampRallyDetailModel {
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new FetchedJsonEvent(false,null));
             }
-
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }
@@ -85,7 +82,7 @@ public class StampRallyDetailModel {
 
         RequestBody body = new FormEncodingBuilder()
                 .add("email", email)
-                .add("pass", pass)
+                .add("password", pass)
                 .add("stampRallyId", stampRallyId)
                 .add("favorite", String.valueOf(favorite))
                 .build();
@@ -98,12 +95,9 @@ public class StampRallyDetailModel {
         new OkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                eventBus.post(new FetchedJsonEvent(false,null));
             }
-
             @Override
             public void onResponse(Response response) throws IOException {
-                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
             }
         });
     }
