@@ -52,15 +52,46 @@ public class StampRallyDetailModel {
         });
     }
 
-    public void evaluation(float point){
+    public void evaluation(String email, String pass, String stampRallyId, float point){
         System.out.println("デバッグ:評価ポイント:"+point);
 
         RequestBody body = new FormEncodingBuilder()
+                .add("email", email)
+                .add("pass", pass)
+                .add("stampRallyId", stampRallyId)
                 .add("point", String.valueOf(point))
                 .build();
 
         Request request = new Request.Builder()
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/evaluation")
+                .post(body)
+                .build();
+
+        new OkHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                eventBus.post(new FetchedJsonEvent(false,null));
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
+            }
+        });
+    }
+
+    public void favorite(String email, String pass, String stampRallyId, boolean favorite){
+        System.out.println("デバッグ:お気に入り:"+favorite);
+
+        RequestBody body = new FormEncodingBuilder()
+                .add("email", email)
+                .add("pass", pass)
+                .add("stampRallyId", stampRallyId)
+                .add("favorite", String.valueOf(favorite))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/favorite")
                 .post(body)
                 .build();
 

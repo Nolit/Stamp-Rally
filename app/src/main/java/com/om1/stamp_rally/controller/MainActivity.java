@@ -231,9 +231,13 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         try {
             Log.d("デバッグ:MainActivity","データベースとの通信に成功");
             Users loginUser = new ObjectMapper().readValue(event.getJson(), Users.class);
-            byte[] notDecodedThumbnail = loginUser.getThumbnailData();
-            Bitmap thumbnail = BitmapFactory.decodeByteArray(notDecodedThumbnail, 0, notDecodedThumbnail.length);
-            profileThumbnail.setImageBitmap(thumbnail);        //プロフィール画像
+            if(loginUser.getThumbnailData() != null) {
+                byte[] notDecodedThumbnail = loginUser.getThumbnailData();
+                Bitmap thumbnail = BitmapFactory.decodeByteArray(notDecodedThumbnail, 0, notDecodedThumbnail.length);
+                profileThumbnail.setImageBitmap(thumbnail);        //プロフィール画像
+            }else{
+                profileThumbnail.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.default_image_view));
+            }
             userName.setText(loginUser.getUserName());
             profile.setText(loginUser.getProfile());
         } catch (IOException e) {
