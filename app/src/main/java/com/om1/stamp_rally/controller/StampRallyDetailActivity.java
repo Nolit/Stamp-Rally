@@ -120,7 +120,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             referenceUserName.setText(pageData.getReferenceUserName());
             stampRallyDescription.setText(pageData.getStampRallyComment());
             if(pageData.getStampRallyReviewAveragePoint() != null){
-                stampRallyReviewAveragePoint.setText(pageData.getStampRallyReviewAveragePoint());
+                stampRallyReviewAveragePoint.setText(pageData.getStampRallyReviewAveragePoint().toString());
             }else{
                 stampRallyReviewAveragePoint.setText("0");
             }
