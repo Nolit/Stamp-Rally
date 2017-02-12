@@ -211,6 +211,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     void clickEvaluationButton(){
         Intent intent = new Intent(StampRallyDetailActivity.this, OverlayEvaluationActivity.class);
         intent.putExtra("defaultPoint", reviewPoint);
+        intent.putExtra("stampRallyId", stampRallyId);
         startActivity(intent);
     }
 
@@ -221,13 +222,15 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             //お気に入り解除
             favoriteButton.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.ic_favorite_off));
             isFavorite = !isFavorite;
-            StampRallyDetailModel.getInstance().favorite(isFavorite);
+            StampRallyDetailModel.getInstance().favorite(mainPref.getString("mailAddress", null), mainPref.getString("password", null)
+                    , stampRallyId, isFavorite);
         }else{
             //お気に入り登録
             favoriteButton.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.ic_favorite_on));
             Toast.makeText(StampRallyDetailActivity.this.getApplication(), SET_FAVORITE_STAMP_RALLY, Toast.LENGTH_SHORT).show();
             isFavorite = !isFavorite;
-            StampRallyDetailModel.getInstance().favorite(isFavorite);
+            StampRallyDetailModel.getInstance().favorite(mainPref.getString("mailAddress", null), mainPref.getString("password", null)
+                    , stampRallyId, isFavorite);
         }
     }
 }
