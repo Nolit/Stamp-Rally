@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,10 @@ public class MyPageOtherActivity extends AppCompatActivity {
     TextView profile;
     @InjectView(R.id.settings_and_follow_button)
     ImageButton settingsAndFollowButton;
+    @InjectView(R.id.follow)
+    Button followNum;
+    @InjectView(R.id.follower)
+    Button followerNum;
 
     boolean followStatus;   //true（フォロー中）・false（未フォロー）
 
@@ -104,13 +109,17 @@ public class MyPageOtherActivity extends AppCompatActivity {
 
             //フォローボタンの設定
 //            followStatus = ;
-        if(followStatus){
-            //フォロー中
-            settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_on));
-        }else{
-            //未フォロー
-            settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_off));
-        }
+            if(followStatus){
+                //フォロー中
+                settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_on));
+            }else{
+                //未フォロー
+                settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_off));
+            }
+
+//            followNum.setText();
+//            followerNum.setText();
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -145,5 +154,6 @@ public class MyPageOtherActivity extends AppCompatActivity {
                     followStatus);
         }
     }
+
 
 }
