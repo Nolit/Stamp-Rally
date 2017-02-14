@@ -15,6 +15,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_weight="10"
+                android:textSize="20dp"
+                android:gravity="center|center_vertical"
+                android:id="@+id/userName"
+                android:text="ユーザー名"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical">
+                <ImageButton
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:id="@+id/settings_and_follow_button"
+                    android:src="@mipmap/ic_settings"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:orientation="horizontal"
             android:id="@+id/myPage_header">
@@ -32,36 +62,6 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_weight="10"
-                        android:id="@+id/userName"
-                        android:text="ユーザー名"
-                        />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right">
-                        <ImageButton
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:scaleType="fitXY"
-                            android:adjustViewBounds="true"
-                            android:background="@null"
-                            android:layout_gravity="right"
-                            android:id="@+id/settings_and_follow_button"
-                            android:src="@mipmap/ic_settings"/>
-                    </LinearLayout>
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
