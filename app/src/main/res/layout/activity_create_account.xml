@@ -75,7 +75,8 @@
                         android:layout_height="wrap_content"
                         android:hint="UserName"
                         android:ems="10"
-                        android:maxLines="1"/>
+                        android:maxLines="1"
+                        android:inputType="text"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <Button

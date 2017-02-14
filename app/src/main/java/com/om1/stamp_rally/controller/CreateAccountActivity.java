@@ -26,7 +26,7 @@ import database.entities.Users;
 
 public class CreateAccountActivity extends AppCompatActivity {
     private static final String ERR_VALIDATION_CHECK_NULL = "未入力の項目があります";
-    private static final String  ERR_CHALLENGE_CREATE_ACCOUNT = "そのメールアドレスはすでに使われています";
+    private static final String ERR_CHALLENGE_CREATE_ACCOUNT = "そのメールアドレスはすでに使われています";
     private static final String SUCCESS_CREATE_ACCOUNT = "アカウントを作成しました";
 
     private final EventBus eventBus = EventBus.getDefault();
