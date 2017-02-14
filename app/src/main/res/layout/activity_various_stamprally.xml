@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#ADD8E6"
     tools:context="com.om1.stamp_rally.controller.ResultSearchActivity">
 
     <LinearLayout
@@ -20,9 +21,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:padding="5dp"
                 android:text="表示スタンプラリー一覧"
-                android:textSize="25dp"
+                android:textSize="15dp"
                 android:id="@+id/showStampRally"/>
         </LinearLayout>
 

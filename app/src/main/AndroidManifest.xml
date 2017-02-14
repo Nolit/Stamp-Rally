@@ -112,6 +112,9 @@
             android:name=".controller.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".controller.VariousStampRallyActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".controller.OverlayEvaluationActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
