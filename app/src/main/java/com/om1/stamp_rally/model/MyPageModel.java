@@ -30,6 +30,31 @@ public class MyPageModel {
                 .build();
 
         Request request = new Request.Builder()
+                .url("http://" + Url.HOST + ":" + Url.PORT + "/stamp-rally/myPage")
+                .post(body)
+                .build();
+        new OkHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                eventBus.post(new FetchedJsonEvent(false, null));
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                eventBus.post(new FetchedJsonEvent(response.isSuccessful(), response.body().string()));
+            }
+        });
+    }
+
+    public void myPageOther(String email, String password, String referenceUserId) {
+
+        RequestBody body = new FormEncodingBuilder()
+                .add("email", email)
+                .add("password", password)
+                .add("referenceUserId", referenceUserId)
+                .build();
+
+        Request request = new Request.Builder()
                 .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/myPage")
                 .post(body)
                 .build();
@@ -45,4 +70,28 @@ public class MyPageModel {
             }
         });
     }
+
+    public void followRequest(String email, String password, String referenceUserId, boolean followRequest) {
+
+        RequestBody body = new FormEncodingBuilder()
+                .add("email", email)
+                .add("password", password)
+                .add("referenceUserId", referenceUserId)
+                .add("followRequest", String.valueOf(followRequest))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/myPage")
+                .post(body)
+                .build();
+        new OkHttpClient().newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+            }
+            @Override
+            public void onResponse(Response response) throws IOException {
+            }
+        });
+    }
+
 }
