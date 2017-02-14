@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
     ImageView profileThumbnail;
     @InjectView(R.id.searchId)
     EditText searchId;
-    @InjectView(R.id.UserName)
+    @InjectView(R.id.userName)
     EditText userName;
     @InjectView(R.id.profileSentence)
     EditText profileSentence;
