@@ -212,20 +212,22 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         intent.putExtra("mode", "favorite");
         startActivity(intent);
     }
-//    @OnClick(R.id.follow)
-//    void clickFollow(){
-//        Intent intent = new Intent(MainActivity.this, .class);
-//        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
-//        intent.putExtra("showStampRally", userName.getText() + "さんのフォロー");
-//        startActivity(intent);
-//    }
-//    @OnClick(R.id.follower)
-//    void clickFollower(){
-//        Intent intent = new Intent(MainActivity.this, .class);
-//        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
-//        intent.putExtra("showStampRally", userName.getText() + "さんのフォロワー");
-//        startActivity(intent);
-//    }
+    @OnClick(R.id.follow)
+    void clickFollow(){
+        Intent intent = new Intent(MainActivity.this, FollowActivity.class);
+        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("mode", "follow");
+        intent.putExtra("showFollow", userName.getText() + "さんのフォロー");
+        startActivity(intent);
+    }
+    @OnClick(R.id.follower)
+    void clickFollower(){
+        Intent intent = new Intent(MainActivity.this, FollowActivity.class);
+        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("mode", "follower");
+        intent.putExtra("showFollow", userName.getText() + "さんのフォロワー");
+        startActivity(intent);
+    }
 
     //スタンプ管理タブ
     //--スタンプラリー作成ボタン
