@@ -63,10 +63,6 @@
             android:label="@string/title_activity_follow"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.FollowerActivity"
-            android:label="@string/title_activity_follower"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".controller.MyStampBookActivity"
             android:label="@string/title_activity_mystampbook"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -81,10 +77,6 @@
         <activity
             android:name=".controller.CompleteRallyActivity"
             android:label="@string/title_activity_complete_rally"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".controller.FavoriteRallyActivity"
-            android:label="@string/title_activity_favorite_rally"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.TakeStampActivity"

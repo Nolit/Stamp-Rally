@@ -155,5 +155,54 @@ public class MyPageOtherActivity extends AppCompatActivity {
         }
     }
 
+    @OnClick(R.id.myStampBookIntentButton)
+    void cilckMyStampBookIntentButton(){
+        Intent intent = new Intent(MyPageOtherActivity.this, MyStampBookActivity.class);
+        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.completeStampRallyIntentButton)
+    void clickCompleteStampRallyIntentButton(){
+        Intent intent = new Intent(MyPageOtherActivity.this, VariousStampRallyActivity.class);
+        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("showStampRally", userName.getText() + "さんのクリアスタンプラリー");
+        intent.putExtra("mode", "complete");
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.createStampRallyIntentButton)
+    void clickCreateStampRallyIntentButton(){
+        Intent intent = new Intent(MyPageOtherActivity.this, VariousStampRallyActivity.class);
+        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("showStampRally", userName.getText() + "さんの作成スタンプラリー");
+        intent.putExtra("mode", "create");
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.favoriteStampRallyIntentButton)
+    void clickFavoriteStampRallyIntentButton(){
+        Intent intent = new Intent(MyPageOtherActivity.this, VariousStampRallyActivity.class);
+        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("showStampRally", userName.getText() + "さんのお気に入りスタンプラリー");
+        intent.putExtra("mode", "favorite");
+        startActivity(intent);
+    }
+
+//    @OnClick(R.id.follow)
+//    void clickFollow(){
+//        Intent intent = new Intent(MyPageOtherActivity.this, .class);
+//        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+//        intent.putExtra("showStampRally", userName.getText() + "さんのフォロー");
+//        startActivity(intent);
+//    }
+//
+//    @OnClick(R.id.follower)
+//    void clickFollower(){
+//        Intent intent = new Intent(MyPageOtherActivity.this, .class);
+//        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+//        intent.putExtra("showStampRally", userName.getText() + "さんのフォロワー");
+//        startActivity(intent);
+//    }
 
 }
