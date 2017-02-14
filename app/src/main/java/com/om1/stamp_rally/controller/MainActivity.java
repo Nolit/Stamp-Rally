@@ -41,8 +41,6 @@ import butterknife.OnClick;
 import database.entities.Users;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
-    private static final String LOGOUT_SENTENCE = "ログアウトしました";
-
     private final EventBus eventBus = EventBus.getDefault();
     SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
     Bundle savedInstanceState;
@@ -178,22 +176,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     }
 
     //マイページ
-    //--ログアウトボタン
-    @OnClick(R.id.LogoutBt)
-    void clickLogoutBt(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("ログアウトしますか？")
-                .setPositiveButton("ログアウト", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        SharedPreferences.Editor mainEdit = mainPref.edit();
-                        mainEdit.clear();
-                        mainEdit.commit();
-                        Toast.makeText(MainActivity.this, LOGOUT_SENTENCE, Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        finish();
-                    }
-                });
-        builder.show();
+    //--設定ボタン兼フォローボタン
+    @OnClick(R.id.settings_and_follow_button)
+    void clickSettingsButton(){
+        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
     }
     //--マイスタンプ帳
     @OnClick(R.id.myStampBookIntentButton)
