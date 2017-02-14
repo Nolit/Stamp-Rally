@@ -52,8 +52,8 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     TextView stampRallyTitle;               //参照しているスタンプラリー名
     @InjectView(R.id.DescriptionText)
     TextView stampRallyDescription;         //スタンプラリーの概要
-    @InjectView(R.id.DetailReferenceName)
-    TextView referenceUserName;             //表示するスタンプのアルバム所有者
+    @InjectView((R.id.ReferenceUserIntentButton))
+    Button referenceUserIntentButton;       //表示するスタンプのアルバム所有者
     @InjectView(R.id.FavoriteButton)
     ImageButton favoriteButton;             //お気に入りボタン
     @InjectView(R.id.ReviewPoint)
@@ -123,7 +123,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             System.out.println("コメント:"+ pageData.getStampRallyComment());
             creatorUserName.setText(pageData.getReferenceUserName());
             stampRallyTitle.setText(pageData.getStampRallyTitle());
-            referenceUserName.setText(pageData.getReferenceUserName());
+            referenceUserIntentButton.setText(pageData.getReferenceUserName());
             stampRallyDescription.setText(pageData.getStampRallyComment());
             if(pageData.getStampRallyReviewAveragePoint() != null){
                 stampRallyReviewAveragePoint.setText(pageData.getStampRallyReviewAveragePoint().toString());
@@ -232,5 +232,12 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             StampRallyDetailModel.getInstance().favorite(mainPref.getString("mailAddress", null), mainPref.getString("password", null)
                     , stampRallyId, isFavorite);
         }
+    }
+
+    @OnClick(R.id.ReferenceUserIntentButton)
+    void clickReferenceUserIntentButton(){
+        Intent intent = new Intent(StampRallyDetailActivity.this, MyPageOtherActivity.class);
+        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        startActivity(intent);
     }
 }

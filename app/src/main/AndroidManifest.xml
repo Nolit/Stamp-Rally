@@ -114,8 +114,15 @@
             android:label="@string/title_activity_specify_stamp_rally_structure"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".controller.MyPageOtherActivity"
+            android:label="MyPageOtherActivity"/>
+        <activity
+            android:name=".controller.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".controller.OverlayEvaluationActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
     </application>
 
 </manifest>

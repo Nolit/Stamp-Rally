@@ -41,20 +41,26 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="15dp"
                         android:layout_weight="10"
                         android:id="@+id/userName"
                         android:text="ユーザー名"
-                        android:textSize="15dp"
                         />
-                    <Button
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:id="@+id/LogoutBt"
-                        android:text="ログアウト"
-                        android:textSize="10dp"/>
-
+                        android:gravity="right">
+                        <ImageButton
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:scaleType="fitXY"
+                            android:adjustViewBounds="true"
+                            android:background="@null"
+                            android:layout_gravity="right"
+                            android:id="@+id/settings_and_follow_button"
+                            android:src="@mipmap/ic_settings"/>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <Button
