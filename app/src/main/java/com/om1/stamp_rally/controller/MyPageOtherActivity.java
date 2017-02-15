@@ -193,6 +193,7 @@ public class MyPageOtherActivity extends AppCompatActivity {
     void clickFollow(){
         Intent intent = new Intent(MyPageOtherActivity.this, FollowActivity.class);
         intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("mode", "follow");
         intent.putExtra("showFollow", userName.getText() + "さんのフォロー");
         startActivity(intent);
     }
@@ -201,6 +202,7 @@ public class MyPageOtherActivity extends AppCompatActivity {
     void clickFollower(){
         Intent intent = new Intent(MyPageOtherActivity.this, FollowActivity.class);
         intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("mode", "follower");
         intent.putExtra("showFollow", userName.getText() + "さんのフォロワー");
         startActivity(intent);
     }
