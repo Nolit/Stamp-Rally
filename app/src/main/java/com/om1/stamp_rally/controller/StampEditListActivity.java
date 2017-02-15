@@ -19,18 +19,17 @@ import android.widget.Toast;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampUpload;
 import com.om1.stamp_rally.model.adapter.StampEditListAdapter;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.om1.stamp_rally.model.event.UploadedStampEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
 import com.om1.stamp_rally.utility.dbadapter.StampDbAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import database.entities.StampPads;
 import database.entities.StampRallys;

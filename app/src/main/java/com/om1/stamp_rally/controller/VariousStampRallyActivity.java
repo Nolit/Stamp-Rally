@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.om1.stamp_rally.R;
-import com.om1.stamp_rally.model.SearchStampRallyModel;
 import com.om1.stamp_rally.model.VariousStampRallyModel;
 import com.om1.stamp_rally.model.adapter.ResultSearchListAdapter;
 import com.om1.stamp_rally.model.bean.StampRallyBean;

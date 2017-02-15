@@ -1,8 +1,8 @@
 package com.om1.stamp_rally.controller;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.om1.stamp_rally.R;
 

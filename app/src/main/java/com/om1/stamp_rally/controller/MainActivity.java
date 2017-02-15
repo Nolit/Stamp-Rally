@@ -1,7 +1,6 @@
 package com.om1.stamp_rally.controller;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,7 +24,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyPageModel;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
-import com.om1.stamp_rally.utility.ByteConverter;
 import com.om1.stamp_rally.utility.EventBusUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,7 +57,6 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     TextView profile;
     //--マップ
     FragmentManager mapFragmentManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,29 +162,25 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     }
 
     //トップ
-    //--検索ボタン
-    @OnClick(R.id.SearchBt)
+    @OnClick(R.id.SearchBt)                                 //--検索ボタン
     void search() {
         //検索結果一覧ページへ
         Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
         intent.putExtra("searchKeyword", search.getText().toString());
         startActivity(intent);
     }
-
     //マイページ
-    //--設定ボタン兼フォローボタン
-    @OnClick(R.id.settings_and_follow_button)
+    @OnClick(R.id.settings_and_follow_button)               //--設定ボタン兼フォローボタン
     void clickSettingsButton(){
         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
     }
-    //--マイスタンプ帳
-    @OnClick(R.id.myStampBookIntentButton)
+    @OnClick(R.id.myStampBookIntentButton)                  //--マイスタンプ帳
     void clickMyStampBookIntentButton(){
         Intent intent = new Intent(MainActivity.this, MyStampBookActivity.class);
         intent.putExtra("referenceUserId", mainPref.getString("loginUserId", null));
         startActivity(intent);
     }
-    @OnClick(R.id.completeStampRallyIntentButton)
+    @OnClick(R.id.completeStampRallyIntentButton)           //--クリアスタンプラリー
     void clickCompleteStampRallyIntentButton(){
         Intent intent = new Intent(MainActivity.this, VariousStampRallyActivity.class);
         intent.putExtra("referenceUserId", mainPref.getString("loginUserId", null));
@@ -196,7 +188,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         intent.putExtra("mode", "complete");
         startActivity(intent);
     }
-    @OnClick(R.id.createStampRallyIntentButton)
+    @OnClick(R.id.createStampRallyIntentButton)             //作成スタンプラリー
     void clickCreateStampRallyIntentButton(){
         Intent intent = new Intent(MainActivity.this, VariousStampRallyActivity.class);
         intent.putExtra("referenceUserId", mainPref.getString("loginUserId", null));
@@ -204,7 +196,7 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         intent.putExtra("mode", "create");
         startActivity(intent);
     }
-    @OnClick(R.id.favoriteStampRallyIntentButton)
+    @OnClick(R.id.favoriteStampRallyIntentButton)           //お気に入りスタンプラリー
     void clickFavoriteStampRallyIntentButton(){
         Intent intent = new Intent(MainActivity.this, VariousStampRallyActivity.class);
         intent.putExtra("referenceUserId", mainPref.getString("loginUserId", null));
@@ -212,36 +204,32 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
         intent.putExtra("mode", "favorite");
         startActivity(intent);
     }
-    @OnClick(R.id.follow)
+    @OnClick(R.id.follow)           //フォロー
     void clickFollow(){
         Intent intent = new Intent(MainActivity.this, FollowActivity.class);
-        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("referenceUserId", mainPref.getString("loginUserId", null));
         intent.putExtra("mode", "follow");
         intent.putExtra("showFollow", userName.getText() + "さんのフォロー");
         startActivity(intent);
     }
-    @OnClick(R.id.follower)
+    @OnClick(R.id.follower)         //フォロワー
     void clickFollower(){
         Intent intent = new Intent(MainActivity.this, FollowActivity.class);
-        intent.putExtra("referenceUserId", getIntent().getStringExtra("referenceUserId"));
+        intent.putExtra("referenceUserId", mainPref.getString("loginUserId", null));
         intent.putExtra("mode", "follower");
         intent.putExtra("showFollow", userName.getText() + "さんのフォロワー");
         startActivity(intent);
     }
-
     //スタンプ管理タブ
-    //--スタンプラリー作成ボタン
-    @OnClick(R.id.createStampRallyButton)
+    @OnClick(R.id.createStampRallyButton)       //--スタンプラリー作成ボタン
     void clickCreateStampRallyButton(){
         Intent intent = new Intent(MainActivity.this, StampRallyControlActivity.class);
         startActivity(intent); }
-    //--スタンプ編集ボタン
-    @OnClick(R.id.editStamp)
+    @OnClick(R.id.editStamp)                    //--スタンプ編集ボタン
     void clickEditStamp(){
         Intent intent = new Intent(MainActivity.this, StampEditListActivity.class);
         startActivity(intent); }
-    //--カメラボタン
-    @OnClick(R.id.stampRegistrationButton)
+    @OnClick(R.id.stampRegistrationButton)      //--カメラボタン
     void clickStampRegistrationButton(){
         Intent intent = new Intent(this, TakeStampActivity.class);
         intent.putExtra("stampRegisterFlag", true);
@@ -270,4 +258,5 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
     }
+
 }

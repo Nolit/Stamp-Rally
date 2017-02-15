@@ -33,8 +33,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import static butterknife.ButterKnife.findById;
 import butterknife.OnClick;
+
+import static butterknife.ButterKnife.findById;
 
 public class StampPreviewActivity extends AppCompatActivity {
     EditText titleEdit;

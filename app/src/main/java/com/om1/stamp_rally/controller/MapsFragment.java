@@ -45,8 +45,8 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MapModel;
-import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.adapter.StampListAdapter;
+import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.Url;
 
