@@ -47,6 +47,8 @@ public class StampEditListActivity extends AppCompatActivity {
     private final String ATTENTION_STAMP_UPLOAD_MESSAGE = "少々お待ちください";
     private final float OVERLAY_ALPHA = 0.7f;
 
+    SharedPreferences mainPref;
+
     EditText titleEdit;
     TextView stampTitleError;
     EditText noteEdit;
@@ -85,6 +87,7 @@ public class StampEditListActivity extends AppCompatActivity {
                 showEditStampDialog(layout, stamp);
             }
         });
+        mainPref = getSharedPreferences("main", MODE_PRIVATE);
     }
 
     private List<Stamps> loadStampData(){
@@ -190,9 +193,8 @@ public class StampEditListActivity extends AppCompatActivity {
         byte[] picture = stamp.getPicture();
         long createTime = stamp.getStampDate().getTime();
 
-        SharedPreferences pref = getSharedPreferences("stamp-rally", MODE_WORLD_READABLE|MODE_WORLD_WRITEABLE);
-        String mailAddress = pref.getString("mailAddress", "tarou2");
-        String password = pref.getString("password", "tarou2");
+        String mailAddress = mainPref.getString("mailAddress", "tarou2");
+        String password = mainPref.getString("password", "tarou2");
 
         StampUpload.getInstance().uploadStamp(id, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
     }
