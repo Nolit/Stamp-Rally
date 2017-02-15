@@ -55,10 +55,6 @@
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".controller.ConfigurationActivity"
-            android:label="@string/title_activity_configuration"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".controller.FollowActivity"
             android:label="@string/title_activity_follow"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -73,10 +69,6 @@
         <activity
             android:name=".controller.StampDetailActivity"
             android:label="@string/title_activity_stamp_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".controller.CompleteRallyActivity"
-            android:label="@string/title_activity_complete_rally"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".controller.TakeStampActivity"
