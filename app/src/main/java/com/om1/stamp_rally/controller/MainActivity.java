@@ -162,9 +162,36 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     }
 
     //トップ
+    @OnClick(R.id.OfficialStampRally)                       //公式スタンプラリー
+    void clickOfficilaStampRally(){
+//        Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+//        intent.putExtra("stampRallyId", );←ここ指定
+//        intent.putExtra("referenceUserId", );←ここ指定
+//        startActivity(intent);
+    }
+    @OnClick(R.id.IntroductionStampRally1)                  //紹介スタンプラリー1
+    void clickIntroductionStampRally1(){
+//        Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+//        intent.putExtra("stampRallyId", );←ここ指定
+//        intent.putExtra("referenceUserId", );←ここ指定
+//        startActivity(intent);
+    }
+    @OnClick(R.id.IntroductionStampRally2)                  //紹介スタンプラリー2
+    void clickIntroductionStampRally2(){
+//        Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+//        intent.putExtra("stampRallyId", );←ここ指定
+//        intent.putExtra("referenceUserId", );←ここ指定
+//        startActivity(intent);
+    }
+    @OnClick(R.id.IntroductionStampRally3)                  //紹介スタンプラリー3
+    void clickIntroductionStampRally3(){
+//        Intent intent = new Intent(MainActivity.this, StampRallyDetailActivity.class);
+//        intent.putExtra("stampRallyId", );←ここ指定
+//        intent.putExtra("referenceUserId", );←ここ指定
+//        startActivity(intent);
+    }
     @OnClick(R.id.SearchBt)                                 //--検索ボタン
     void search() {
-        //検索結果一覧ページへ
         Intent intent = new Intent(MainActivity.this, ResultSearchActivity.class);
         intent.putExtra("searchKeyword", search.getText().toString());
         startActivity(intent);

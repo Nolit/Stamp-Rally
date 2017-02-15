@@ -150,4 +150,9 @@ public class SettingsActivity extends AppCompatActivity {
         builder.show();
     }
 
+    @OnClick(R.id.changeThumbnail)
+    void clickChangeThumbnail(){
+        //　処理を追加する
+    }
+
 }
