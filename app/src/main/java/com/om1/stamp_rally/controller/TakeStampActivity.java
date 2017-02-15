@@ -12,8 +12,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
@@ -31,7 +35,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
+
+import static butterknife.ButterKnife.findById;
 
 public class TakeStampActivity extends AppCompatActivity implements LocationListener {
     private final EventBus eventBus = EventBus.getDefault();
@@ -41,9 +48,13 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
     private double longitude;
 
     //位置情報詐称
+    private boolean isMockLocationEnabled = false;
     private Location testLocation;
     private final String providerName = LocationManager.GPS_PROVIDER;
     private WebSocket mockLocationClient;
+
+    @InjectView(R.id.stamp_button)
+    ImageButton stampButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +73,14 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
 
         //スタンプ獲得時ではなく、スタンプ登録時には位置情報を取得する
         if(getIntent().getBooleanExtra("stampRegisterFlag", false) == true){
-            setUpTestProvider();
-            connectMockLocation();
+            stampButton.setEnabled(false);
+            mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            if(isMockLocationEnabled){
+                setUpTestProvider();
+                connectMockLocation();
+            }else{
+                setUpLocationManager();
+            }
         }
     }
 
@@ -86,7 +103,6 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
     }
 
     private void setUpTestProvider(){
-        mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         if(mLocationManager.isProviderEnabled(providerName)){
             mLocationManager.addTestProvider(providerName, true, true, true, true, true, true, true, Criteria.POWER_HIGH, Criteria.ACCURACY_HIGH);
         }
@@ -140,15 +156,23 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
         );
     }
 
+    private void setUpLocationManager(){
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);       //高精度
+        criteria.setAccuracy(Criteria.NO_REQUIREMENT);      //プロバイダ条件選択なし
+        String provider = mLocationManager.getBestProvider(criteria, true);     //プロバイダ取得
+        mLocationManager.requestLocationUpdates(provider, 1, 1, this);          //位置情報取得
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         Log.d("デバッグ", "位置情報取得");
         Log.d("デバッグ", "latitude : " + location.getLatitude() + ", longitude : " + location.getLongitude());
-        Toast.makeText(this, "位置情報取得", Toast.LENGTH_SHORT);
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         mLocationManager.removeUpdates(this);
+        stampButton.setEnabled(true);
     }
 
     @Override
