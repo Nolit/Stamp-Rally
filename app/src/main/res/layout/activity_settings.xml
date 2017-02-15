@@ -27,7 +27,11 @@
                 android:adjustViewBounds="true"
                 android:background="@null"
                 android:src="@mipmap/default_image_view"
-                android:id="@+id/profileThumbnail" />
+                android:id="@+id/profileThumbnail"
+                android:focusable="true"
+                android:focusableInTouchMode="true"   >
+                <requestFocus />
+            </ImageView>
             <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -36,7 +40,7 @@
                 android:adjustViewBounds="true"
                 android:background="@null"
                 android:src="@mipmap/ic_add_thumbnail"
-                android:id="@+id/addThumbnail" />
+                android:id="@+id/changeThumbnail" />
         </FrameLayout>
 
         <ScrollView

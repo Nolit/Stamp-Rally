@@ -30,16 +30,18 @@
                     android:background="#ADD8E6"
                     android:layout_height="50dp" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:src="@mipmap/oosakajo"
-                    android:id="@+id/OfficialImage"
+                <ImageButton
+                    android:layout_width="200dp"
                     android:layout_height="200dp"
+                    android:src="@mipmap/oosakajo"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:id="@+id/OfficialStampRally"
                     android:layout_marginTop="10dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true">
                     <requestFocus />
-                </ImageView>
+                </ImageButton>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -54,9 +56,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <ImageView
+                        <ImageButton
                             android:src="@mipmap/sample_view_colosseo"
-                            android:id="@+id/IntroductionImage1"
+                            android:id="@+id/IntroductionStampRally1"
                             android:layout_weight="1"
                             android:scaleType="fitXY"
                             android:adjustViewBounds="true"
@@ -66,9 +68,9 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"/>
 
-                        <ImageView
+                        <ImageButton
                             android:src="@mipmap/sample_view_pisa"
-                            android:id="@+id/IntroductionImage2"
+                            android:id="@+id/IntroductionStampRally2"
                             android:layout_weight="1"
                             android:background="@null"
                             android:scaleType="fitXY"
@@ -76,9 +78,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
 
-                        <ImageView
+                        <ImageButton
                             android:src="@mipmap/sample_view_duomo"
-                            android:id="@+id/IntroductionImage3"
+                            android:id="@+id/IntroductionStampRally3"
                             android:layout_weight="1"
                             android:background="@null"
                             android:scaleType="fitXY"
