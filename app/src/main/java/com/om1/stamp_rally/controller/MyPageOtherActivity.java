@@ -50,6 +50,7 @@ public class MyPageOtherActivity extends AppCompatActivity {
     Button followerNum;
 
     boolean followStatus;   //true（フォロー中）・false（未フォロー）
+    int followerCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +120,7 @@ public class MyPageOtherActivity extends AppCompatActivity {
             }
             followNum.setText(referenceUser.followUserCount + FOLLOW_UNIT);
             followerNum.setText(referenceUser.followerCount + FOLLOW_UNIT);
+            followerCount = referenceUser.followerCount;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,9 +137,11 @@ public class MyPageOtherActivity extends AppCompatActivity {
         if(followStatus){
             //フォロー解除
             settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_off));
+            followerCount--;
         }else{
             //フォロー申請
             settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_on));
+            followerCount++;
             Toast.makeText(this, FOLLOW_ON, Toast.LENGTH_SHORT).show();
         }
         followStatus = !followStatus;
@@ -146,6 +150,7 @@ public class MyPageOtherActivity extends AppCompatActivity {
                 mainPref.getString("password", null),
                 getIntent().getStringExtra("referenceUserId"),
                 followStatus);
+        followerNum.setText(followerCount + FOLLOW_UNIT);
     }
 
     @OnClick(R.id.myStampBookIntentButton)
