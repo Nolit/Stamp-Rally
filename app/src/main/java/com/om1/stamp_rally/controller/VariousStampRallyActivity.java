@@ -82,8 +82,7 @@ public class VariousStampRallyActivity extends AppCompatActivity {
         }
         try {
             Log.d("デバッグ:ResultSearch", "データベースとの通信に成功");
-            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
-            stampRallyDatas = new ObjectMapper().readValue(responseData[0], StampRallyData[].class);
+            stampRallyDatas = new ObjectMapper().readValue(event.getJson(), StampRallyData[].class);
             if(stampRallyDatas.length < 1){
                 noHitResult.setText("データがありません");
             }else{
