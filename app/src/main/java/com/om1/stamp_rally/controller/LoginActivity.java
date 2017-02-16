@@ -102,24 +102,19 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, "データベースとの通信に失敗しました", Toast.LENGTH_SHORT).show();
             return;
         }
-        try {
-            Log.d("デバッグ:LoginActivity","データベースとの通信に成功");
-            Users loginUser = new ObjectMapper().readValue(event.getJson(), Users.class);
+        Log.d("デバッグ:LoginActivity","データベースとの通信に成功");
+        String[] responseData = event.getJson().split(System.getProperty("line.separator"));
 
-            if(loginUser != null){
-                Toast.makeText(LoginActivity.this, SUCCESS_LOGIN, Toast.LENGTH_SHORT).show();
-                mainEdit.putString("mailAddress", loginUser.getMailAddress());
-                mainEdit.putString("password", loginUser.getPassword());
-                mainEdit.putString("loginUserId", loginUser.getUserId().toString());
-                mainEdit.commit();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-            }else{
-                Toast.makeText(LoginActivity.this, ERR_CHALLENGE_LOGIN, Toast.LENGTH_SHORT).show();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(responseData != null){
+            Toast.makeText(LoginActivity.this, SUCCESS_LOGIN, Toast.LENGTH_SHORT).show();
+            mainEdit.putString("loginUserId", responseData[0]);
+            mainEdit.putString("mailAddress", responseData[1]);
+            mainEdit.putString("password", responseData[2]);
+            mainEdit.commit();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }else{
+            Toast.makeText(LoginActivity.this, ERR_CHALLENGE_LOGIN, Toast.LENGTH_SHORT).show();
         }
     }
 
