@@ -18,6 +18,7 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.MyPageModel;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,7 +35,6 @@ public class MyPageOtherActivity extends AppCompatActivity {
     private final String FOLLOW_UNIT = "人";
     private static final String FOLLOW_ON = "フォローしました";
     SharedPreferences mainPref;
-    private final EventBus eventBus = EventBus.getDefault();
 
     @InjectView(R.id.profileThumbnail)
     ImageView profileThumbnail;
@@ -51,6 +51,8 @@ public class MyPageOtherActivity extends AppCompatActivity {
 
     boolean followStatus;   //true（フォロー中）・false（未フォロー）
     int followerCount;
+
+    private Overlayer overlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,8 @@ public class MyPageOtherActivity extends AppCompatActivity {
                 getIntent().getStringExtra("referenceUserId")
         );
 
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
     }
 
     @Override
@@ -121,10 +125,10 @@ public class MyPageOtherActivity extends AppCompatActivity {
             followNum.setText(referenceUser.followUserCount + FOLLOW_UNIT);
             followerNum.setText(referenceUser.followerCount + FOLLOW_UNIT);
             followerCount = referenceUser.followerCount;
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        overlayer.hideProgress();
     }
 
     @OnClick(R.id.settings_and_follow_button)

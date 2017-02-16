@@ -48,4 +48,5 @@
         android:textSize="20dp"
         android:id="@+id/NotHaveStamp"/>
 
+    <include layout="@layout/wait_overlay"/>
 </android.support.design.widget.CoordinatorLayout>

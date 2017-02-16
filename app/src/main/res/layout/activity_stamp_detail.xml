@@ -67,4 +67,5 @@
 
 
     </LinearLayout>
+    <include layout="@layout/wait_overlay"/>
 </FrameLayout>

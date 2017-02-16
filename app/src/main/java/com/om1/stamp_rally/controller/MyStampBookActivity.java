@@ -16,6 +16,7 @@ import com.om1.stamp_rally.model.adapter.MyStampBookListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,10 +39,16 @@ public class MyStampBookActivity extends AppCompatActivity {
     private TextView userName;
     private TextView notHaveStamp;
 
+    private Overlayer overlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mystamp_book);
+
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
+
         lv = (ListView) findViewById(R.id.MyStampList);
         MyStampBookModel model = MyStampBookModel.getInstance();
 
@@ -101,6 +108,7 @@ public class MyStampBookActivity extends AppCompatActivity {
         }catch(IOException e){
             e.printStackTrace();
         }
+        overlayer.hideProgress();
     }
 
     @Override

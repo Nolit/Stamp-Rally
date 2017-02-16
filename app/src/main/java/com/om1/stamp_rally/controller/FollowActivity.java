@@ -16,6 +16,7 @@ import com.om1.stamp_rally.model.adapter.UserListAdapter;
 import com.om1.stamp_rally.model.bean.UserBean;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,6 +39,8 @@ public class FollowActivity extends AppCompatActivity {
 
     private TextView showFollow;        //最上部に表示（〜さんのフォロワー）
     private TextView noHitResult;       //表示件数が0件の時表示される
+
+    private Overlayer overlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class FollowActivity extends AppCompatActivity {
             }
         });
 
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
     }
 
     @Override
@@ -109,6 +114,7 @@ public class FollowActivity extends AppCompatActivity {
         }catch(IOException e){
             e.printStackTrace();
         }
+        overlayer.hideProgress();
     }
 
 }

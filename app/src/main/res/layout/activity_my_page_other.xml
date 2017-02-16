@@ -10,5 +10,6 @@
     android:background="#ADD8E6">
 
     <include layout="@layout/activity_mypage" android:id="@+id/mypage_other"></include>
+    <include layout="@layout/wait_overlay"/>
 
 </android.support.design.widget.CoordinatorLayout>

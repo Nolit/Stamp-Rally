@@ -12,6 +12,7 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampDetailModel;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,7 +23,6 @@ import java.io.IOException;
 import database.entities.Stamps;
 
 public class StampDetailActivity extends AppCompatActivity {
-    private final EventBus eventBus = EventBus.getDefault();
     private Stamps stamps;
 
     private TextView stampUserName;       //スタンプユーザー名
@@ -30,10 +30,15 @@ public class StampDetailActivity extends AppCompatActivity {
     private ImageView stampThumbnail;      //スタンプの画像
     private TextView stampComment;         //スタンプラリーの概要
 
+    private Overlayer overlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stamp_detail);
+
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
 
         //データベース通信
         StampDetailModel stampDetailModel = StampDetailModel.getInstance();
@@ -82,6 +87,8 @@ public class StampDetailActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        overlayer.hideProgress();
     }
 
 }

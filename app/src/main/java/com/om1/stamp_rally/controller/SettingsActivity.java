@@ -16,6 +16,7 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.SettingsModel;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +36,6 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String SUCCESS_UPDATE_DATA = "ユーザー情報を更新しました";
     private static final String LOGOUT_SENTENCE = "ログアウトしました";
 
-    private final EventBus eventBus = EventBus.getDefault();
     SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
     SharedPreferences.Editor mainEdit;
 
@@ -54,6 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
     @InjectView(R.id.password)
     EditText password;
 
+    private Overlayer overlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +67,8 @@ public class SettingsActivity extends AppCompatActivity {
             SettingsModel.getInstance().fetchJson(mainPref.getString("mailAddress", null), mainPref.getString("password", null));
         }
 
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
     }
 
     //バリデーションチェック
@@ -119,6 +123,7 @@ public class SettingsActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        overlayer.hideProgress();
     }
 
     @OnClick(R.id.updateButton)

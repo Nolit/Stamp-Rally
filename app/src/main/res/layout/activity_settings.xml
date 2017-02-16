@@ -146,5 +146,5 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
+    <include layout="@layout/wait_overlay"/>
 </android.support.design.widget.CoordinatorLayout>

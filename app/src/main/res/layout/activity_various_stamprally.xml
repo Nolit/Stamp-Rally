@@ -43,4 +43,5 @@
         android:textSize="20dp"
         android:id="@+id/NoHitResult"/>
 
+    <include layout="@layout/wait_overlay"/>
 </android.support.design.widget.CoordinatorLayout>

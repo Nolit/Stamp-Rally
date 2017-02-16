@@ -7,8 +7,10 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.StampRallyDetailModel;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,6 +35,8 @@ import butterknife.OnClick;
 import data.StampData;
 import data.StampRallyDetailPageData;
 
+import static butterknife.ButterKnife.findById;
+
 public class StampRallyDetailActivity extends AppCompatActivity {
     private static final String SET_PLAY_STAMP_RALLY = "スタンプラリーをマップにセットしました";
     private static final String SET_FAVORITE_STAMP_RALLY = "お気に入りしました";
@@ -43,7 +48,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     private boolean isFavorite;
     private Integer reviewPoint;
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private Overlayer overlayer;
 
     //レイアウト・ビュー
     @InjectView(R.id.CreatorName)
@@ -89,6 +94,8 @@ public class StampRallyDetailActivity extends AppCompatActivity {
             System.out.println("stampRallyId:" + stampRallyId + "_________________");
         }
 
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
     }
 
     @Override
@@ -205,6 +212,8 @@ public class StampRallyDetailActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        overlayer.hideProgress();
     }
 
     @OnClick(R.id.EvaluationButton)

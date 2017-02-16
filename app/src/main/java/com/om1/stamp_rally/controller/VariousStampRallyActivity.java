@@ -16,6 +16,7 @@ import com.om1.stamp_rally.model.adapter.ResultSearchListAdapter;
 import com.om1.stamp_rally.model.bean.StampRallyBean;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import data.StampRallyData;
 
 public class VariousStampRallyActivity extends AppCompatActivity {
-    private final EventBus eventBus = EventBus.getDefault();
     private StampRallyData[] stampRallyDatas;
 
     ListView lv;
@@ -37,6 +37,8 @@ public class VariousStampRallyActivity extends AppCompatActivity {
 
     private TextView showStampRally;    //スタンプラリーの表示形式
     private TextView noHitResult;       //表示件数が0件の時表示される
+
+    private Overlayer overlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class VariousStampRallyActivity extends AppCompatActivity {
             }
         });
 
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -106,6 +110,7 @@ public class VariousStampRallyActivity extends AppCompatActivity {
         }catch(IOException e){
             e.printStackTrace();
         }
+        overlayer.hideProgress();
     }
 
     @Override

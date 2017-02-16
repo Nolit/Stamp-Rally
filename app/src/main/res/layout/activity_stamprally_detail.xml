@@ -170,4 +170,5 @@
         android:textSize="15dp"
         android:id="@+id/PlayButton"/>
     </LinearLayout>
+    <include layout="@layout/wait_overlay"/>
 </android.support.design.widget.CoordinatorLayout>

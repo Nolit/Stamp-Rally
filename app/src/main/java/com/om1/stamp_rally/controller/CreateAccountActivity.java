@@ -15,6 +15,7 @@ import com.om1.stamp_rally.R;
 import com.om1.stamp_rally.model.CreateAccountModel;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,7 +30,6 @@ public class CreateAccountActivity extends AppCompatActivity {
     private static final String ERR_CHALLENGE_CREATE_ACCOUNT = "そのメールアドレスはすでに使われています";
     private static final String SUCCESS_CREATE_ACCOUNT = "アカウントを作成しました";
 
-    private final EventBus eventBus = EventBus.getDefault();
     SharedPreferences mainPref;
     SharedPreferences.Editor mainEdit;
 
@@ -42,6 +42,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private Button createAccountButton;
     private Button loginIntentButton;
+
+    private Overlayer overlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 challengePassword = editPassword.getText().toString();
                 challengeUserName = editUserName.getText().toString();
                 if(validationCheck(challengeMailAddress, challengePassword, challengeUserName)){
+                    overlayer = new Overlayer(CreateAccountActivity.this);
+                    overlayer.showProgress();
                     CreateAccountModel.getInstance().fetchJson(challengeMailAddress, challengePassword, challengeUserName);
                 }
             }
@@ -125,6 +129,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        overlayer.hideProgress();
     }
 
 }
