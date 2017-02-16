@@ -25,10 +25,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import data.UserData;
+import database.entities.Users;
 
 public class FollowActivity extends AppCompatActivity {
     private final EventBus eventBus = EventBus.getDefault();
-    private UserData userDatas[];
+    private Users[] userDatas;
 
     ListView lv;
     UserBean userBean;
@@ -85,17 +86,16 @@ public class FollowActivity extends AppCompatActivity {
         }
         try {
             Log.d("デバッグ:FollowActivity", "データベースとの通信に成功");
-            String[] responseData = event.getJson().split(System.getProperty("line.separator"));
-            userDatas = new ObjectMapper().readValue(responseData[0], UserData[].class);
+            userDatas = new ObjectMapper().readValue(event.getJson(), Users[].class);
             if(userDatas.length < 1){
                 noHitResult.setText("データがありません");
             }else{
                 userList = new ArrayList<UserBean>();
                 adapter = new UserListAdapter(this, 0, userList);
 
-                for( UserData userData : userDatas ){
+                for( Users userData : userDatas ){
                     userBean = new UserBean();
-                    userBean.setPictPath(userData.getPicture());
+                    userBean.setPictPath(userData.getThumbnailData());
                     userBean.setUserId(userData.getUserId());
                     userBean.setUserName(userData.getUserName());
                     userBean.setSearchId(userData.getSearchId());

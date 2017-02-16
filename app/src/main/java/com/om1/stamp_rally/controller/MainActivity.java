@@ -38,7 +38,7 @@ import butterknife.OnClick;
 import database.entities.Users;
 
 public class MainActivity  extends FragmentActivity implements OnMapReadyCallback {
-    private final EventBus eventBus = EventBus.getDefault();
+    private final String FOLLOW_UNIT = "人";
     SharedPreferences mainPref;             //ログアウト時にPreferencesは削除する
     Bundle savedInstanceState;
 
@@ -53,6 +53,10 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
     ImageView profileThumbnail;
     @InjectView(R.id.userName)
     TextView userName;
+    @InjectView(R.id.follow)
+    TextView followButton;
+    @InjectView(R.id.follower)
+    TextView followerButton;
     @InjectView(R.id.profile)
     TextView profile;
     //--マップ
@@ -276,6 +280,8 @@ public class MainActivity  extends FragmentActivity implements OnMapReadyCallbac
                 byte[] notDecodedThumbnail = loginUser.getThumbnailData();
                 Bitmap thumbnail = BitmapFactory.decodeByteArray(notDecodedThumbnail, 0, notDecodedThumbnail.length);
                 profileThumbnail.setImageBitmap(thumbnail);        //プロフィール画像
+                followButton.setText(loginUser.followUserCount + FOLLOW_UNIT);
+                followerButton.setText(loginUser.followerCount + FOLLOW_UNIT);
             }else{
                 profileThumbnail.setImageBitmap(BitmapFactory.decodeResource(getResources() ,R.mipmap.default_image_view));
             }

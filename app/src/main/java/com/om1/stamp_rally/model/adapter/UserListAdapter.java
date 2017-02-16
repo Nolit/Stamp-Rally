@@ -25,7 +25,7 @@ public class UserListAdapter extends BaseAdapter {
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setUserList(ArrayList<UserBean> UserList) {
+    public void setUserList(ArrayList<UserBean> userList) {
         this.userList = userList;
     }
 
