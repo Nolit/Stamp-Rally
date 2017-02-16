@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         Log.d("デバッグ:LoginActivity","データベースとの通信に成功");
-        String[] responseData = event.getJson().split(System.getProperty("line.separator"));
+        String[] responseData = event.getJson().split(",");
 
         if(responseData != null){
             Toast.makeText(LoginActivity.this, SUCCESS_LOGIN, Toast.LENGTH_SHORT).show();
