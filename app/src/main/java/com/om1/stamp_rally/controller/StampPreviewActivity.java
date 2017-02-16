@@ -54,6 +54,8 @@ public class StampPreviewActivity extends AppCompatActivity {
     private final String ATTENTION_STAMP_SAVE_MESSAGE = "スタンプを保存してください！";
     private final float OVERLAY_ALPHA = 0.7f;
 
+    SharedPreferences mainPref;
+
     private int stampId;
     private int stampRallyId;
     private String stampRallyName;
@@ -79,6 +81,7 @@ public class StampPreviewActivity extends AppCompatActivity {
         stampRallyName = getIntent().getStringExtra("stampRallyName");
         latitude = getIntent().getDoubleExtra("latitude", 0);
         longitude = getIntent().getDoubleExtra("longitude", 0);
+        mainPref = getSharedPreferences("main", MODE_PRIVATE);
 
         setupCropImageView();
     }
@@ -181,9 +184,8 @@ public class StampPreviewActivity extends AppCompatActivity {
     private void uploadStamp(){
         showOverlay();
         long createTime = System.currentTimeMillis();
-        SharedPreferences pref = getSharedPreferences("main", MODE_PRIVATE);
-        String mailAddress = pref.getString("mailAddress", "tarou2");
-        String password = pref.getString("password", "tarou2");
+        String mailAddress = mainPref.getString("mailAddress", "tarou2");
+        String password = mainPref.getString("password", "tarou2");
         StampUpload.getInstance().uploadStamp(stampId, stampRallyId, latitude, longitude, title, note, picture, createTime, mailAddress, password);
     }
 
@@ -192,6 +194,7 @@ public class StampPreviewActivity extends AppCompatActivity {
         String message;
         if(event.isSuccess()){
             if(event.isClear()){
+                mainPref.edit().remove("playingStampRally").commit();
                 Intent intent = new Intent(this, ClearActivity.class);
                 intent.putExtra("stampRallyId", stampRallyId);
                 startActivity(intent);
