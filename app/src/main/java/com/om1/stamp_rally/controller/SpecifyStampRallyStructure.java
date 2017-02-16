@@ -13,6 +13,7 @@ import com.om1.stamp_rally.model.adapter.StructureStampListAdapter;
 import com.om1.stamp_rally.model.bean.StampBean;
 import com.om1.stamp_rally.model.event.FetchedJsonEvent;
 import com.om1.stamp_rally.utility.EventBusUtil;
+import com.om1.stamp_rally.utility.Overlayer;
 import com.om1.stamp_rally.utility.dbadapter.StructureStampDbAdapter;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -30,6 +31,8 @@ public class SpecifyStampRallyStructure extends AppCompatActivity {
     private StructureStampListAdapter adapter;
     private Integer stampRallyId;
 
+    private Overlayer overlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,8 @@ public class SpecifyStampRallyStructure extends AppCompatActivity {
 
         MyStampBookModel.getInstance().fetchJson(getSharedPreferences("main", MODE_PRIVATE).getString("loginUserId", "20"));
         stampRallyId = getIntent().getIntExtra("stampRallyId", -1);
+        overlayer = new Overlayer(this);
+        overlayer.showProgress();
     }
 
     @Override
@@ -79,6 +84,7 @@ public class SpecifyStampRallyStructure extends AppCompatActivity {
         }catch(IOException e){
             e.printStackTrace();
         }
+        overlayer.hideProgress();
     }
 
     @OnClick(R.id.saveStructureStampButton)
