@@ -101,31 +101,29 @@
 
                     <LinearLayout
                         android:orientation="horizontal"
-                        android:layout_width="360dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|center_horizontal">
 
                         <EditText
                             android:id="@+id/SearchEdit"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
                             android:hint="検索"
-                            android:inputType="textEmailAddress"
+                            android:ems="10"
                             android:maxLines="1"
-                            android:singleLine="true"
+                            android:inputType="text"
                             android:layout_weight="0.07"
                             android:layout_width="280dp" />
-
-                        <Space
-                            android:layout_width="10dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.01" />
 
                         <Button
                             android:text="検索"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.01"
-                            android:id="@+id/SearchBt"
-                            android:layout_width="70dp" />
+                            android:layout_width="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:id="@+id/SearchBt" />
                     </LinearLayout>
                 </FrameLayout>
 
