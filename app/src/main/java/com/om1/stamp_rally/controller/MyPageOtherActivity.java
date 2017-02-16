@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import database.entities.Users;
 
 public class MyPageOtherActivity extends AppCompatActivity {
+    private final String FOLLOW_UNIT = "人";
     private static final String FOLLOW_ON = "フォローしました";
     SharedPreferences mainPref;
     private final EventBus eventBus = EventBus.getDefault();
@@ -96,30 +97,27 @@ public class MyPageOtherActivity extends AppCompatActivity {
         }
         try {
             Log.d("デバッグ:MainActivity", "データベースとの通信に成功");
-            Users loginUser = new ObjectMapper().readValue(event.getJson(), Users.class);
-            if (loginUser.getThumbnailData() != null) {
-                byte[] notDecodedThumbnail = loginUser.getThumbnailData();
+            Users referenceUser = new ObjectMapper().readValue(event.getJson(), Users.class);
+            if (referenceUser.getThumbnailData() != null) {
+                byte[] notDecodedThumbnail = referenceUser.getThumbnailData();
                 Bitmap thumbnail = BitmapFactory.decodeByteArray(notDecodedThumbnail, 0, notDecodedThumbnail.length);
                 profileThumbnail.setImageBitmap(thumbnail);        //プロフィール画像
             } else {
                 profileThumbnail.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.default_image_view));
             }
-            userName.setText(loginUser.getUserName());
-            profile.setText(loginUser.getProfile());
+            userName.setText(referenceUser.getUserName());
+            profile.setText(referenceUser.getProfile());
 
             //フォローボタンの設定
-//            followStatus = ;
-            if(followStatus){
+            if(referenceUser.isFollow){
                 //フォロー中
                 settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_on));
             }else{
                 //未フォロー
                 settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_off));
             }
-
-//            followNum.setText();
-//            followerNum.setText();
-
+            followNum.setText(referenceUser.followUserCount + FOLLOW_UNIT);
+            followerNum.setText(referenceUser.followerCount + FOLLOW_UNIT);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,23 +134,17 @@ public class MyPageOtherActivity extends AppCompatActivity {
         if(followStatus){
             //フォロー解除
             settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_off));
-            followStatus = !followStatus;
-            MyPageModel.getInstance().followRequest(
-                    mainPref.getString("mailAddress", null),
-                    mainPref.getString("password", null),
-                    getIntent().getStringExtra("referenceUserId"),
-                    followStatus);
         }else{
             //フォロー申請
             settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_on));
             Toast.makeText(this, FOLLOW_ON, Toast.LENGTH_SHORT).show();
-            followStatus = !followStatus;
-            MyPageModel.getInstance().followRequest(
-                    mainPref.getString("mailAddress", null),
-                    mainPref.getString("password", null),
-                    getIntent().getStringExtra("referenceUserId"),
-                    followStatus);
         }
+        followStatus = !followStatus;
+        MyPageModel.getInstance().followRequest(
+                mainPref.getString("mailAddress", null),
+                mainPref.getString("password", null),
+                getIntent().getStringExtra("referenceUserId"),
+                followStatus);
     }
 
     @OnClick(R.id.myStampBookIntentButton)
