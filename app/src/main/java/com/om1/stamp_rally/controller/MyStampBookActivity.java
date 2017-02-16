@@ -79,6 +79,7 @@ public class MyStampBookActivity extends AppCompatActivity {
     public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:MyStampBook", "データベースとの通信に失敗");
+            overlayer.hideProgress();
             notHaveStamp.setText("データベース接続に失敗しました");
             return;
         }

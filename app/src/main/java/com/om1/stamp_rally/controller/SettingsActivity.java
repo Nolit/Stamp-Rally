@@ -92,6 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:SettingsActivity","データベースとの通信に失敗");
+            overlayer.hideProgress();
             Toast.makeText(SettingsActivity.this, "データベースとの通信に失敗しました", Toast.LENGTH_SHORT).show();
             return;
         }

@@ -81,6 +81,7 @@ public class VariousStampRallyActivity extends AppCompatActivity {
     public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:ResultSearch", "データベースとの通信に失敗");
+            overlayer.hideProgress();
             noHitResult.setText("データベース接続に失敗しました");
             return;
         }

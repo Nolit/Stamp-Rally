@@ -36,6 +36,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             EventBusUtil.defaultBus.register(this);
 
             camera=Camera.open();
+            Camera.Parameters params = camera.getParameters();
+            params.setPictureSize(640, 480);
+            camera.setParameters(params);
             camera.setPreviewDisplay(holder);
             camera.setDisplayOrientation(DISPLAY_ORIENTATIOM);
         } catch (Exception e) {

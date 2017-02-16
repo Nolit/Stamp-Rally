@@ -97,6 +97,7 @@ public class MyPageOtherActivity extends AppCompatActivity {
     public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:MainActivity", "データベースとの通信に失敗");
+            overlayer.hideProgress();
             Toast.makeText(MyPageOtherActivity.this, "データベースとの通信に失敗しました", Toast.LENGTH_SHORT).show();
             return;
         }

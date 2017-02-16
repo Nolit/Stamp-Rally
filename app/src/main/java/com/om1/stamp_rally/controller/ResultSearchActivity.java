@@ -78,6 +78,7 @@ public class ResultSearchActivity extends AppCompatActivity {
         if (!event.isSuccess()) {
             Log.d("デバッグ:ResultSearch", "データベースとの通信に失敗");
             noHitResult.setText("データベース接続に失敗しました");
+            overlayer.hideProgress();
             return;
         }
         try {

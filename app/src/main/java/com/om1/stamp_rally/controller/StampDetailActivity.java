@@ -72,6 +72,7 @@ public class StampDetailActivity extends AppCompatActivity {
     public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:StampDetail","データベースとの通信に失敗");
+            overlayer.hideProgress();
             return;
         }
         try {

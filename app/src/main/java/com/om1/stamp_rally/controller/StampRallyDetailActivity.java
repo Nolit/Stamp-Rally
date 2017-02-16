@@ -115,6 +115,7 @@ public class StampRallyDetailActivity extends AppCompatActivity {
     public void fetchedJson(FetchedJsonEvent event) {
         if (!event.isSuccess()) {
             Log.d("デバッグ:StampRallyDetail","データベースとの通信に失敗");
+            overlayer.hideProgress();
             return;
         }
         try {
