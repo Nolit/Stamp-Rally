@@ -46,10 +46,11 @@ public class SettingsModel {
         });
     }
 
-    public void updateUserInfo(String searchId, String userName
+    public void updateUserInfo(String userId, String searchId, String userName
             , String profile, String email, String password) {
 
         RequestBody body = new FormEncodingBuilder()
+                .add("userId", userId)
                 .add("searchId", searchId)
                 .add("userName", userName)
                 .add("profile", profile)
@@ -58,7 +59,7 @@ public class SettingsModel {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/settings")
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/updateUserInfo")
                 .post(body)
                 .build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {

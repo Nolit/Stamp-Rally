@@ -125,6 +125,7 @@ public class SettingsActivity extends AppCompatActivity {
     void clickUpdatebutton(){
         clickUpdateButtonFlag = true;
         SettingsModel.getInstance().updateUserInfo(
+                mainPref.getString("loginUserId", null),
                 searchId.getText().toString(),
                 userName.getText().toString(),
                 profileSentence.getText().toString(),
