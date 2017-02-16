@@ -140,7 +140,7 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void updateLocation(LocationEvent event){
+    public void updateLocation(LocationEvent event){
         testLocation.setLatitude(event.getLatitude());
         testLocation.setLongitude(event.getLongitude());
         mLocationManager.setTestProviderLocation(providerName, testLocation);

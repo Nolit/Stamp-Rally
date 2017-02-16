@@ -60,7 +60,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void takePicture(final Intent intent) {
+    public void takePicture(final Intent intent) {
         Camera.ShutterCallback shutterListener = new Camera.ShutterCallback() {
             public void onShutter() {
             }
