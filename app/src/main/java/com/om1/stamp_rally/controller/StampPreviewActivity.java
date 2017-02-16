@@ -194,7 +194,6 @@ public class StampPreviewActivity extends AppCompatActivity {
         String message;
         if(event.isSuccess()){
             if(event.isClear()){
-                mainPref.edit().remove("playingStampRally").commit();
                 Intent intent = new Intent(this, ClearActivity.class);
                 intent.putExtra("stampRallyId", stampRallyId);
                 startActivity(intent);

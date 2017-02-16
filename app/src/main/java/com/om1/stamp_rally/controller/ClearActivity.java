@@ -15,6 +15,8 @@ public class ClearActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clear);
         ButterKnife.inject(this);
+
+        getSharedPreferences("main", MODE_PRIVATE).edit().remove("playingStampRally").commit();
     }
 
     @OnClick(R.id.returnTopButton)
