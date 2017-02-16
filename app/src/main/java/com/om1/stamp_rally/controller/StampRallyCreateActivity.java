@@ -140,6 +140,7 @@ public class StampRallyCreateActivity extends AppCompatActivity {
         new StampRallyDbAdapter(this).deleteById(stampRallyId);
         new StructureStampDbAdapter(this).deleteBySrampRallyId(stampRallyId);
         startActivity(new Intent(this, StampRallyControlActivity.class));
+        finish();
     }
 
     private void showOverlay(){
