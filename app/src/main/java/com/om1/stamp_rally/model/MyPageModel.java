@@ -55,7 +55,7 @@ public class MyPageModel {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/myPage")
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/otherPage")
                 .post(body)
                 .build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {
@@ -81,7 +81,7 @@ public class MyPageModel {
                 .build();
 
         Request request = new Request.Builder()
-                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/myPage")
+                .url("http://"+ Url.HOST+":"+Url.PORT+"/stamp-rally/followRequest")
                 .post(body)
                 .build();
         new OkHttpClient().newCall(request).enqueue(new Callback() {

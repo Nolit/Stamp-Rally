@@ -109,7 +109,8 @@ public class MyPageOtherActivity extends AppCompatActivity {
             profile.setText(referenceUser.getProfile());
 
             //フォローボタンの設定
-            if(referenceUser.isFollow){
+            followStatus = referenceUser.isFollow;
+            if(followStatus){
                 //フォロー中
                 settingsAndFollowButton.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_follow_on));
             }else{
