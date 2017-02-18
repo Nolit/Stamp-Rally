@@ -17,5 +17,14 @@ android:orientation="vertical" >
         android:layout_gravity="bottom|center"
         android:src="@mipmap/stamp_icon"
         android:background="#FA8072"/>
+    <TextView
+        android:id="@+id/debugText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20px"
+        android:visibility="visible"
+        android:textColor="#f00"
+        android:layout_gravity="bottom|right"
+        android:text="押してね！"/>
 
 </FrameLayout>

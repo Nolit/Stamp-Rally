@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
@@ -44,8 +45,8 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
     private final EventBus eventBus = EventBus.getDefault();
 
     private LocationManager mLocationManager;
-    private double latitude;
-    private double longitude;
+    private double latitude = 34.66372428473802;
+    private double longitude = 135.51852397620678;
 
     //位置情報詐称
     private boolean isMockLocationEnabled = false;
@@ -55,6 +56,8 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
 
     @InjectView(R.id.stamp_button)
     ImageButton stampButton;
+    @InjectView(R.id.debugText)
+    TextView debugText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_camera);
         ButterKnife.inject(this);
+        debugText.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -73,7 +77,6 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
 
         //スタンプ獲得時ではなく、スタンプ登録時には位置情報を取得する
         if(getIntent().getBooleanExtra("stampRegisterFlag", false) == true){
-            stampButton.setEnabled(false);
             mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
             if(isMockLocationEnabled){
                 setUpTestProvider();
@@ -173,6 +176,7 @@ public class TakeStampActivity extends AppCompatActivity implements LocationList
         longitude = location.getLongitude();
         mLocationManager.removeUpdates(this);
         stampButton.setEnabled(true);
+        debugText.setVisibility(View.VISIBLE);
     }
 
     @Override
